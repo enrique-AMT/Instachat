@@ -16,6 +16,7 @@ def greeting():
 def getAllParts():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
     else:
         if not request.args:
             return ChatHandler().getAllChats()
