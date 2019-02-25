@@ -1,8 +1,7 @@
 from flask import jsonify
 
-
+uid = 1
 class UserHandler:
-    uid = 1
 
     def build_user_dict(self, row):
         user_list = {'user_id': row[0], 'user_name': row[1], 'user_lastName': row[2], 'user_phone': row[3],
