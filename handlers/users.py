@@ -1,12 +1,13 @@
 from flask import jsonify
 
 uid = 1
+user_list = []
 class UserHandler:
 
     def build_user_dict(self, row):
-        user_list = {'user_id': row[0], 'user_name': row[1], 'user_lastName': row[2], 'user_phone': row[3],
+        result = {'user_id': row[0], 'user_name': row[1], 'user_lastName': row[2], 'user_phone': row[3],
                      'user_contact_list': row[4]}
-        return user_list
+        return result
 
     def build_user_attributes(self, user_id, user_name, user_lastName, user_phone,user_contact_list, ):
         result = {}
@@ -24,19 +25,27 @@ class UserHandler:
         for row in user_list:
             result = self.build_user_dict(row)
             result_list.append(result)
-        return jsonify(Users=result_list)
+        return jsonify(User=result_list)
+
+    def getUserById(self, user_id):
+        if len(user_list) <= user_id:
+            return jsonify(Error='User not found'), 404
+        else:
+            return jsonify(User=user_list[user_id])
 
     def createUser(self, json):
         global uid
-        users_list = [['1', 'Juan', 'Del Pueblo', '787-777-7777', ['2', '3', '4']]]
+        #users_list = []
+            #[['1', 'Juan', 'Del Pueblo', '787-777-7777', ['2', '3', '4']]]
         user_id = json['user_id']
         user_name = json['user_name']
         user_lastName = json['user_lastName']
         user_phone = json['user_phone']
         user_contacts_list = json['user_contact_list']
         if user_id and user_name and user_lastName and user_phone and user_contacts_list:
+            print("added")
             user_id = (uid + 1)
-            users_list.append([user_id, user_name, user_lastName, user_phone, user_contacts_list])
+            user_list.append([user_id, user_name, user_lastName, user_phone, user_contacts_list])
             result = self.build_user_attributes(user_id, user_name, user_lastName, user_phone, user_contacts_list)
             return jsonify(Part=result), 201
         else:

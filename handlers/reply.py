@@ -1,14 +1,14 @@
 from flask import jsonify
 
 rid = 1
-
+replies_list = []
 
 class ReplyHandler:
 
     def build_reply_dict(self, row):
-        reply_list = {'reply_id': row[0], 'user_id': row[1], 'post_id': row[2], 'reply_text': row[3],
+        result = {'reply_id': row[0], 'user_id': row[1], 'post_id': row[2], 'reply_text': row[3],
                       'reply_date': row[4]}
-        return reply_list
+        return result
 
     def build_reply_attributes(self, reply_id, user_id, post_id, reply_text, reply_date):
         result = {}
@@ -28,9 +28,15 @@ class ReplyHandler:
             result_list.append(result)
         return jsonify(Reply=result_list)
 
+    def getReplyById(self, reply_id):
+        if len(replies_list) <= reply_id:
+            return jsonify(Error='User not found'), 404
+        else:
+            return jsonify(Reply=replies_list[reply_id])
+
     def createReply(self, json):
         global rid
-        replies_list = [['1', '1', '1', 'Hello there', '21-02-2019']]
+        #replies_list = [['1', '1', '1', 'Hello there', '21-02-2019']]
         reply_id = json['reply_id']
         user_id = json['user_id']
         post_id = json['post_id']
