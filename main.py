@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, request
 from handlers.chats import ChatHandler
 from handlers.posts import PostHandler
+from handlers.sessions import SessionHandler
 
 
-#from flask_cors import CORS, cross_origin
+# from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__)
 @app.route('/')
@@ -42,6 +44,28 @@ def getPostById(post_id):
         return PostHandler().updatePost(post_id, request.json)
     elif request.method == 'DELETE':
         return PostHandler().deletePost(post_id)
+    else:
+        return jsonify(Error = "Method not allowed."), 405
+
+
+@app.route('/InstaChat/sessions', methods=['POST', 'GET'])
+def getAllSessions():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return SessionHandler().insertSessionJson(request.json)
+    else:
+        if not request.args:
+            return SessionHandler().getAllSessions()
+
+
+@app.route('/InstaChat/sessions/<int:session_id>', methods=['GET', 'PUT', 'DELETE'])
+def getSessionById(session_id):
+    if request.method == 'GET':
+        return SessionHandler().getSessionById(session_id)
+    elif request.method == 'PUT':
+        return SessionHandler().updateSession(session_id, request.json)
+    elif request.method == 'DELETE':
+        return SessionHandler().deleteSession(session_id)
     else:
         return jsonify(Error = "Method not allowed."), 405
 
