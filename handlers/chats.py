@@ -37,7 +37,7 @@ class ChatHandler:
         if chat_name and number_of_users and user_id and active_user_count:
             chat_id = (cid + 1)
             chats_list.append([chat_id, chat_name, number_of_users, user_id, active_user_count])
-            result = self.build_part_attributes(chat_id, chat_name, number_of_users, user_id, active_user_count)
+            result = self.build_chat_attributes(chat_id, chat_name, number_of_users, user_id, active_user_count)
             return jsonify(Part=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
