@@ -1,7 +1,7 @@
 from flask import jsonify
 
 uid = 1
-user_list = []
+user_list = [['1', 'Juan', 'Del Pueblo', '787-777-7777', ['2', '3', '4']]]
 class UserHandler:
 
     def build_user_dict(self, row):
@@ -20,7 +20,6 @@ class UserHandler:
         return result
 
     def getAllUsers(self):
-        user_list = [['1', 'Juan', 'Del Pueblo', '787-777-7777', ['2', '3', '4']]]
         result_list = []
         for row in user_list:
             result = self.build_user_dict(row)
@@ -28,15 +27,13 @@ class UserHandler:
         return jsonify(User=result_list)
 
     def getUserById(self, user_id):
-        if len(user_list) <= user_id:
+        if len(user_list) < user_id or user_id<1:
             return jsonify(Error='User not found'), 404
         else:
-            return jsonify(User=user_list[user_id])
+            return jsonify(User=user_list[user_id-1])
 
     def createUser(self, json):
         global uid
-        #users_list = []
-            #[['1', 'Juan', 'Del Pueblo', '787-777-7777', ['2', '3', '4']]]
         user_id = json['user_id']
         user_name = json['user_name']
         user_lastName = json['user_lastName']
