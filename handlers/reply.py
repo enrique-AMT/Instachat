@@ -30,7 +30,7 @@ class ReplyHandler:
 
     def createReply(self, json):
         global rid
-        replies_list = [['1', '1', '1', '1', 'Hello there', '21-02-2019']]
+        replies_list = [['1', '1', '1', 'Hello there', '21-02-2019']]
         reply_id = json['reply_id']
         user_id = json['user_id']
         post_id = json['post_id']
