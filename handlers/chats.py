@@ -1,7 +1,8 @@
 from flask import jsonify
 
-cid = 1
+cid = 2
 
+chats_list = [[1, 'test', '1', 'test1', '1']]
 
 class ChatHandler:
 
@@ -22,16 +23,20 @@ class ChatHandler:
         return result
 
     def getAllChats(self):
-        chats_list = [['1', 'test', '1', 'test1', '1']]
         result_list = []
         for row in chats_list:
             result = self.build_chat_dict(row)
             result_list.append(result)
         return jsonify(Chats=result_list)
 
+    def getChatById(self, chat_id):
+        if len(chats_list) < chat_id or chat_id < 1:
+            return jsonify(Error='Chat not found'), 404
+        else:
+            return jsonify(Chat=chats_list[chat_id-1])
+
     def createChat(self, json):
         global cid
-        chats_list = [['1', 'test', '1', 'test1', '1']]
         chat_name = json['chat_name']
         number_of_users = json['number_of_users']
         user_id = json['user_id']
@@ -43,3 +48,24 @@ class ChatHandler:
             return jsonify(Part=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def updateChat(self, chat_id, json):
+        if len(chats_list) < chat_id or chat_id < 1:
+            return jsonify(Error = "Chat not found."), 404
+        else:
+            if len(json) != 5:
+                return jsonify(Error = "Update request incorrect."), 400
+            else:
+                chat_name = json['chat_name']
+                number_of_users = json['number_of_users']
+                user_id = json['user_id']
+                active_user_count = json['active_user_count']
+                if chat_name and number_of_users and user_id and active_user_count:
+                    return jsonify(UpdateStatus = "AREA TO UPDATE CHAT BY ID"), 200
+
+    def deleteChat(self, chat_id):
+        global cid
+        if len(chats_list) < chat_id or chat_id < 1:
+            return jsonify(Error = "Chat not found."), 404
+        else:
+            return jsonify(DeleteStatus = "AREA TO DELETE CHAT BY ID"), 200

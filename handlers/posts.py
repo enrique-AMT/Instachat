@@ -1,8 +1,8 @@
 from flask import jsonify
 
-posts_list = [{"post_id": 0, "user_id": "1", "imageURL": "www.test.com", "post_caption": "HI", "post_likes": "10",
+posts_list = [{"post_id": 1, "user_id": "1", "imageURL": "www.test.com", "post_caption": "HI", "post_likes": "10",
                "post_dislikes": "1", "reply_id": "5", "post_Date": "2/15/2019", "topic_id": "9"}]
-p_id = 1
+p_id = 2
 
 class PostHandler:
 
@@ -38,13 +38,12 @@ class PostHandler:
         return jsonify(Posts=posts_list)
 
     def getPostById(self, post_id):
-        if len(posts_list) <= post_id:
+        if len(posts_list) < post_id or post_id < 1:
             return jsonify(Eror = "Post not found."), 404
         else:
-            return jsonify(Post=posts_list[post_id])
+            return jsonify(Post=posts_list[post_id - 1])
 
     def insertPostJson(self, json):
-        #post_id = json['post_id']
         global p_id
         user_id = json['user_id']
         imageURL = json['imageURL']
@@ -66,7 +65,7 @@ class PostHandler:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updatePost(self, post_id, json):
-        if len(posts_list) <= post_id:
+        if len(posts_list) < post_id or post_id < 1:
             return jsonify(Error = "Post not found."), 404
         else:
             if len(json) != 9:
@@ -85,9 +84,7 @@ class PostHandler:
 
     def deletePost(self, post_id):
         global p_id
-        if len(posts_list) <= post_id:
+        if len(posts_list) < post_id or post_id < 1:
             return jsonify(Error = "Post not found."), 404
         else:
-            #del posts_list[post_id]
-            #p_id = p_id - 1
             return jsonify(DeleteStatus = "AREA TO DELETE POST BY ID"), 200

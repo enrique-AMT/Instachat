@@ -1,8 +1,8 @@
 from flask import jsonify
 
-session_list = [{"session_id": 0, "session_date": "12/30/2017", "post_count": "10", "likes_count": "5",
+session_list = [{"session_id": 1, "session_date": "12/30/2017", "post_count": "10", "likes_count": "5",
                  "replies_count": "2", "dislikes_count": "2"}]
-s_id = 1
+s_id = 2
 
 
 class SessionHandler:
@@ -33,13 +33,12 @@ class SessionHandler:
         return jsonify(Sessions=session_list)
 
     def getSessionById(self, session_id):
-        if len(session_list) <= session_id:
+        if len(session_list) < session_id or session_id < 1:
             return jsonify(Eror = "Session not found."), 404
         else:
-            return jsonify(Session=session_list[session_id])
+            return jsonify(Session=session_list[session_id - 1])
 
     def insertSessionJson(self, json):
-        # session_id = json['session_id']
         global s_id
         session_date = json['session_date']
         post_count = json['post_count']
@@ -56,7 +55,7 @@ class SessionHandler:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updateSession(self, session_id, json):
-        if len(session_list) <= session_id:
+        if len(session_list) < session_id or session_id < 1:
             return jsonify(Error = "Session not found."), 404
         else:
             if len(json) != 6:
@@ -65,16 +64,14 @@ class SessionHandler:
                 session_date = json['session_date']
                 post_count = json['post_count']
                 likes_count = json['likes_count']
-                replies_count = json['replies count']
+                replies_count = json['replies_count']
                 dislikes_count = json['dislikes_count']
                 if session_date and post_count and likes_count and replies_count and dislikes_count:
                     return jsonify(UpdateStatus = "AREA TO UPDATE SESSION BY ID"), 200
 
-    def deleteSession(self, post_id):
-        global p_id
-        if len(session_list) <= post_id:
+    def deleteSession(self, session_id):
+        global s_id
+        if len(session_list) < session_id or session_id < 1:
             return jsonify(Error = "Session not found."), 404
         else:
-            #del sessions_list[post_id]
-            #s_id = s_id - 1
             return jsonify(DeleteStatus = "AREA TO DELETE SESSION BY ID"), 200
