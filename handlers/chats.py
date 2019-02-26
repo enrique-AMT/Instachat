@@ -49,7 +49,7 @@ class ChatHandler:
         if len(chats_list) < chat_id or chat_id < 1:
             return jsonify(Error = "Chat not found."), 404
         else:
-            if len(json) != 6:
+            if len(json) != 5:
                 return jsonify(Error = "Update request incorrect."), 400
             else:
                 chat_name = json['chat_name']
