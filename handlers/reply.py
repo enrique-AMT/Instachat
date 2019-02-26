@@ -48,3 +48,25 @@ class ReplyHandler:
             return jsonify(Reply=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def updateReply(self, reply_id, json):
+        if len(replies_list) < reply_id or reply_id < 1:
+            return jsonify(Error = "Reply not found."), 404
+        else:
+            if len(json) != 6:
+                return jsonify(Error = "Update request incorrect."), 400
+            else:
+                user_id = json['user_id']
+                post_id = json['post_id']
+                reply_text = json['reply_text']
+                reply_date = json['reply_date']
+
+                if user_id and post_id and reply_text and reply_date:
+                    return jsonify(UpdateStatus = "AREA TO UPDATE SESSION BY ID"), 200
+
+    def deleteReply(self, reply_id):
+        global p_id
+        if len(replies_list) < reply_id or reply_id < 1:
+            return jsonify(Error = "Session not found."), 404
+        else:
+            return jsonify(DeleteStatus = "AREA TO DELETE SESSION BY ID"), 200
