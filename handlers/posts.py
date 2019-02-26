@@ -2,7 +2,7 @@ from flask import jsonify
 
 posts_list = [{"post_id": 1, "user_id": "1", "imageURL": "www.test.com", "post_caption": "HI", "post_likes": "10",
                "post_dislikes": "1", "reply_id": "5", "post_Date": "2/15/2019", "topic_id": "9"}]
-p_id = 1
+p_id = 2
 
 class PostHandler:
 

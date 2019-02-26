@@ -1,6 +1,6 @@
 from flask import jsonify
 
-rid = 1
+rid = 2
 
 replies_list = [{"reply_id":1,"user_id": "1","post_id": "1", "reply_text": "Hello there", "reply_date": "21-02-2019"}]
 
