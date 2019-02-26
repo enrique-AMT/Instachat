@@ -13,7 +13,6 @@ def greeting():
     return 'Welcome to the poor mans Instagram!'
 
 
-
 @app.route('/InstaChat/chats', methods=['GET', 'POST'])
 def getAllParts():
     if request.method == 'POST':

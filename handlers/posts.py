@@ -1,7 +1,8 @@
 from flask import jsonify
 
-posts_list = []
-p_id = 0
+posts_list = [{"post_id": 0, "user_id": "1", "imageURL": "www.test.com", "post_caption": "HI", "post_likes": "10",
+               "post_dislikes": "1", "reply_id": "5", "post_Date": "2/15/2019", "topic_id": "9"}]
+p_id = 1
 
 class PostHandler:
 
@@ -56,7 +57,9 @@ class PostHandler:
         if user_id and imageURL and post_caption and post_likes and post_dislikes and reply_id and post_Date and topic_id:
             result = self.build_post_attributes(p_id, user_id, imageURL, post_caption, post_likes, post_dislikes,
                                                 reply_id, post_Date, topic_id)
-            posts_list.append({"post_id": p_id, "user_id": user_id, "imageURL": imageURL, "post_caption": post_caption, "post_likes": post_likes, "post_dislikes": post_dislikes, "reply_id": reply_id, "post_Date": post_Date, "topic_id": topic_id})
+            posts_list.append({"post_id": p_id, "user_id": user_id, "imageURL": imageURL, "post_caption": post_caption,
+                               "post_likes": post_likes, "post_dislikes": post_dislikes, "reply_id": reply_id,
+                               "post_Date": post_Date, "topic_id": topic_id})
             p_id = p_id + 1
             return jsonify(Post=result), 201
         else:
