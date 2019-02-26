@@ -52,14 +52,16 @@ class UserHandler:
         if len(user_list) < user_id or user_id < 1:
             return jsonify(Error = "User not found."), 404
         else:
-            if len(json) != 5:
+            if len(json) != 7:
                 return jsonify(Error = "Update request incorrect."), 400
             else:
                 user_name = json['user_name']
                 user_lastName = json['user_lastName']
                 user_phone = json['user_phone']
                 user_contacts_list = json['user_contact_list']
-                if user_id and user_name and user_lastName and user_phone and user_contacts_list:
+                user_email = json['user_email']
+                user_password = json['user_password']
+                if user_id and user_name and user_lastName and user_phone and user_contacts_list and user_email and user_password:
                     return jsonify(UpdateStatus = "AREA TO UPDATE USER BY ID"), 200
 
     def deleteUser(self, user_id):
