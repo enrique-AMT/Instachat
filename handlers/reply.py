@@ -29,7 +29,7 @@ class ReplyHandler:
         return jsonify(Reply=result_list)
 
     def getReplyById(self, reply_id):
-        if len(replies_list) < reply_id or reply_id<1:
+        if len(replies_list) < reply_id or reply_id < 1:
             return jsonify(Error='User not found'), 404
         else:
             return jsonify(Reply=replies_list[reply_id-1])
