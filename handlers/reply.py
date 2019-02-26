@@ -1,6 +1,7 @@
 from flask import jsonify
 
 rid = 1
+
 replies_list = [{"reply_id":1,"user_id": "1","post_id": "1", "reply_text": "Hello there", "reply_date": "21-02-2019"}]
 
 class ReplyHandler:
@@ -11,8 +12,13 @@ class ReplyHandler:
         return result
 
     def build_reply_attributes(self, reply_id, user_id, post_id, reply_text, reply_date):
-        result = {"reply_id": reply_id,"user_id": user_id,"post_id": post_id,
-                  "reply_text": reply_text, "reply_date": reply_date}
+        result = {}
+        result['reply_id'] = reply_id
+        result['user_id'] = user_id
+        result['post_id'] = post_id
+        result['reply_text'] = reply_text
+        result['reply_date'] = reply_date
+
         return result
 
     def getAllReplies(self):
@@ -20,7 +26,7 @@ class ReplyHandler:
 
     def getReplyById(self, reply_id):
         if len(replies_list) < reply_id or reply_id < 1:
-            return jsonify(Error='Reply not found'), 404
+            return jsonify(Error='User not found'), 404
         else:
             return jsonify(Reply=replies_list[reply_id-1])
 
@@ -32,10 +38,10 @@ class ReplyHandler:
         reply_date = json['reply_date']
 
         if user_id and post_id and reply_text and reply_date:
-            reply_id = (rid + 1)
-            replies_list.append([{"reply_id": reply_id,"user_id": user_id,"post_id": post_id,
-                  "reply_text": reply_text, "reply_date": reply_date}])
-            result = self.build_reply_attributes(reply_id, user_id, post_id, reply_text, reply_date)
+            replies_list.append([{"reply_id": rid, "user_id": user_id, "post_id": post_id,
+                                  "reply_text": reply_text, "reply_date": reply_date}])
+            result = self.build_reply_attributes(rid, user_id, post_id, reply_text, reply_date)
+            rid = (rid + 1)
             return jsonify(Reply=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
@@ -44,7 +50,7 @@ class ReplyHandler:
         if len(replies_list) < reply_id or reply_id < 1:
             return jsonify(Error = "Reply not found."), 404
         else:
-            if len(json) != 6:
+            if len(json) != 5:
                 return jsonify(Error = "Update request incorrect."), 400
             else:
                 user_id = json['user_id']
@@ -53,11 +59,11 @@ class ReplyHandler:
                 reply_date = json['reply_date']
 
                 if user_id and post_id and reply_text and reply_date:
-                    return jsonify(UpdateStatus = "AREA TO UPDATE SESSION BY ID"), 200
+                    return jsonify(UpdateStatus = "AREA TO UPDATE REPLY BY ID"), 200
 
     def deleteReply(self, reply_id):
         global p_id
         if len(replies_list) < reply_id or reply_id < 1:
             return jsonify(Error = "Session not found."), 404
         else:
-            return jsonify(DeleteStatus = "AREA TO DELETE SESSION BY ID"), 200
+            return jsonify(DeleteStatus = "AREA TO DELETE REPLY BY ID"), 200
