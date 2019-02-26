@@ -48,3 +48,24 @@ class ChatHandler:
             return jsonify(Part=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def updateChat(self, chat_id, json):
+        if len(chats_list) < chat_id or chat_id < 1:
+            return jsonify(Error = "Reply not found."), 404
+        else:
+            if len(json) != 6:
+                return jsonify(Error = "Update request incorrect."), 400
+            else:
+                chat_name = json['chat_name']
+                number_of_users = json['number_of_users']
+                user_id = json['user_id']
+                active_user_count = json['active_user_count']
+                if chat_name and number_of_users and user_id and active_user_count:
+                    return jsonify(UpdateStatus = "AREA TO UPDATE SESSION BY ID"), 200
+
+    def deleteChat(self, chat_id):
+        global p_id
+        if len(chats_list) < chat_id or chat_id < 1:
+            return jsonify(Error = "Session not found."), 404
+        else:
+            return jsonify(DeleteStatus = "AREA TO DELETE SESSION BY ID"), 200

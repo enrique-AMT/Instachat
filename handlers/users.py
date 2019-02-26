@@ -44,6 +44,28 @@ class UserHandler:
             user_id = (uid + 1)
             user_list.append([user_id, user_name, user_lastName, user_phone, user_contacts_list])
             result = self.build_user_attributes(user_id, user_name, user_lastName, user_phone, user_contacts_list)
-            return jsonify(Part=result), 201
+            return jsonify(User=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def updateUser(self, user_id, json):
+        if len(user_list) < user_id:
+            return jsonify(Error = "User not found."), 404
+        else:
+            if len(json) != 9:
+                return jsonify(Error = "Update request incorrect."), 400
+            else:
+                user_id = json['user_id']
+                user_name = json['user_name']
+                user_lastName = json['user_lastName']
+                user_phone = json['user_phone']
+                user_contacts_list = json['user_contacts_list']
+                if user_id and user_name and user_lastName and user_phone and user_contacts_list:
+                    return jsonify(UpdateStatus = "AREA TO UPDATE POST BY ID"), 200
+
+    def deletePost(self, user_id):
+        global uid
+        if len(user_list) < user_id or user_id < 1:
+            return jsonify(Error = "User not found."), 404
+        else:
+            return jsonify(DeleteStatus = "AREA TO DELETE POST BY ID"), 200

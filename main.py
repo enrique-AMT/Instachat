@@ -47,6 +47,10 @@ def getAllUsers():
 def getUserById(user_id):
     if request.method == 'GET':
         return UserHandler().getUserById(user_id)
+    elif request.method == 'PUT':
+        return ReplyHandler().updateUser(user_id, request.json)
+    elif request.method == 'DELETE':
+        return ReplyHandler().deleteUser(user_id)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -65,6 +69,10 @@ def getAllReplies():
 def getReplyById(reply_id):
     if request.method == 'GET':
         return ReplyHandler.getReplyById(reply_id)
+    elif request.method == 'PUT':
+        return ReplyHandler().updatePost(reply_id, request.json)
+    elif request.method == 'DELETE':
+        return ReplyHandler().deletePost(reply_id)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -77,6 +85,7 @@ def getAllPost():
     else:
         if not request.args:
             return PostHandler().getAllPosts()
+
 
 
 @app.route('/InstaChat/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
