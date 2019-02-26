@@ -1,6 +1,7 @@
 from flask import jsonify
 
-session_list = ['1', '21-02-2019', '1', '1', '1', '1']
+session_list = [{"session_id": 1, "session_date": "12/30/2017", "post_count": "10", "likes_count": "5",
+                 "replies_count": "2", "dislikes_count": "2"}]
 s_id = 1
 
 
@@ -22,10 +23,10 @@ class SessionHandler:
         return jsonify(Sessions=session_list)
 
     def getSessionById(self, session_id):
-        if len(session_list) < session_id or session_id<1:
+        if len(session_list) < session_id or session_id < 1:
             return jsonify(Eror = "Session not found."), 404
         else:
-            return jsonify(Session=session_list[session_id])
+            return jsonify(Session=session_list[session_id-1])
 
     def insertSessionJson(self, json):
         global s_id
