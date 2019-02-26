@@ -36,12 +36,12 @@ class ChatHandler:
         active_user_count = json['active_user_count']
         owner_id = json['owner_id']
         if chat_name and number_of_users and user_id and active_user_count and owner_id:
-            chat_id = (cid + 1)
             chats_list.append(
-                {'chat_id': chat_id, 'chat_name': chat_name, 'number_of_users': number_of_users, 'user_id':
+                {'chat_id': cid, 'chat_name': chat_name, 'number_of_users': number_of_users, 'user_id':
                     user_id, 'active_user_count': active_user_count, 'owner_id': owner_id})
-            result = self.build_chat_attributes(chat_id, chat_name, number_of_users, user_id, active_user_count)
-            return jsonify(Part=result), 201
+            result = self.build_chat_attributes(cid, chat_name, number_of_users, user_id, active_user_count, owner_id)
+            cid = (cid + 1)
+            return jsonify(Chat=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
@@ -56,7 +56,8 @@ class ChatHandler:
                 number_of_users = json['number_of_users']
                 user_id = json['user_id']
                 active_user_count = json['active_user_count']
-                if chat_name and number_of_users and user_id and active_user_count:
+                owner_id = json['owner_id']
+                if chat_name and number_of_users and user_id and active_user_count and owner_id:
                     return jsonify(UpdateStatus = "AREA TO UPDATE CHAT BY ID"), 200
 
     def deleteChat(self, chat_id):
