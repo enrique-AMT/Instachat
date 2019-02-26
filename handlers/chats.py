@@ -2,32 +2,25 @@ from flask import jsonify
 
 cid = 2
 
-chats_list = [[1, 'test', '1', 'test1', '1']]
+chats_list = [{'chat_id': 1, 'chat_name': 'test','number_of_users': '1','user_id':
+                '[1]','active_user_count': '1','owner_id': '258'}]
 
 class ChatHandler:
 
 
     def build_chat_dict(self, row):
         chat_list = {'chat_id': row[0], 'chat_name': row[1], 'number_of_users': row[2], 'user_id': row[3],
-                     'active_user_count': row[4]}
+                     'active_user_count': row[4], 'owner_id': row[5]}
         return chat_list
 
-    def build_chat_attributes(self, chat_id, chat_name, number_of_users, user_id, active_user_count):
-        result = {}
-        result['chat_id'] = chat_id
-        result['chat_name'] = chat_name
-        result['number_of_users'] = number_of_users
-        result['user_id'] = user_id
-        result['active_user_count'] = active_user_count
+    def build_chat_attributes(self, chat_id, chat_name, number_of_users, user_id, active_user_count, owner_id):
+        result = {'chat_id': chat_id, 'chat_name': chat_name, 'number_of_users': number_of_users, 'user_id': user_id,
+                  'active_user_count': active_user_count, 'owner_id': owner_id}
 
         return result
 
     def getAllChats(self):
-        result_list = []
-        for row in chats_list:
-            result = self.build_chat_dict(row)
-            result_list.append(result)
-        return jsonify(Chats=result_list)
+        return jsonify(Chats=chats_list)
 
     def getChatById(self, chat_id):
         if len(chats_list) < chat_id or chat_id < 1:
@@ -41,9 +34,12 @@ class ChatHandler:
         number_of_users = json['number_of_users']
         user_id = json['user_id']
         active_user_count = json['active_user_count']
-        if chat_name and number_of_users and user_id and active_user_count:
+        owner_id = json['owner_id']
+        if chat_name and number_of_users and user_id and active_user_count and owner_id:
             chat_id = (cid + 1)
-            chats_list.append([chat_id, chat_name, number_of_users, user_id, active_user_count])
+            chats_list.append(
+                {'chat_id': chat_id, 'chat_name': chat_name, 'number_of_users': number_of_users, 'user_id':
+                    user_id, 'active_user_count': active_user_count, 'owner_id': owner_id})
             result = self.build_chat_attributes(chat_id, chat_name, number_of_users, user_id, active_user_count)
             return jsonify(Part=result), 201
         else:

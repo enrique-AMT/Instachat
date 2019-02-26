@@ -1,8 +1,8 @@
 from flask import jsonify
 
-rid = 2
+rid = 1
 
-replies_list = [[1, '1', '1', 'Hello there', '21-02-2019']]
+replies_list = [{"reply_id":1,"user_id": "1","post_id": "1", "reply_text": "Hello there", "reply_date": "21-02-2019"}]
 
 class ReplyHandler:
 
@@ -22,11 +22,7 @@ class ReplyHandler:
         return result
 
     def getAllReplies(self):
-        result_list = []
-        for row in replies_list:
-            result = self.build_reply_dict(row)
-            result_list.append(result)
-        return jsonify(Reply=result_list)
+        return jsonify(Reply=replies_list)
 
     def getReplyById(self, reply_id):
         if len(replies_list) < reply_id or reply_id < 1:
@@ -42,7 +38,8 @@ class ReplyHandler:
         reply_date = json['reply_date']
 
         if user_id and post_id and reply_text and reply_date:
-            replies_list.append([rid, user_id, post_id, reply_text, reply_date])
+            replies_list.append([{"reply_id": rid, "user_id": user_id, "post_id": post_id,
+                                  "reply_text": reply_text, "reply_date": reply_date}])
             result = self.build_reply_attributes(rid, user_id, post_id, reply_text, reply_date)
             rid = (rid + 1)
             return jsonify(Reply=result), 201
