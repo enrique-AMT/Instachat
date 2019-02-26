@@ -2,14 +2,14 @@ from flask import jsonify
 
 cid = 1
 
-chats_list = [['1', 'test', '1', 'test1', '1']]
+chats_list = [['1', 'test', '1', '[test1]', '1', 'Pepe']]
 
 class ChatHandler:
 
 
     def build_chat_dict(self, row):
         chat_list = {'chat_id': row[0], 'chat_name': row[1], 'number_of_users': row[2], 'user_id': row[3],
-                     'active_user_count': row[4]}
+                     'active_user_count': row[4], 'owner_id': row[5]}
         return chat_list
 
     def build_chat_attributes(self, chat_id, chat_name, number_of_users, user_id, active_user_count):
@@ -45,7 +45,7 @@ class ChatHandler:
             chat_id = (cid + 1)
             chats_list.append([chat_id, chat_name, number_of_users, user_id, active_user_count])
             result = self.build_chat_attributes(chat_id, chat_name, number_of_users, user_id, active_user_count)
-            return jsonify(Part=result), 201
+            return jsonify(Chat=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
 

@@ -48,9 +48,9 @@ def getUserById(user_id):
     if request.method == 'GET':
         return UserHandler().getUserById(user_id)
     elif request.method == 'PUT':
-        return ReplyHandler().updateUser(user_id, request.json)
+        return UserHandler().updateUser(user_id, request.json)
     elif request.method == 'DELETE':
-        return ReplyHandler().deleteUser(user_id)
+        return UserHandler().deleteUser(user_id)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -68,11 +68,11 @@ def getAllReplies():
 @app.route('/InstaChat/replies/<int:reply_id>', methods=['GET', 'PUT', 'DELETE'])
 def getReplyById(reply_id):
     if request.method == 'GET':
-        return ReplyHandler.getReplyById(reply_id)
+        return ReplyHandler().getReplyById(reply_id)
     elif request.method == 'PUT':
-        return ReplyHandler().updatePost(reply_id, request.json)
+        return ReplyHandler().updateReply(reply_id, request.json)
     elif request.method == 'DELETE':
-        return ReplyHandler().deletePost(reply_id)
+        return ReplyHandler().deleteReply(reply_id)
     else:
         return jsonify(Error="Method not allowed."), 405
 
