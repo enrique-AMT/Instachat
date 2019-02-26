@@ -41,7 +41,8 @@ class UserHandler:
             user_list.append([{"user_id": uid, "user_name": user_name, "user_lastName": user_lastName,
                                "user_phone": user_phone, "user_contacts_list": user_contacts_list,
                                "user_email": user_email, "user_password": user_password}])
-            result = self.build_user_attributes(uid, user_name, user_lastName, user_phone, user_contacts_list)
+            result = self.build_user_attributes(uid, user_name, user_lastName, user_phone, user_contacts_list, user_email,
+                                                user_password)
             uid = (uid + 1)
             return jsonify(User=result), 201
         else:
