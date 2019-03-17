@@ -1,4 +1,7 @@
+from config.dbconfig import pg_config
+import psycopg2
 from flask import jsonify
+
 
 cid = 2
 
