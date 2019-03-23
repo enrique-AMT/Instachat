@@ -70,3 +70,16 @@ class UserHandler:
             return jsonify(Error = "User not found."), 404
         else:
             return jsonify(DeleteStatus = "AREA TO DELETE USER BY ID"), 200
+
+
+    def getUserContactList(self, user_id):
+        if len(user_list) < user_id or user_id < 1:
+            return jsonify(Error='User not found'), 404
+        else:
+            return jsonify(User=user_list[user_id-1])
+
+    def getUserChattList(self, user_id):
+        if len(user_list) < user_id or user_id < 1:
+            return jsonify(Error='User not found'), 404
+        else:
+            return jsonify(User=user_list[user_id-1])

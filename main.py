@@ -61,6 +61,28 @@ def getUserById(user_id):
     else:
         return jsonify(Error = "Method not allowed."), 405
 
+@app.route('/InstaChat/users/<int:user_id>/contacts', methods=['GET', 'PUT', 'DELETE'])
+def getUserContactList(user_id):
+    if request.method == 'GET':
+        return UserHandler().getUserContactList(user_id)
+    elif request.method == 'PUT':
+        return UserHandler().updateUser(user_id, request.json)
+    elif request.method == 'DELETE':
+        return UserHandler().deleteUser(user_id)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaChat/users/<int:user_id>/chats', methods=['GET', 'PUT', 'DELETE'])
+def getUserChatList(user_id):
+    if request.method == 'GET':
+        return UserHandler().getUserContactList(user_id)
+    elif request.method == 'PUT':
+        return UserHandler().updateUser(user_id, request.json)
+    elif request.method == 'DELETE':
+        return UserHandler().deleteUser(user_id)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 @app.route('/InstaChat/replies', methods=['POST', 'GET'])
 def getAllReplies():
@@ -96,6 +118,28 @@ def getAllPost():
 
 @app.route('/InstaChat/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
 def getPostById(post_id):
+    if request.method == 'GET':
+        return PostHandler().getPostById(post_id)
+    elif request.method == 'PUT':
+        return PostHandler().updatePost(post_id, request.json)
+    elif request.method == 'DELETE':
+        return PostHandler().deletePost(post_id)
+    else:
+        return jsonify(Error = "Method not allowed."), 405
+
+@app.route('/InstaChat/posts/<int:post_id>/reactions', methods=['GET', 'PUT', 'DELETE'])
+def getPostReactions(post_id):
+    if request.method == 'GET':
+        return PostHandler().getPostById(post_id)
+    elif request.method == 'PUT':
+        return PostHandler().updatePost(post_id, request.json)
+    elif request.method == 'DELETE':
+        return PostHandler().deletePost(post_id)
+    else:
+        return jsonify(Error = "Method not allowed."), 405
+
+@app.route('/InstaChat/posts/<int:post_id>/replies', methods=['GET', 'PUT', 'DELETE'])
+def getPostReplies(post_id):
     if request.method == 'GET':
         return PostHandler().getPostById(post_id)
     elif request.method == 'PUT':
