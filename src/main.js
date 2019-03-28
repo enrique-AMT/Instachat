@@ -10,7 +10,6 @@ import 'vue-material/dist/vue-material.css'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
-
 Vue.config.productionTip = false
 Vue.use(VueMaterial)
 Vue.use(Vuelidate)
@@ -18,6 +17,6 @@ Vue.use(Vuelidate)
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

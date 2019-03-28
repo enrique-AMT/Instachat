@@ -1,6 +1,7 @@
 from config.dbconfig import pg_config
 import psycopg2
 from flask import jsonify
+from daos.chats import ChatsDAO
 
 
 cid = 2
@@ -23,7 +24,13 @@ class ChatHandler:
         return result
 
     def getAllChats(self):
-        return jsonify(Chats=chats_list)
+        dao = ChatsDAO()
+        chat_list = dao.getAllChats()
+        result_list = []
+        for row in chat_list:
+          result = self.build_chat_dict(row)
+          result_list.append(result)
+        return jsonify(Chat=result_list)
 
     def getChatById(self, chat_id):
         if len(chats_list) < chat_id or chat_id < 1:

@@ -15,7 +15,7 @@
 
 <script>
   export default {
-    name: "Header"
+    name: 'Header'
   }
 </script>
 
@@ -26,6 +26,7 @@
     text-align: left;
     padding: 10px;
   }
+
   .header a {
     color: #fff;
     padding-right: 5px;
