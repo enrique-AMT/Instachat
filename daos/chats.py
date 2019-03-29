@@ -11,7 +11,7 @@ class ChatsDAO:
 
   def getAllChats(self):
     cursor = self.conn.cursor()
-    query = "select * from chats;"
+    query = "select * from instachat.chat;"
     cursor.execute(query)
     result = []
     for row in cursor:
