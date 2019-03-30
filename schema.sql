@@ -91,6 +91,18 @@ ALTER SEQUENCE instachat.chat_chat_id_seq OWNED BY instachat.chat.chat_id;
 
 
 --
+-- Name: creates; Type: TABLE; Schema: instachat; Owner: instadev
+--
+
+CREATE TABLE instachat.creates (
+    user_id integer NOT NULL,
+    post_id integer NOT NULL
+);
+
+
+ALTER TABLE instachat.creates OWNER TO instadev;
+
+--
 -- Name: phone; Type: TABLE; Schema: instachat; Owner: instadev
 --
 
@@ -123,6 +135,53 @@ ALTER TABLE instachat.phone_phone_id_seq OWNER TO instadev;
 --
 
 ALTER SEQUENCE instachat.phone_phone_id_seq OWNED BY instachat.phone.phone_id;
+
+
+--
+-- Name: post; Type: TABLE; Schema: instachat; Owner: instadev
+--
+
+CREATE TABLE instachat.post (
+    post_id integer NOT NULL,
+    post_caption character varying(280),
+    post_date character varying(10)
+);
+
+
+ALTER TABLE instachat.post OWNER TO instadev;
+
+--
+-- Name: post_belongs; Type: TABLE; Schema: instachat; Owner: instadev
+--
+
+CREATE TABLE instachat.post_belongs (
+    chat_id integer NOT NULL,
+    post_id integer NOT NULL
+);
+
+
+ALTER TABLE instachat.post_belongs OWNER TO instadev;
+
+--
+-- Name: post_post_id_seq; Type: SEQUENCE; Schema: instachat; Owner: instadev
+--
+
+CREATE SEQUENCE instachat.post_post_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE instachat.post_post_id_seq OWNER TO instadev;
+
+--
+-- Name: post_post_id_seq; Type: SEQUENCE OWNED BY; Schema: instachat; Owner: instadev
+--
+
+ALTER SEQUENCE instachat.post_post_id_seq OWNED BY instachat.post.post_id;
 
 
 --
@@ -213,6 +272,41 @@ ALTER SEQUENCE public.chats_chat_id_seq OWNED BY public.chats.chat_id;
 
 
 --
+-- Name: post; Type: TABLE; Schema: public; Owner: instadev
+--
+
+CREATE TABLE public.post (
+    post_id integer NOT NULL,
+    post_caption character varying(280),
+    post_date character varying(10)
+);
+
+
+ALTER TABLE public.post OWNER TO instadev;
+
+--
+-- Name: post_post_id_seq; Type: SEQUENCE; Schema: public; Owner: instadev
+--
+
+CREATE SEQUENCE public.post_post_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.post_post_id_seq OWNER TO instadev;
+
+--
+-- Name: post_post_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: instadev
+--
+
+ALTER SEQUENCE public.post_post_id_seq OWNED BY public.post.post_id;
+
+
+--
 -- Name: chat chat_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
@@ -227,6 +321,13 @@ ALTER TABLE ONLY instachat.phone ALTER COLUMN phone_id SET DEFAULT nextval('inst
 
 
 --
+-- Name: post post_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.post ALTER COLUMN post_id SET DEFAULT nextval('instachat.post_post_id_seq'::regclass);
+
+
+--
 -- Name: user user_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
@@ -238,6 +339,13 @@ ALTER TABLE ONLY instachat."user" ALTER COLUMN user_id SET DEFAULT nextval('inst
 --
 
 ALTER TABLE ONLY public.chats ALTER COLUMN chat_id SET DEFAULT nextval('public.chats_chat_id_seq'::regclass);
+
+
+--
+-- Name: post post_id; Type: DEFAULT; Schema: public; Owner: instadev
+--
+
+ALTER TABLE ONLY public.post ALTER COLUMN post_id SET DEFAULT nextval('public.post_post_id_seq'::regclass);
 
 
 --
@@ -258,11 +366,35 @@ COPY instachat.chat (chat_id, chat_name, owner_id, number_of_users) FROM stdin;
 
 
 --
+-- Data for Name: creates; Type: TABLE DATA; Schema: instachat; Owner: instadev
+--
+
+COPY instachat.creates (user_id, post_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: phone; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
 COPY instachat.phone (phone_id, user_id, phone) FROM stdin;
 1	1	7873830072
+\.
+
+
+--
+-- Data for Name: post; Type: TABLE DATA; Schema: instachat; Owner: instadev
+--
+
+COPY instachat.post (post_id, post_caption, post_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: post_belongs; Type: TABLE DATA; Schema: instachat; Owner: instadev
+--
+
+COPY instachat.post_belongs (chat_id, post_id) FROM stdin;
 \.
 
 
@@ -297,6 +429,14 @@ COPY public.chats (chat_id, chat_name, number_of_users, user_id, active_user_cou
 
 
 --
+-- Data for Name: post; Type: TABLE DATA; Schema: public; Owner: instadev
+--
+
+COPY public.post (post_id, post_caption, post_date) FROM stdin;
+\.
+
+
+--
 -- Name: chat_chat_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
@@ -311,6 +451,13 @@ SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, true);
 
 
 --
+-- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 1, false);
+
+
+--
 -- Name: user_user_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
@@ -322,6 +469,13 @@ SELECT pg_catalog.setval('instachat.user_user_id_seq', 3, true);
 --
 
 SELECT pg_catalog.setval('public.chats_chat_id_seq', 1, true);
+
+
+--
+-- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: public; Owner: instadev
+--
+
+SELECT pg_catalog.setval('public.post_post_id_seq', 1, false);
 
 
 --
@@ -341,11 +495,35 @@ ALTER TABLE ONLY instachat.chat
 
 
 --
+-- Name: creates creates_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.creates
+    ADD CONSTRAINT creates_pkey PRIMARY KEY (user_id, post_id);
+
+
+--
 -- Name: phone phone_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.phone
     ADD CONSTRAINT phone_pkey PRIMARY KEY (phone_id);
+
+
+--
+-- Name: post_belongs post_belongs_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.post_belongs
+    ADD CONSTRAINT post_belongs_pkey PRIMARY KEY (chat_id, post_id);
+
+
+--
+-- Name: post post_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.post
+    ADD CONSTRAINT post_pkey PRIMARY KEY (post_id);
 
 
 --
@@ -381,6 +559,14 @@ ALTER TABLE ONLY public.chats
 
 
 --
+-- Name: post post_pkey; Type: CONSTRAINT; Schema: public; Owner: instadev
+--
+
+ALTER TABLE ONLY public.post
+    ADD CONSTRAINT post_pkey PRIMARY KEY (post_id);
+
+
+--
 -- Name: belongs belongs_chat_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
@@ -405,11 +591,43 @@ ALTER TABLE ONLY instachat.chat
 
 
 --
+-- Name: creates creates_post_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.creates
+    ADD CONSTRAINT creates_post_id_fkey FOREIGN KEY (post_id) REFERENCES instachat.post(post_id);
+
+
+--
+-- Name: creates creates_user_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.creates
+    ADD CONSTRAINT creates_user_id_fkey FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id);
+
+
+--
 -- Name: phone phone_user_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.phone
     ADD CONSTRAINT phone_user_id_fkey FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id);
+
+
+--
+-- Name: post_belongs post_belongs_chat_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.post_belongs
+    ADD CONSTRAINT post_belongs_chat_id_fkey FOREIGN KEY (chat_id) REFERENCES instachat.chat(chat_id);
+
+
+--
+-- Name: post_belongs post_belongs_post_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.post_belongs
+    ADD CONSTRAINT post_belongs_post_id_fkey FOREIGN KEY (post_id) REFERENCES instachat.post(post_id);
 
 
 --
