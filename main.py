@@ -14,7 +14,7 @@ def greeting():
 
 
 @app.route('/InstaChat/chats', methods=['GET', 'POST'])
-def getAllParts():
+def getAllChats():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
         return ChatHandler().createChat(request.json)
