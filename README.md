@@ -1,4 +1,4 @@
-# instachat
+# Instachat
 
 > A Instagram & Whatsapp like project where users are able to post images on different chats.
 
