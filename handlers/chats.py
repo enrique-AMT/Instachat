@@ -26,11 +26,12 @@ class ChatHandler:
         return jsonify(Chat=result_list)
 
     def getChatById(self, chat_id):
-      print("todo")
-        # if len(chat_list) < chat_id or chat_id < 1:
-        #     return jsonify(Error='Chat not found'), 404
-        # else:
-        #     return jsonify(Chat=chat_list[chat_id-1])
+        dao = ChatsDAO()
+        return jsonify(Chat=dao.getChatById(chat_id))
+
+    def getChatPosts(self, chat_id):
+        dao = ChatsDAO()
+        return jsonify(Posts=dao.getChatPosts(chat_id))
 
     def createChat(self, json):
       print("todo")

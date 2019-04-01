@@ -9,7 +9,6 @@ from handlers.reply import ReplyHandler
 
 app = Flask(__name__)
 
-#Testing comment
 
 
 @app.route('/')
@@ -33,6 +32,17 @@ def getAllChats():
 def getChatById(chat_id):
     if request.method == 'GET':
         return ChatHandler().getChatById(chat_id)
+    elif request.method == 'PUT':
+        return ChatHandler().updateChat(chat_id, request.json)
+    elif request.method == 'DELETE':
+        return ChatHandler().deleteChat(chat_id)
+    else:
+        return jsonify(Error = "Method not allowed."), 405
+
+@app.route('/InstaChat/chats/<int:chat_id>/posts', methods=['GET', 'PUT', 'DELETE'])
+def getChatPosts(chat_id):
+    if request.method == 'GET':
+        return ChatHandler().getChatPosts(chat_id)
     elif request.method == 'PUT':
         return ChatHandler().updateChat(chat_id, request.json)
     elif request.method == 'DELETE':
@@ -73,28 +83,6 @@ def getUserContactList(user_id):
     else:
         return jsonify(Error="Method not allowed."), 405
 
-@app.route('/InstaChat/users/<int:user_id>/contacts', methods=['GET', 'PUT', 'DELETE'])
-def getUserContactList(user_id):
-    if request.method == 'GET':
-        return UserHandler().getUserContactList(user_id)
-    elif request.method == 'PUT':
-        return UserHandler().updateUser(user_id, request.json)
-    elif request.method == 'DELETE':
-        return UserHandler().deleteUser(user_id)
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-
-@app.route('/InstaChat/users/<int:user_id>/chats', methods=['GET', 'PUT', 'DELETE'])
-def getUserChatList(user_id):
-    if request.method == 'GET':
-        return UserHandler().getUserContactList(user_id)
-    elif request.method == 'PUT':
-        return UserHandler().updateUser(user_id, request.json)
-    elif request.method == 'DELETE':
-        return UserHandler().deleteUser(user_id)
-    else:
-        return jsonify(Error="Method not allowed."), 405
 
 @app.route('/InstaChat/users/<int:user_id>/chats', methods=['GET', 'PUT', 'DELETE'])
 def getUserChatList(user_id):
