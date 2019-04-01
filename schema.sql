@@ -103,6 +103,41 @@ CREATE TABLE instachat.creates (
 ALTER TABLE instachat.creates OWNER TO instadev;
 
 --
+-- Name: image; Type: TABLE; Schema: instachat; Owner: instadev
+--
+
+CREATE TABLE instachat.image (
+    image_id integer NOT NULL,
+    post_id integer,
+    image_file character varying(256)
+);
+
+
+ALTER TABLE instachat.image OWNER TO instadev;
+
+--
+-- Name: image_image_id_seq; Type: SEQUENCE; Schema: instachat; Owner: instadev
+--
+
+CREATE SEQUENCE instachat.image_image_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE instachat.image_image_id_seq OWNER TO instadev;
+
+--
+-- Name: image_image_id_seq; Type: SEQUENCE OWNED BY; Schema: instachat; Owner: instadev
+--
+
+ALTER SEQUENCE instachat.image_image_id_seq OWNED BY instachat.image.image_id;
+
+
+--
 -- Name: phone; Type: TABLE; Schema: instachat; Owner: instadev
 --
 
@@ -314,6 +349,13 @@ ALTER TABLE ONLY instachat.chat ALTER COLUMN chat_id SET DEFAULT nextval('instac
 
 
 --
+-- Name: image image_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.image ALTER COLUMN image_id SET DEFAULT nextval('instachat.image_image_id_seq'::regclass);
+
+
+--
 -- Name: phone phone_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
@@ -353,6 +395,10 @@ ALTER TABLE ONLY public.post ALTER COLUMN post_id SET DEFAULT nextval('public.po
 --
 
 COPY instachat.belongs (chat_id, user_id) FROM stdin;
+1	1
+1	2
+1	3
+1	4
 \.
 
 
@@ -370,6 +416,16 @@ COPY instachat.chat (chat_id, chat_name, owner_id, number_of_users) FROM stdin;
 --
 
 COPY instachat.creates (user_id, post_id) FROM stdin;
+1	1
+\.
+
+
+--
+-- Data for Name: image; Type: TABLE DATA; Schema: instachat; Owner: instadev
+--
+
+COPY instachat.image (image_id, post_id, image_file) FROM stdin;
+1	1	hola.png
 \.
 
 
@@ -379,6 +435,9 @@ COPY instachat.creates (user_id, post_id) FROM stdin;
 
 COPY instachat.phone (phone_id, user_id, phone) FROM stdin;
 1	1	7873830072
+2	2	9392590242
+3	3	9399999999
+4	4	9399999999
 \.
 
 
@@ -387,6 +446,8 @@ COPY instachat.phone (phone_id, user_id, phone) FROM stdin;
 --
 
 COPY instachat.post (post_id, post_caption, post_date) FROM stdin;
+1	jaja saludos	04/01/2019
+2	sin imagen	04/01/2019
 \.
 
 
@@ -395,6 +456,7 @@ COPY instachat.post (post_id, post_caption, post_date) FROM stdin;
 --
 
 COPY instachat.post_belongs (chat_id, post_id) FROM stdin;
+1	1
 \.
 
 
@@ -444,17 +506,24 @@ SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 1, true);
 
 
 --
+-- Name: image_image_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.image_image_id_seq', 1, true);
+
+
+--
 -- Name: phone_phone_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, true);
+SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 4, true);
 
 
 --
 -- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.post_post_id_seq', 1, false);
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 2, true);
 
 
 --
@@ -500,6 +569,14 @@ ALTER TABLE ONLY instachat.chat
 
 ALTER TABLE ONLY instachat.creates
     ADD CONSTRAINT creates_pkey PRIMARY KEY (user_id, post_id);
+
+
+--
+-- Name: image image_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.image
+    ADD CONSTRAINT image_pkey PRIMARY KEY (image_id);
 
 
 --
@@ -604,6 +681,14 @@ ALTER TABLE ONLY instachat.creates
 
 ALTER TABLE ONLY instachat.creates
     ADD CONSTRAINT creates_user_id_fkey FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id);
+
+
+--
+-- Name: image image_post_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.image
+    ADD CONSTRAINT image_post_id_fkey FOREIGN KEY (post_id) REFERENCES instachat.post(post_id);
 
 
 --
