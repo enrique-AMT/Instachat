@@ -1,4 +1,5 @@
 from flask import jsonify
+from daos.posts import PostsDAO
 
 posts_list = [{"post_id": 1, "user_id": "1", "imageURL": "www.test.com", "post_caption": "HI", "post_likes": "10",
                "post_dislikes": "1", "reply_id": "5", "post_Date": "2/15/2019", "topic_id": "9"}]
@@ -8,15 +9,13 @@ class PostHandler:
 
     def build_post_dict(self, row):
         result = {}
-        result['post_id'] = row[0]
-        result['user_id'] = row[1]
-        result['imageURL'] = row[2]
-        result['post_caption'] = row[3]
-        result['post_likes'] = row[4]
-        result['post_dislikes'] = row[5]
-        result['reply_id'] = row[6]
-        result['post_Date'] = row[7]
-        result['topic_id'] = row[8]
+        result['post_caption'] = row[0]
+        result['hash_name'] = row[1]
+        result['first_name'] = row[2]
+        result['last_name'] = row[3]
+        result['phone'] = row[4]
+        result['u_email_address'] = row[5]
+        result['post_date'] = row[6]
 
         return result
 
@@ -34,14 +33,22 @@ class PostHandler:
         result['topic_id'] = tid
         return result
 
-    def getAllPosts(self):
-        return jsonify(Posts=posts_list)
+    def getAllPosts(self, chat_id):
+      dao = PostsDAO()
+      posts = dao.getAllPosts(chat_id)
+      postsList = []
+      for row in posts:
+        postsList.append(self.build_post_dict(row))
+      return jsonify(Posts=postsList)
 
-    def getPostById(self, post_id):
-        if len(posts_list) < post_id or post_id < 1:
-            return jsonify(Eror = "Post not found."), 404
-        else:
-            return jsonify(Post=posts_list[post_id - 1])
+    def getPostById(self, chat_id, post_id):
+      dao = PostsDAO()
+      row = dao.getPostById(chat_id, post_id)
+      if not row:
+        return jsonify(Error="Post Not Found"), 404
+      else:
+        post = self.build_post_dict(row)
+        return jsonify(Post=post)
 
     def insertPostJson(self, json):
         global p_id
