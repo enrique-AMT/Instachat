@@ -25,14 +25,14 @@ CREATE SCHEMA instachat;
 ALTER SCHEMA instachat OWNER TO instadev;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -649,4 +649,3 @@ ALTER TABLE ONLY instachat.u_contacts
 --
 -- PostgreSQL database dump complete
 --
-
