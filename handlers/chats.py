@@ -10,9 +10,8 @@ class ChatHandler:
         chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id' : row[2], 'number_of_users' : row[3]}
         return chat_list
 
-    def build_chat_attributes(self, chat_id, chat_name, number_of_users, user_id, active_user_count, owner_id):
-        result = {'chat_id': chat_id, 'chat_name': chat_name, 'number_of_users': number_of_users, 'user_id': user_id,
-                  'active_user_count': active_user_count, 'owner_id': owner_id}
+    def build_chat_attributes(self, chat_name, number_of_users, owner_id):
+        result = {'chat_name': chat_name, 'number_of_users': number_of_users, 'owner_id': owner_id}
 
         return result
 
@@ -27,11 +26,12 @@ class ChatHandler:
 
     def getChatById(self, chat_id):
         dao = ChatsDAO()
-        return jsonify(Chat=dao.getChatById(chat_id))
-
-    def getChatPosts(self, chat_id):
-        dao = ChatsDAO()
-        return jsonify(Posts=dao.getChatPosts(chat_id))
+        row = dao.getChatById(chat_id)
+        if not row:
+          return jsonify(Error="Chat Not Found"), 404
+        else:
+          chat = self.build_chat_dict(row)
+          return jsonify(Chat=chat)
 
     def createChat(self, json):
       print("todo")
