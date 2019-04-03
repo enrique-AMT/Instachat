@@ -452,6 +452,9 @@ COPY instachat.belongs (chat_id, user_id) FROM stdin;
 1	2
 1	3
 1	4
+2	2
+2	3
+2	4
 \.
 
 
@@ -460,7 +463,8 @@ COPY instachat.belongs (chat_id, user_id) FROM stdin;
 --
 
 COPY instachat.chat (chat_id, chat_name, owner_id, number_of_users) FROM stdin;
-1	hello	1	1
+2	Sin Pedrito	4	3
+1	hello	1	4
 \.
 
 
@@ -496,7 +500,7 @@ COPY instachat.hashtag (hashtag_id, hash_name) FROM stdin;
 --
 
 COPY instachat.image (image_id, post_id, image_file) FROM stdin;
-1	1	hola.png
+1	1	/static/hola.png
 \.
 
 
@@ -538,6 +542,9 @@ COPY instachat.post_belongs (chat_id, post_id) FROM stdin;
 
 COPY instachat.u_contacts (user_id, contact_id) FROM stdin;
 1	2
+1	3
+1	4
+2	1
 \.
 
 
@@ -574,7 +581,7 @@ COPY public.post (post_id, post_caption, post_date) FROM stdin;
 -- Name: chat_chat_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 1, true);
+SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 2, true);
 
 
 --

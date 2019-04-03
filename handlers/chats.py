@@ -1,7 +1,7 @@
-from config.dbconfig import pg_config
-import psycopg2
 from flask import jsonify
 from daos.chats import ChatsDAO
+from daos.users import UsersDAO
+from handlers.users import UserHandler
 
 class ChatHandler:
 
@@ -32,6 +32,18 @@ class ChatHandler:
         else:
           chat = self.build_chat_dict(row)
           return jsonify(Chat=chat)
+
+    def getChatUsers(self, chat_id):
+      dao = ChatsDAO()
+      user_list = dao.getChatUsers(chat_id)
+      if not user_list:
+        return jsonify(Error="Users Not Found"), 404
+      else:
+        result_list = []
+        for row in user_list:
+          user = UserHandler.build_user_dict(UserHandler, row)
+          result_list.append(user)
+        return jsonify(Chat=result_list)
 
     def createChat(self, json):
       print("todo")

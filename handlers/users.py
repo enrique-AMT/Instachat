@@ -1,13 +1,10 @@
 from flask import jsonify
+from daos.users import UsersDAO
 
-uid = 2
-user_list = [{"user_id": 1, "user_name": "Juan", "user_lastName": "Del Pueblo", "user_phone": "787-777-7777",
-              "user_contact_list": '["1","3","4"]', "user_email": "dummy@gmail.com", "user_password": "dummy1234"}]
 class UserHandler:
 
     def build_user_dict(self, row):
-        result = {'user_id': row[0], 'user_name': row[1], 'user_lastName': row[2], 'user_phone': row[3],
-                     'user_contact_list': row[4], 'user_email': row[5], 'user_password': row[6]}
+        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2]}
         return result
 
     def build_user_attributes(self, user_id, user_name, user_lastName, user_phone,user_contact_list,
@@ -20,13 +17,22 @@ class UserHandler:
 
 
     def getAllUsers(self):
-        return jsonify(User=user_list)
+        dao = UsersDAO()
+        user_list = dao.getAllUsers()
+        result_list = []
+        for row in user_list:
+          result = self.build_user_dict(row)
+          result_list.append(result)
+        return jsonify(User=result_list)
 
     def getUserById(self, user_id):
-        if len(user_list) < user_id or user_id < 1:
-            return jsonify(Error='User not found'), 404
+        dao = UsersDAO()
+        row = dao.getUserById(user_id)
+        if not row:
+          return jsonify(Error="User Not Found"), 404
         else:
-            return jsonify(User=user_list[user_id-1])
+          user = self.build_user_dict(row)
+          return jsonify(User=user)
 
     def createUser(self, json):
         global uid
@@ -73,12 +79,15 @@ class UserHandler:
 
 
     def getUserContactList(self, user_id):
-        if len(user_list) < user_id or user_id < 1:
-            return jsonify(Error='User not found'), 404
-        else:
-            return jsonify(User=user_list[user_id-1])
+        dao = UsersDAO()
+        contact_list = dao.getUserContactList(user_id)
+        result_list = []
+        for row in contact_list:
+          result = self.build_user_dict(row)
+          result_list.append(result)
+        return jsonify(Contact=result_list)
 
-    def getUserChattList(self, user_id):
+    def getUserChatList(self, user_id):
         if len(user_list) < user_id or user_id < 1:
             return jsonify(Error='User not found'), 404
         else:
