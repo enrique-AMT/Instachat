@@ -61,8 +61,7 @@ ALTER TABLE instachat.belongs OWNER TO instadev;
 CREATE TABLE instachat.chat (
     chat_id integer NOT NULL,
     chat_name character varying(20),
-    owner_id integer,
-    number_of_users integer
+    owner_id integer
 );
 
 
@@ -115,6 +114,18 @@ CREATE TABLE instachat.has_hashtag (
 ALTER TABLE instachat.has_hashtag OWNER TO instadev;
 
 --
+-- Name: has_image; Type: TABLE; Schema: instachat; Owner: instadev
+--
+
+CREATE TABLE instachat.has_image (
+    post_id integer NOT NULL,
+    image_id integer NOT NULL
+);
+
+
+ALTER TABLE instachat.has_image OWNER TO instadev;
+
+--
 -- Name: hashtag; Type: TABLE; Schema: instachat; Owner: instadev
 --
 
@@ -154,8 +165,7 @@ ALTER SEQUENCE instachat.hashtag_hashtag_id_seq OWNED BY instachat.hashtag.hasht
 
 CREATE TABLE instachat.image (
     image_id integer NOT NULL,
-    post_id integer,
-    image_file character varying(256)
+    image_file character varying(128)
 );
 
 
@@ -448,13 +458,6 @@ ALTER TABLE ONLY public.post ALTER COLUMN post_id SET DEFAULT nextval('public.po
 --
 
 COPY instachat.belongs (chat_id, user_id) FROM stdin;
-1	1
-1	2
-1	3
-1	4
-2	2
-2	3
-2	4
 \.
 
 
@@ -462,9 +465,8 @@ COPY instachat.belongs (chat_id, user_id) FROM stdin;
 -- Data for Name: chat; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat.chat (chat_id, chat_name, owner_id, number_of_users) FROM stdin;
-2	Sin Pedrito	4	3
-1	hello	1	4
+COPY instachat.chat (chat_id, chat_name, owner_id) FROM stdin;
+1	hello	1
 \.
 
 
@@ -487,6 +489,15 @@ COPY instachat.has_hashtag (post_id, hashtag_id) FROM stdin;
 
 
 --
+-- Data for Name: has_image; Type: TABLE DATA; Schema: instachat; Owner: instadev
+--
+
+COPY instachat.has_image (post_id, image_id) FROM stdin;
+1	1
+\.
+
+
+--
 -- Data for Name: hashtag; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
@@ -499,8 +510,8 @@ COPY instachat.hashtag (hashtag_id, hash_name) FROM stdin;
 -- Data for Name: image; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat.image (image_id, post_id, image_file) FROM stdin;
-1	1	/static/hola.png
+COPY instachat.image (image_id, image_file) FROM stdin;
+1	hola.png
 \.
 
 
@@ -510,9 +521,6 @@ COPY instachat.image (image_id, post_id, image_file) FROM stdin;
 
 COPY instachat.phone (phone_id, user_id, phone) FROM stdin;
 1	1	7873830072
-2	2	9392590242
-3	3	9399999999
-4	4	9399999999
 \.
 
 
@@ -521,8 +529,8 @@ COPY instachat.phone (phone_id, user_id, phone) FROM stdin;
 --
 
 COPY instachat.post (post_id, post_caption, post_date) FROM stdin;
-1	jaja saludos	04/01/2019
-2	sin imagen	04/01/2019
+1	jajaja este test	4/1/2019
+2	sin imagen	4/1/2019
 \.
 
 
@@ -544,7 +552,6 @@ COPY instachat.u_contacts (user_id, contact_id) FROM stdin;
 1	2
 1	3
 1	4
-2	1
 \.
 
 
@@ -574,6 +581,7 @@ COPY public.chats (chat_id, chat_name, number_of_users, user_id, active_user_cou
 --
 
 COPY public.post (post_id, post_caption, post_date) FROM stdin;
+1	sin imagen	4/1/2019
 \.
 
 
@@ -663,6 +671,14 @@ ALTER TABLE ONLY instachat.creates
 
 ALTER TABLE ONLY instachat.has_hashtag
     ADD CONSTRAINT has_hashtag_pkey PRIMARY KEY (post_id, hashtag_id);
+
+
+--
+-- Name: has_image has_image_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.has_image
+    ADD CONSTRAINT has_image_pkey PRIMARY KEY (post_id, image_id);
 
 
 --
@@ -802,11 +818,19 @@ ALTER TABLE ONLY instachat.has_hashtag
 
 
 --
--- Name: image image_post_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: has_image has_image_image_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
-ALTER TABLE ONLY instachat.image
-    ADD CONSTRAINT image_post_id_fkey FOREIGN KEY (post_id) REFERENCES instachat.post(post_id);
+ALTER TABLE ONLY instachat.has_image
+    ADD CONSTRAINT has_image_image_id_fkey FOREIGN KEY (image_id) REFERENCES instachat.image(image_id);
+
+
+--
+-- Name: has_image has_image_post_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.has_image
+    ADD CONSTRAINT has_image_post_id_fkey FOREIGN KEY (post_id) REFERENCES instachat.post(post_id);
 
 
 --
