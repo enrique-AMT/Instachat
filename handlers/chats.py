@@ -7,7 +7,7 @@ class ChatHandler:
 
 
     def build_chat_dict(self, row):
-        chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id' : row[2], 'number_of_users' : row[3]}
+        chat_list = {'chat_id': row[0], 'chat_name': row[1]}
         return chat_list
 
     def build_chat_attributes(self, chat_name, number_of_users, owner_id):

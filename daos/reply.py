@@ -1,5 +1,6 @@
 from config.dbconfig import pg_config
 from flask import jsonify
+from daos.users import UsersDAO
 import psycopg2
 
 
@@ -48,11 +49,10 @@ class ReplyDAO:
     reply_list = self.getAllReplies()
     if len(reply_list) < reply_id or reply_id < 1:
         return jsonify(Error='Reply not found'), 404
-    cursor.execute("select * from instachat.get_reaction natural inner join instachat.react where reply_id = %s;",
+    cursor.execute("select * from instachat.react natural inner join instachat.reply where reply_id = %s;",
                    [reply_id])
     result = []
     for row in cursor:
         result.append(row)
     return result
-
 
