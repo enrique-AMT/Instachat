@@ -50,6 +50,17 @@ def getAllPosts(chat_id):
     else:
         return jsonify(Error = "Method not allowed."), 405
 
+@app.route('/InstaChat/chats/<int:chat_id>/users', methods=['GET', 'PUT', 'DELETE'])
+def getChatUsers(chat_id):
+    if request.method == 'GET':
+        return ChatHandler().getChatUsers(chat_id)
+    elif request.method == 'PUT':
+        return ChatHandler().updateChat(chat_id, request.json)
+    elif request.method == 'DELETE':
+        return ChatHandler().deleteChat(chat_id)
+    else:
+        return jsonify(Error = "Method not allowed."), 405
+
 
 @app.route('/InstaChat/users', methods=['POST', 'GET'])
 def getAllUsers():
@@ -87,7 +98,7 @@ def getUserContactList(user_id):
 @app.route('/InstaChat/users/<int:user_id>/chats', methods=['GET', 'PUT', 'DELETE'])
 def getUserChatList(user_id):
     if request.method == 'GET':
-        return UserHandler().getUserContactList(user_id)
+        return UserHandler().getUserChatList(user_id)
     elif request.method == 'PUT':
         return UserHandler().updateUser(user_id, request.json)
     elif request.method == 'DELETE':
@@ -181,6 +192,8 @@ def getSessionById(session_id):
         return SessionHandler().deleteSession(session_id)
     else:
         return jsonify(Error = "Method not allowed."), 405
+
+
 
 
 if __name__ == '__main__':

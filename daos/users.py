@@ -2,7 +2,7 @@ from config.dbconfig import pg_config
 from flask import jsonify
 import psycopg2
 
-class ChatsDAO:
+class UsersDAO:
   def __init__(self):
     connection_url = "dbname=%s user=%s password=%s host=%s" % (pg_config['dbname'],
                                                                 pg_config['user'],
@@ -10,30 +10,29 @@ class ChatsDAO:
 
     self.conn = psycopg2._connect(connection_url)
 
-  def getAllChats(self):
+  def getAllUsers(self):
     cursor = self.conn.cursor()
-    query = "select * from instachat.chat;"
+    query = "select * from instachat.user;"
     cursor.execute(query)
     result = []
     for row in cursor:
       result.append(row)
     return result
 
-  def getChatById(self, chat_id):
+  def getUserById(self, user_id):
     cursor = self.conn.cursor()
-    cursor.execute("select * from instachat.chat where chat_id = %s;", [chat_id])
+    cursor.execute("select user_id, first_name, last_name from instachat.user where user_id = %s;", [user_id])
     result = cursor.fetchone()
     return result
 
-  def getChatUsers(self, chat_id):
+  def getUserContactList(self, user_id):
     cursor = self.conn.cursor()
-    chat_list = self.getAllChats()
-    if len(chat_list) < chat_id or chat_id < 1:
-      return jsonify(Error='Chat not found'), 404
-    cursor.execute("select user_id, first_name, last_name from instachat.chat natural inner join instachat.belongs "
-                   "natural inner join instachat.user where chat_id = %s;", [chat_id])
+    cursor.execute("select contact_id from instachat.user natural inner join instachat.u_contacts where user_id = %s;", [user_id])
+    ids = []
     result = []
     for row in cursor:
-      result.append(row)
+      ids.append(row[0])
+    for row in ids:
+      cursor.execute("select user_id, first_name, last_name from instachat.user where user_id = %s;", [row])
+      result.append(cursor.fetchone())
     return result
-
