@@ -34,7 +34,6 @@ class ReplyDAO:
 
   def getReplyByDate(self, reply_date):
     cursor = self.conn.cursor()
-    reply_list = self.getAllReplies()
     cursor.execute("select * from instachat.reply where reply_date = %s;", [reply_date])
     result = []
     if len(cursor) == 0:
@@ -44,7 +43,7 @@ class ReplyDAO:
             result.append(row)
     return result
 
-  def getReactsOnReplies(self, reply_id):
+  def getReactsOnReply(self, reply_id):
     cursor = self.conn.cursor()
     reply_list = self.getAllReplies()
     if len(reply_list) < reply_id or reply_id < 1:
