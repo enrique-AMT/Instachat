@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.14
--- Dumped by pg_dump version 9.5.14
+-- Dumped from database version 10.6 (Ubuntu 10.6-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.6 (Ubuntu 10.6-0ubuntu0.18.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -323,35 +324,35 @@ CREATE TABLE public.post (
 ALTER TABLE public.post OWNER TO instadev;
 
 --
--- Name: chat_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+-- Name: chat chat_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.chat ALTER COLUMN chat_id SET DEFAULT nextval('instachat.chat_chat_id_seq'::regclass);
 
 
 --
--- Name: image_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+-- Name: image image_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.image ALTER COLUMN image_id SET DEFAULT nextval('instachat.image_image_id_seq'::regclass);
 
 
 --
--- Name: phone_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+-- Name: phone phone_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.phone ALTER COLUMN phone_id SET DEFAULT nextval('instachat.phone_phone_id_seq'::regclass);
 
 
 --
--- Name: react_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+-- Name: react react_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.react ALTER COLUMN react_id SET DEFAULT nextval('instachat.react_react_id_seq'::regclass);
 
 
 --
--- Name: reply_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+-- Name: reply reply_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.reply ALTER COLUMN reply_id SET DEFAULT nextval('instachat.reply_reply_id_seq'::regclass);
@@ -381,17 +382,11 @@ COPY instachat.chat (chat_id, chat_name, owner_id) FROM stdin;
 
 
 --
--- Name: chat_chat_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
---
-
-SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 2, true);
-
-
---
 -- Data for Name: has_hashtag; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
 COPY instachat.has_hashtag (hashtag_id, p_with_hashtag) FROM stdin;
+1	1
 \.
 
 
@@ -413,25 +408,11 @@ COPY instachat.image (image_id, image_file, p_with_image) FROM stdin;
 
 
 --
--- Name: image_image_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
---
-
-SELECT pg_catalog.setval('instachat.image_image_id_seq', 1, false);
-
-
---
 -- Data for Name: phone; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
 COPY instachat.phone (phone_id, u_phone, phone) FROM stdin;
 \.
-
-
---
--- Name: phone_phone_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
---
-
-SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
 
 
 --
@@ -451,14 +432,12 @@ COPY instachat.post (post_id, post_caption, post_date, p_created_by, c_post_belo
 COPY instachat.react (react_id, react_type, react_date, user_that_react, p_reacted, reply_reacted) FROM stdin;
 1	like	04-04-2019	1	2	\N
 2	dislike	05-05-2020	3	2	\N
+3	like	03-03-2019	4	1	\N
+4	like	03-10-2018	3	1	\N
+5	like	03-10-2018	1	1	\N
+6	dislike	12-15-2017	2	1	\N
+7	dislike	12-15-2015	4	2	\N
 \.
-
-
---
--- Name: react_react_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
---
-
-SELECT pg_catalog.setval('instachat.react_react_id_seq', 2, true);
 
 
 --
@@ -467,13 +446,6 @@ SELECT pg_catalog.setval('instachat.react_react_id_seq', 2, true);
 
 COPY instachat.reply (reply_id, reply_date, reply_text, p_replied) FROM stdin;
 \.
-
-
---
--- Name: reply_reply_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
---
-
-SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 1, false);
 
 
 --
@@ -515,7 +487,42 @@ COPY public.post (post_id, post_caption, post_date) FROM stdin;
 
 
 --
--- Name: belongs_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: chat_chat_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 2, true);
+
+
+--
+-- Name: image_image_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.image_image_id_seq', 1, false);
+
+
+--
+-- Name: phone_phone_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
+
+
+--
+-- Name: react_react_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.react_react_id_seq', 7, true);
+
+
+--
+-- Name: reply_reply_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 1, false);
+
+
+--
+-- Name: belongs belongs_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.belongs
@@ -523,7 +530,7 @@ ALTER TABLE ONLY instachat.belongs
 
 
 --
--- Name: chat_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: chat chat_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.chat
@@ -531,7 +538,7 @@ ALTER TABLE ONLY instachat.chat
 
 
 --
--- Name: has_hashtag_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: has_hashtag has_hashtag_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.has_hashtag
@@ -539,7 +546,7 @@ ALTER TABLE ONLY instachat.has_hashtag
 
 
 --
--- Name: hashtag_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: hashtag hashtag_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.hashtag
@@ -547,7 +554,7 @@ ALTER TABLE ONLY instachat.hashtag
 
 
 --
--- Name: image_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: image image_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.image
@@ -555,7 +562,7 @@ ALTER TABLE ONLY instachat.image
 
 
 --
--- Name: phone_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: phone phone_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.phone
@@ -563,7 +570,7 @@ ALTER TABLE ONLY instachat.phone
 
 
 --
--- Name: post_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: post post_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.post
@@ -571,7 +578,7 @@ ALTER TABLE ONLY instachat.post
 
 
 --
--- Name: react_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: react react_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.react
@@ -579,7 +586,7 @@ ALTER TABLE ONLY instachat.react
 
 
 --
--- Name: reply_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: reply reply_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.reply
@@ -587,7 +594,7 @@ ALTER TABLE ONLY instachat.reply
 
 
 --
--- Name: u_contacts_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: u_contacts u_contacts_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.u_contacts
@@ -595,7 +602,7 @@ ALTER TABLE ONLY instachat.u_contacts
 
 
 --
--- Name: user_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat."user"
@@ -603,7 +610,7 @@ ALTER TABLE ONLY instachat."user"
 
 
 --
--- Name: user_u_email_address_key; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: user user_u_email_address_key; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat."user"
@@ -611,7 +618,7 @@ ALTER TABLE ONLY instachat."user"
 
 
 --
--- Name: chats_pkey; Type: CONSTRAINT; Schema: public; Owner: instadev
+-- Name: chats chats_pkey; Type: CONSTRAINT; Schema: public; Owner: instadev
 --
 
 ALTER TABLE ONLY public.chats
@@ -619,7 +626,7 @@ ALTER TABLE ONLY public.chats
 
 
 --
--- Name: post_pkey; Type: CONSTRAINT; Schema: public; Owner: instadev
+-- Name: post post_pkey; Type: CONSTRAINT; Schema: public; Owner: instadev
 --
 
 ALTER TABLE ONLY public.post
@@ -627,7 +634,7 @@ ALTER TABLE ONLY public.post
 
 
 --
--- Name: belongs_c_user_belongs_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: belongs belongs_c_user_belongs_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.belongs
@@ -635,7 +642,7 @@ ALTER TABLE ONLY instachat.belongs
 
 
 --
--- Name: belongs_u_belongs_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: belongs belongs_u_belongs_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.belongs
@@ -643,7 +650,7 @@ ALTER TABLE ONLY instachat.belongs
 
 
 --
--- Name: chat_owner_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: chat chat_owner_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.chat
@@ -651,7 +658,7 @@ ALTER TABLE ONLY instachat.chat
 
 
 --
--- Name: has_hashtag_hashtag_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: has_hashtag has_hashtag_hashtag_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.has_hashtag
@@ -659,7 +666,7 @@ ALTER TABLE ONLY instachat.has_hashtag
 
 
 --
--- Name: has_hashtag_p_with_hashtag_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: has_hashtag has_hashtag_p_with_hashtag_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.has_hashtag
@@ -667,7 +674,7 @@ ALTER TABLE ONLY instachat.has_hashtag
 
 
 --
--- Name: image_p_with_image_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: image image_p_with_image_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.image
@@ -675,7 +682,7 @@ ALTER TABLE ONLY instachat.image
 
 
 --
--- Name: phone_u_phone_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: phone phone_u_phone_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.phone
@@ -683,7 +690,7 @@ ALTER TABLE ONLY instachat.phone
 
 
 --
--- Name: post_c_post_belongs_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: post post_c_post_belongs_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.post
@@ -691,7 +698,7 @@ ALTER TABLE ONLY instachat.post
 
 
 --
--- Name: post_p_created_by_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: post post_p_created_by_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.post
@@ -699,7 +706,7 @@ ALTER TABLE ONLY instachat.post
 
 
 --
--- Name: react_p_reacted_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: react react_p_reacted_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.react
@@ -707,7 +714,7 @@ ALTER TABLE ONLY instachat.react
 
 
 --
--- Name: react_r_reacted_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: react react_r_reacted_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.react
@@ -715,7 +722,7 @@ ALTER TABLE ONLY instachat.react
 
 
 --
--- Name: react_u_that_react_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: react react_u_that_react_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.react
@@ -723,7 +730,7 @@ ALTER TABLE ONLY instachat.react
 
 
 --
--- Name: reply_p_replied_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: reply reply_p_replied_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.reply
@@ -731,7 +738,7 @@ ALTER TABLE ONLY instachat.reply
 
 
 --
--- Name: u_contacts_contact_of_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: u_contacts u_contacts_contact_of_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.u_contacts
@@ -739,21 +746,11 @@ ALTER TABLE ONLY instachat.u_contacts
 
 
 --
--- Name: u_contacts_user_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: u_contacts u_contacts_user_id_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.u_contacts
     ADD CONSTRAINT u_contacts_user_id_fkey FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id);
-
-
---
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --

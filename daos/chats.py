@@ -12,7 +12,7 @@ class ChatsDAO:
 
   def getAllChats(self):
     cursor = self.conn.cursor()
-    query = "select chat_id, chat_name, owner_id, count(user_id) from instachat.chat natural inner join instachat.belongs " \
+    query = "select chat_id, chat_name, owner_id, count(u_belongs) from instachat.chat natural inner join instachat.belongs " \
             "group by chat_id, chat_name, owner_id;"
     cursor.execute(query)
     result = []
@@ -22,7 +22,7 @@ class ChatsDAO:
 
   def getChatById(self, chat_id):
     cursor = self.conn.cursor()
-    cursor.execute("select chat_id, chat_name, owner_id, count(user_id) from instachat.chat natural inner join instachat.belongs"
+    cursor.execute("select chat_id, chat_name, owner_id, count(u_belongs) from instachat.chat natural inner join instachat.belongs"
                    " where chat_id = %s group by chat_id, chat_name, owner_id;", [chat_id])
     result = cursor.fetchone()
     return result
@@ -32,8 +32,8 @@ class ChatsDAO:
     chat_list = self.getAllChats()
     if len(chat_list) < chat_id or chat_id < 1:
       return jsonify(Error='Chat not found'), 404
-    cursor.execute("select user_id, first_name, last_name, count(user_id) from instachat.chat natural inner join instachat.belongs "
-                   "natural inner join instachat.user where chat_id = %s and user_id in (select user_id from instachat.belongs"
+    cursor.execute("select user_id, first_name, last_name, count(u_belongs) from instachat.chat natural inner join instachat.belongs "
+                   "natural inner join instachat.user where chat_id = %s and user_id in (select u_belongs from instachat.belongs"
                    " where chat_id = %s) group by user_id, first_name, last_name;", [chat_id, chat_id])
     result = []
     for row in cursor:
