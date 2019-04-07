@@ -20,6 +20,7 @@ class PostHandler:
       result = {}
       result['post_date'] = row[0]
       result['post_count'] = row[1]
+      return result
 
     def build_post_attributes(self, pid, uid, image, pcaption,plikes,
                               pdislikes, rid, pdate, tid):
@@ -65,8 +66,7 @@ class PostHandler:
       post_list = dao.getDailyPosts()
       result_list = []
       for row in post_list:
-        day = self.build_daily_post_dict(row)
-        result_list.append(day)
+        result_list.append(self.build_daily_post_dict(row))
       print(result_list)
       return jsonify(Post=result_list)
 
