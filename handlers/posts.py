@@ -9,15 +9,17 @@ class PostHandler:
 
     def build_post_dict(self, row):
         result = {}
-        result['post_caption'] = row[0]
-        result['hash_name'] = row[1]
-        result['first_name'] = row[2]
-        result['last_name'] = row[3]
-        result['phone'] = row[4]
-        result['u_email_address'] = row[5]
-        result['post_date'] = row[6]
+        result['post_id'] = row[0]
+        result['post_caption'] = row[1]
+        result['post_date'] = row[2]
+        result['user_id'] = row[3]
 
         return result
+
+    def build_daily_post_dict(self, row):
+      result = {}
+      result['post_date'] = row[0]
+      result['post_count'] = row[1]
 
     def build_post_attributes(self, pid, uid, image, pcaption,plikes,
                               pdislikes, rid, pdate, tid):
@@ -33,9 +35,17 @@ class PostHandler:
         result['topic_id'] = tid
         return result
 
-    def getAllPosts(self, chat_id):
+    def getAllPosts(self):
       dao = PostsDAO()
-      posts = dao.getAllPosts(chat_id)
+      posts = dao.getAllPosts()
+      postsList = []
+      for row in posts:
+        postsList.append(self.build_post_dict(row))
+      return jsonify(Posts=postsList)
+
+    def getChatPosts(self, chat_id):
+      dao = PostsDAO()
+      posts = dao.getChatPosts(chat_id)
       postsList = []
       for row in posts:
         postsList.append(self.build_post_dict(row))
@@ -49,6 +59,16 @@ class PostHandler:
       else:
         post = self.build_post_dict(row)
         return jsonify(Post=post)
+
+    def getDailyPosts(self):
+      dao = PostsDAO()
+      post_list = dao.getDailyPosts()
+      result_list = []
+      for row in post_list:
+        day = self.build_daily_post_dict(row)
+        result_list.append(day)
+      print(result_list)
+      return jsonify(Post=result_list)
 
     def insertPostJson(self, json):
         global p_id

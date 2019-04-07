@@ -1,6 +1,5 @@
 from flask import jsonify
 from daos.chats import ChatsDAO
-from daos.users import UsersDAO
 from handlers.users import UserHandler
 
 class ChatHandler:
