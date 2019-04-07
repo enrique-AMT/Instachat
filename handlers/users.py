@@ -7,6 +7,10 @@ class UserHandler:
         result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2]}
         return result
 
+    def build_full_user_dict(self, row):
+        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3], 'phone': row[4]}
+        return result
+
     def build_user_attributes(self, user_id, user_name, user_lastName, user_phone,user_contact_list,
                               user_email, user_password):
 
@@ -31,7 +35,7 @@ class UserHandler:
         if not row:
           return jsonify(Error="User Not Found"), 404
         else:
-          user = self.build_user_dict(row)
+          user = self.build_full_user_dict(row)
           return jsonify(User=user)
 
     def getUsersThatReact(self, post_id, react_type):

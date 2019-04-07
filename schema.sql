@@ -451,6 +451,11 @@ COPY instachat.post (post_id, post_caption, post_date, p_created_by, c_post_belo
 COPY instachat.react (react_id, react_type, react_date, user_that_react, p_reacted, reply_reacted) FROM stdin;
 1	like	04-04-2019	1	2	\N
 2	dislike	05-05-2020	3	2	\N
+3	like	03-03-2019	4	1	\N
+4	like	03-10-2018	3	1	\N
+5	like	03-10-2018	1	1	\N
+6	dislike	12-15-2017	2	1	\N
+7	dislike	12-15-2015	4	2	\N
 \.
 
 
@@ -458,7 +463,7 @@ COPY instachat.react (react_id, react_type, react_date, user_that_react, p_react
 -- Name: react_react_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.react_react_id_seq', 2, true);
+SELECT pg_catalog.setval('instachat.react_react_id_seq', 7, true);
 
 
 --

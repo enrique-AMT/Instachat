@@ -1,6 +1,5 @@
 from flask import jsonify
 from daos.posts import PostsDAO
-from daos.reacts import ReactsDAO
 
 # posts_list = [{"post_id": 1, "user_id": "1", "imageURL": "www.test.com", "post_caption": "HI", "post_likes": "10",
 #               "post_dislikes": "1", "reply_id": "5", "post_Date": "2/15/2019", "topic_id": "9"}]
@@ -17,6 +16,12 @@ class PostHandler:
 
         return result
 
+    def build_daily_post_dict(self, row):
+      result = {}
+      result['post_date'] = row[0]
+      result['post_count'] = row[1]
+      return result
+
     def build_post_attributes(self, pid, p_caption, p_date):
         result = []
         result['post_id'] = pid
@@ -24,13 +29,21 @@ class PostHandler:
         result['post_date'] = p_date
         return result
 
-    def getAllPosts(self, chat_id):
-        dao = PostsDAO()
-        posts = dao.getAllPosts(chat_id)
-        postsList = []
-        for row in posts:
-            postsList.append(self.build_post_dict(row))
-        return jsonify(Posts=postsList)
+    def getAllPosts(self):
+      dao = PostsDAO()
+      posts = dao.getAllPosts()
+      postsList = []
+      for row in posts:
+        postsList.append(self.build_post_dict(row))
+      return jsonify(Posts=postsList)
+
+    def getChatPosts(self, chat_id):
+      dao = PostsDAO()
+      posts = dao.getChatPosts(chat_id)
+      postsList = []
+      for row in posts:
+        postsList.append(self.build_post_dict(row))
+      return jsonify(Posts=postsList)
 
     def getPostById(self, chat_id, post_id):
         dao = PostsDAO()
@@ -40,6 +53,15 @@ class PostHandler:
         else:
             post = self.build_post_dict(row)
             return jsonify(Post=post)
+
+    def getDailyPosts(self):
+      dao = PostsDAO()
+      post_list = dao.getDailyPosts()
+      result_list = []
+      for row in post_list:
+        result_list.append(self.build_daily_post_dict(row))
+      print(result_list)
+      return jsonify(Post=result_list)
 
     def insertPostJson(self, json):
         print("TODO")

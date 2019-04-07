@@ -4,11 +4,11 @@ from handlers.posts import PostHandler
 # from handlers.sessions import SessionHandler
 from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
-
-
+from handlers.hashtags import HashtagsHandler
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-
+CORS(app)
 
 
 @app.route('/')
@@ -27,6 +27,28 @@ def getAllChats():
         else:
             return
 
+@app.route('/InstaChat/dashboard/<string:post_date>/hashtags', methods=['GET', 'POST'])
+def getDailyHashtags(post_date):
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return HashtagsHandler().getDailyHashtags(post_date)
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/posts', methods=['GET', 'POST'])
+def getDailyPosts():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return PostHandler().getDailyPosts()
+        else:
+            return
+
 
 @app.route('/InstaChat/chats/<int:chat_id>', methods=['GET', 'PUT', 'DELETE'])
 def getChatById(chat_id):
@@ -42,7 +64,7 @@ def getChatById(chat_id):
 @app.route('/InstaChat/chats/<int:chat_id>/posts', methods=['GET', 'PUT', 'DELETE'])
 def getAllPosts(chat_id):
     if request.method == 'GET':
-        return PostHandler().getAllPosts(chat_id)
+        return PostHandler().getChatPosts(chat_id)
     elif request.method == 'PUT':
         return ChatHandler().updateChat(chat_id, request.json)
     elif request.method == 'DELETE':
@@ -135,14 +157,14 @@ def getReplyById(reply_id):
         return jsonify(Error = "Method not allowed."), 405
 
 
-# @app.route('/InstaChat/posts', methods=['POST', 'GET'])
-# def getAllPost():
-#     if request.method == 'POST':
-#         print("REQUEST: ", request.json)
-#         return PostHandler().insertPostJson(request.json)
-#     else:
-#         if not request.args:
-#             return PostHandler().getAllPosts()
+@app.route('/InstaChat/posts', methods=['POST', 'GET'])
+def getAllPost():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return PostHandler().insertPostJson(request.json)
+    else:
+        if not request.args:
+            return PostHandler().getAllPosts()
 
 
 @app.route('/InstaChat/chats/<int:chat_id>/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
