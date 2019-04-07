@@ -31,7 +31,7 @@ class ChatsDAO:
     cursor = self.conn.cursor()
     chat_list = self.getAllChats()
     if len(chat_list) < chat_id or chat_id < 1:
-      return jsonify(Error='Chat not found'), 404
+      return jsonify(Error='Chat not found.'), 404
     cursor.execute("select user_id, first_name, last_name, count(user_id) from instachat.chat natural inner join instachat.belongs "
                    "natural inner join instachat.user where chat_id = %s and user_id in (select user_id from instachat.belongs"
                    " where chat_id = %s) group by user_id, first_name, last_name;", [chat_id, chat_id])
