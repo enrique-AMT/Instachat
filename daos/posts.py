@@ -11,7 +11,7 @@ class PostsDAO:
 
   def getAllPosts(self):
     cursor = self.conn.cursor()
-    cursor.execute("select post_id, post_caption, post_date, user_id"
+    cursor.execute("select distinct post_id, post_caption, post_date, user_id"
                    " from instachat.post natural inner join instachat.user natural inner "
                    "join instachat.post_belongs;")
     result = []
