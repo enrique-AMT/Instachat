@@ -1,5 +1,6 @@
 from flask import jsonify
 from daos.posts import PostsDAO
+from daos.reacts import ReactsDAO
 
 # posts_list = [{"post_id": 1, "user_id": "1", "imageURL": "www.test.com", "post_caption": "HI", "post_likes": "10",
 #               "post_dislikes": "1", "reply_id": "5", "post_Date": "2/15/2019", "topic_id": "9"}]
@@ -16,11 +17,11 @@ class PostHandler:
 
         return result
 
-    def build_post_attributes(self, pid, pcaption, pdate):
+    def build_post_attributes(self, pid, p_caption, p_date):
         result = []
         result['post_id'] = pid
-        result['post_caption'] = pcaption
-        result['post_date'] = pdate
+        result['post_caption'] = p_caption
+        result['post_date'] = p_date
         return result
 
     def getAllPosts(self, chat_id):
@@ -39,6 +40,10 @@ class PostHandler:
         else:
             post = self.build_post_dict(row)
             return jsonify(Post=post)
+
+    def getUsersThatReact(self, post_id, react_type):
+        dao = PostsDAO()
+        return jsonify(Post=dao.getUsersThatReact(post_id, react_type))
 
     def insertPostJson(self, json):
         print("TODO")

@@ -30,3 +30,13 @@ class PostsDAO:
       " instachat.creates where chat_id= %s and post_id = %s;",[chat_id, post_id])
     result = cursor.fetchone()
     return result
+
+  def getUsersThatReact(self, post_id, react_type):
+    cursor = self.conn.cursor()
+    cursor.execute("select distinct user_id, first_name, last_name, react_date from instachat.post natural inner join "
+                   "instachat.react natural inner join instachat.user where react_type = %s and user_id in "
+                   "(select user_that_reacted from instachat.react where p_reacted = %s);", [react_type, post_id])
+    result = []
+    for row in cursor:
+        result.append(row)
+    return result

@@ -35,7 +35,7 @@ class ReactsDAO:
     cursor.execute("select * from instachat.react where react_date = %s;", [react_date])
     result = []
     if len(cursor) == 0:
-        return jsonify(React="No recats on this date."), 404
+        return jsonify(React="No reacts on this date."), 404
     else:
         for row in cursor:
           result.append(row)
