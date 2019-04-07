@@ -21,7 +21,8 @@ class UsersDAO:
 
   def getUserById(self, user_id):
     cursor = self.conn.cursor()
-    cursor.execute("select user_id, first_name, last_name from instachat.user where user_id = %s;", [user_id])
+    cursor.execute("select user_id, first_name, last_name, u_email_address, phone from instachat.user natural inner join "
+                   "instachat.phone where user_id = %s;", [user_id])
     result = cursor.fetchone()
     return result
 
