@@ -41,10 +41,6 @@ class PostHandler:
             post = self.build_post_dict(row)
             return jsonify(Post=post)
 
-    def getUsersThatReact(self, post_id, react_type):
-        dao = PostsDAO()
-        return jsonify(Post=dao.getUsersThatReact(post_id, react_type))
-
     def insertPostJson(self, json):
         print("TODO")
         # global p_id

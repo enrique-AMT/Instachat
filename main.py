@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from handlers.chats import ChatHandler
 from handlers.posts import PostHandler
-from handlers.sessions import SessionHandler
+# from handlers.sessions import SessionHandler
 from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
 
@@ -106,6 +106,13 @@ def getUserChatList(user_id):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaChat/users/posts/<int:post_id>/<string:react_type>', methods=['GET'])
+def getUsersThatReactToPostX(post_id, react_type):
+    if request.method == 'GET':
+        return UserHandler().getUsersThatReact(post_id, react_type)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 @app.route('/InstaChat/replies', methods=['POST', 'GET'])
 def getAllReplies():
     if request.method == 'POST':
@@ -172,26 +179,26 @@ def getPostReplies(post_id):
         return jsonify(Error = "Method not allowed."), 405
 
 
-@app.route('/InstaChat/sessions', methods=['POST', 'GET'])
-def getAllSessions():
-    if request.method == 'POST':
-        print("REQUEST: ", request.json)
-        return SessionHandler().insertSessionJson(request.json)
-    else:
-        if not request.args:
-            return SessionHandler().getAllSessions()
-
-
-@app.route('/InstaChat/sessions/<int:session_id>', methods=['GET', 'PUT', 'DELETE'])
-def getSessionById(session_id):
-    if request.method == 'GET':
-        return SessionHandler().getSessionById(session_id)
-    elif request.method == 'PUT':
-        return SessionHandler().updateSession(session_id, request.json)
-    elif request.method == 'DELETE':
-        return SessionHandler().deleteSession(session_id)
-    else:
-        return jsonify(Error = "Method not allowed."), 405
+# @app.route('/InstaChat/sessions', methods=['POST', 'GET'])
+# def getAllSessions():
+#     if request.method == 'POST':
+#         print("REQUEST: ", request.json)
+#         return SessionHandler().insertSessionJson(request.json)
+#     else:
+#         if not request.args:
+#             return SessionHandler().getAllSessions()
+#
+#
+# @app.route('/InstaChat/sessions/<int:session_id>', methods=['GET', 'PUT', 'DELETE'])
+# def getSessionById(session_id):
+#     if request.method == 'GET':
+#         return SessionHandler().getSessionById(session_id)
+#     elif request.method == 'PUT':
+#         return SessionHandler().updateSession(session_id, request.json)
+#     elif request.method == 'DELETE':
+#         return SessionHandler().deleteSession(session_id)
+#     else:
+#         return jsonify(Error = "Method not allowed."), 405
 
 
 

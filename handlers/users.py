@@ -34,48 +34,59 @@ class UserHandler:
           user = self.build_user_dict(row)
           return jsonify(User=user)
 
-    def createUser(self, json):
-        global uid
-        user_name = json['user_name']
-        user_lastName = json['user_lastName']
-        user_phone = json['user_phone']
-        user_contacts_list = json['user_contact_list']
-        user_email = json['user_email']
-        user_password = json['user_password']
-        if user_name and user_lastName and user_phone and user_contacts_list and user_email and user_password:
-            print("added")
-            user_list.append([{"user_id": uid, "user_name": user_name, "user_lastName": user_lastName,
-                               "user_phone": user_phone, "user_contacts_list": user_contacts_list,
-                               "user_email": user_email, "user_password": user_password}])
-            result = self.build_user_attributes(uid, user_name, user_lastName, user_phone, user_contacts_list, user_email,
-                                                user_password)
-            uid = (uid + 1)
-            return jsonify(User=result), 201
+    def getUsersThatReact(self, post_id, react_type):
+        dao = UsersDAO()
+        user_list = dao.getUsersThatReact(post_id, react_type)
+        if not user_list:
+            return jsonify(Error="User not found"), 404
         else:
-            return jsonify(Error="Unexpected attributes in post request"), 400
+            return jsonify(Users=user_list)
+
+    def createUser(self, json):
+        print("TODO")
+        # global uid
+        # user_name = json['user_name']
+        # user_lastName = json['user_lastName']
+        # user_phone = json['user_phone']
+        # user_contacts_list = json['user_contact_list']
+        # user_email = json['user_email']
+        # user_password = json['user_password']
+        # if user_name and user_lastName and user_phone and user_contacts_list and user_email and user_password:
+        #     print("added")
+        #     user_list.append([{"user_id": uid, "user_name": user_name, "user_lastName": user_lastName,
+        #                        "user_phone": user_phone, "user_contacts_list": user_contacts_list,
+        #                        "user_email": user_email, "user_password": user_password}])
+        #     result = self.build_user_attributes(uid, user_name, user_lastName, user_phone, user_contacts_list, user_email,
+        #                                         user_password)
+        #     uid = (uid + 1)
+        #     return jsonify(User=result), 201
+        # else:
+        #     return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updateUser(self, user_id, json):
-        if len(user_list) < user_id or user_id < 1:
-            return jsonify(Error = "User not found."), 404
-        else:
-            if len(json) != 7:
-                return jsonify(Error = "Update request incorrect."), 400
-            else:
-                user_name = json['user_name']
-                user_lastName = json['user_lastName']
-                user_phone = json['user_phone']
-                user_contacts_list = json['user_contact_list']
-                user_email = json['user_email']
-                user_password = json['user_password']
-                if user_id and user_name and user_lastName and user_phone and user_contacts_list and user_email and user_password:
-                    return jsonify(UpdateStatus = "AREA TO UPDATE USER BY ID"), 200
+        print("TODO")
+        # if len(user_list) < user_id or user_id < 1:
+        #     return jsonify(Error = "User not found."), 404
+        # else:
+        #     if len(json) != 7:
+        #         return jsonify(Error = "Update request incorrect."), 400
+        #     else:
+        #         user_name = json['user_name']
+        #         user_lastName = json['user_lastName']
+        #         user_phone = json['user_phone']
+        #         user_contacts_list = json['user_contact_list']
+        #         user_email = json['user_email']
+        #         user_password = json['user_password']
+        #         if user_id and user_name and user_lastName and user_phone and user_contacts_list and user_email and user_password:
+        #             return jsonify(UpdateStatus = "AREA TO UPDATE USER BY ID"), 200
 
     def deleteUser(self, user_id):
-        global uid
-        if len(user_list) < user_id or user_id < 1:
-            return jsonify(Error = "User not found."), 404
-        else:
-            return jsonify(DeleteStatus = "AREA TO DELETE USER BY ID"), 200
+        print("TODO")
+        # global uid
+        # if len(user_list) < user_id or user_id < 1:
+        #     return jsonify(Error = "User not found."), 404
+        # else:
+        #     return jsonify(DeleteStatus = "AREA TO DELETE USER BY ID"), 200
 
 
     def getUserContactList(self, user_id):
@@ -88,7 +99,8 @@ class UserHandler:
         return jsonify(Contact=result_list)
 
     def getUserChatList(self, user_id):
-        if len(user_list) < user_id or user_id < 1:
-            return jsonify(Error='User not found'), 404
-        else:
-            return jsonify(User=user_list[user_id-1])
+        print("TODO")
+        # if len(user_list) < user_id or user_id < 1:
+        #     return jsonify(Error='User not found'), 404
+        # else:
+        #     return jsonify(User=user_list[user_id-1])
