@@ -27,8 +27,8 @@ class UsersDAO:
 
   def getUserContactList(self, user_id):
     cursor = self.conn.cursor()
-    cursor.execute("select user_id, first_name, last_name from instachat.user where user_id in (select contact_of from"
-                     " instachat.u_contacts where user_id = %s);", [user_id])
+    cursor.execute("select user_id, first_name, last_name from instachat.user where user_id in (select user_id from"
+                     " instachat.u_contacts where contact_of = %s);", [user_id])
     result = []
     for row in cursor:
       result.append(row)
