@@ -434,6 +434,8 @@ COPY instachat.image (image_id, image_file, p_with_image) FROM stdin;
 --
 
 COPY instachat.phone (phone_id, u_phone, phone) FROM stdin;
+1	1	7873830072
+2	2	9393522252
 \.
 
 
@@ -532,7 +534,7 @@ SELECT pg_catalog.setval('instachat.image_image_id_seq', 1, false);
 -- Name: phone_phone_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
+SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 2, true);
 
 
 --

@@ -8,7 +8,8 @@ class UserHandler:
         return result
 
     def build_full_user_dict(self, row):
-        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3], 'password': row[4]}
+        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3],
+                  'password': row[4], 'u_phone': row[5]}
         return result
 
     def build_user_attributes(self, user_id, first_name, last_name, u_email_address, u_password):
