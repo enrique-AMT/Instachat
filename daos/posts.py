@@ -12,8 +12,10 @@ class PostsDAO:
 
   def getAllPosts(self):
     cursor = self.conn.cursor()
-    cursor.execute("select post_id, post_caption, post_date, p_created_by"
-                   " from instachat.post;")
+    cursor.execute("select * from instachat.post left outer join instachat.image on post_id = p_with_image left outer "
+                   "join instachat.has_hashtag as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
+                   "on hh.hashtag_id=h.hashtag_id ;")
+
     result = []
     for row in cursor:
       result.append(row)
@@ -35,9 +37,12 @@ class PostsDAO:
     cursor.execute("select post_id, post_caption, post_date, p_created_by" 
       " from instachat.post natural inner join instachat.hashtag"
       " where c_post_belongs= %s;",[chat_id])
-    result = []
+    without_images = []
     for row in cursor:
-      result.append(row)
+      without_images.append(row)
+    cursor.execute("select post_id, post_caption,  post_date, p_created_by"
+                   " from instachat.post natural inner join instachat.hashtag"
+                   " where c_post_belongs= %s;", [chat_id])
     return result
 
   def getPostsInChatX(self, chat_id, post_id):

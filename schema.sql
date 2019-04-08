@@ -426,6 +426,8 @@ COPY instachat.hashtag (hashtag_id, hash_name) FROM stdin;
 --
 
 COPY instachat.image (image_id, image_file, p_with_image) FROM stdin;
+1	hola.png	1
+2	hola2.png	3
 \.
 
 
@@ -527,7 +529,7 @@ SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 2, true);
 -- Name: image_image_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.image_image_id_seq', 1, false);
+SELECT pg_catalog.setval('instachat.image_image_id_seq', 2, true);
 
 
 --

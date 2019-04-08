@@ -13,6 +13,11 @@ class PostHandler:
         result['post_id'] = row[0]
         result['post_caption'] = row[1]
         result['post_date'] = row[2]
+        result['p_created_by'] = row[3]
+        if(row[6]):
+            result['image_file'] = row[6]
+        if(row[11]):
+            result['hashtag_name'] = row[11]
 
         return result
 
