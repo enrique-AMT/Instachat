@@ -18,14 +18,22 @@ class UserHandler:
 
         return result
 
-
     def getAllUsers(self):
         dao = UsersDAO()
         user_list = dao.getAllUsers()
         result_list = []
         for row in user_list:
-          result = self.build_user_dict(row)
-          result_list.append(result)
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(User=result_list)
+
+    def getDetailedUsers(self):
+        dao = UsersDAO()
+        user_list = dao.getDetailedUsers()
+        result_list = []
+        for row in user_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
         return jsonify(User=result_list)
 
     def getUserById(self, user_id):
@@ -44,6 +52,19 @@ class UserHandler:
             return jsonify(Error="User not found"), 404
         else:
             return jsonify(Users=user_list)
+
+    def getUserContactList(self, user_id):
+        dao = UsersDAO()
+        row = dao.getUserById(user_id)
+        if not row:
+            return jsonify(Error="User Not Found"), 404
+        else:
+            contact_list = dao.getUserContactList(user_id)
+            result_list = []
+            for row in contact_list:
+                result = self.build_user_dict(row)
+                result_list.append(result)
+            return jsonify(Contact=result_list)
 
     def createUser(self, json):
         print("TODO")
@@ -90,15 +111,6 @@ class UserHandler:
         #     return jsonify(Error = "User not found."), 404
         # else:
         #     return jsonify(DeleteStatus = "AREA TO DELETE USER BY ID"), 200
-
-    def getUserContactList(self, user_id):
-        dao = UsersDAO()
-        contact_list = dao.getUserContactList(user_id)
-        result_list = []
-        for row in contact_list:
-          result = self.build_user_dict(row)
-          result_list.append(result)
-        return jsonify(Contact=result_list)
 
     def getUserChatList(self, user_id):
         print("TODO")

@@ -88,6 +88,16 @@ def getAllUsers():
             return UserHandler().getAllUsers()
 
 
+@app.route('/InstaChat/users/details', methods=['GET'])
+def getDetailedUsers():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return UserHandler().createUser(request.json)
+    else:
+        if not request.args:
+            return UserHandler().getDetailedUsers()
+
+
 @app.route('/InstaChat/users/<int:user_id>', methods=['GET', 'PUT', 'DELETE'])
 def getUserById(user_id):
     if request.method == 'GET':
@@ -179,12 +189,23 @@ def getReactById(react_id):
         return jsonify(Error="Method not allowed."), 405
 
 
+@app.route('/InstaChat/reacts/date/<string:react_date>', methods=['GET'])
+def getReactByDate(react_date):
+    if request.method == 'GET':
+        return ReactHandler().getReactByDate(react_date)
+    else:
+        return jsonify(Error="Method not allowed"), 405
+
+
 @app.route('/InstaChat/posts/<int:post_id>/reacts/<string:react_type>', methods=['GET'])
 def getReactsOnPost(post_id, react_type):
     if request.method == 'GET':
         return ReactHandler().getReactsOnPost(post_id, react_type)
     else:
         return jsonify(Error="Method not allowed."), 405
+
+
+# ========================================= REPLIES OPERATIONS ============================================= #
 
 
 @app.route('/InstaChat/replies', methods=['POST', 'GET'])
@@ -209,6 +230,9 @@ def getReplyById(reply_id):
         return jsonify(Error = "Method not allowed."), 405
 
 
+# ========================================= POST OPERATIONS ============================================= #
+
+
 @app.route('/InstaChat/posts', methods=['POST', 'GET'])
 def getAllPost():
     if request.method == 'POST':
@@ -219,16 +243,17 @@ def getAllPost():
             return PostHandler().getAllPosts()
 
 
-@app.route('/InstaChat/chats/<int:chat_id>/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
-def getPostsInChatX(chat_id, post_id):
+@app.route('/InstaChat/chats/<int:chat_id>/posts', methods=['GET'])
+def getPostsInChatX(chat_id):
     if request.method == 'GET':
-        return PostHandler().getPostsInChatX(chat_id, post_id)
-    elif request.method == 'PUT':
-        return PostHandler().updatePost(post_id, request.json)
-    elif request.method == 'DELETE':
-        return PostHandler().deletePost(post_id)
+        return PostHandler().getPostsInChatX(chat_id)
+    # elif request.method == 'PUT':
+    #     return PostHandler().updatePost(post_id, request.json)
+    # elif request.method == 'DELETE':
+    #     return PostHandler().deletePost(post_id)
     else:
         return jsonify(Error = "Method not allowed."), 405
+
 
 @app.route('/InstaChat/posts/<int:post_id>/reactions', methods=['GET', 'PUT', 'DELETE'])
 def getPostReactions(post_id):
@@ -241,6 +266,7 @@ def getPostReactions(post_id):
     else:
         return jsonify(Error = "Method not allowed."), 405
 
+
 @app.route('/InstaChat/posts/<int:post_id>/replies', methods=['GET', 'PUT', 'DELETE'])
 def getPostReplies(post_id):
     if request.method == 'GET':
@@ -251,30 +277,6 @@ def getPostReplies(post_id):
         return PostHandler().deletePost(post_id)
     else:
         return jsonify(Error = "Method not allowed."), 405
-
-
-# @app.route('/InstaChat/sessions', methods=['POST', 'GET'])
-# def getAllSessions():
-#     if request.method == 'POST':
-#         print("REQUEST: ", request.json)
-#         return SessionHandler().insertSessionJson(request.json)
-#     else:
-#         if not request.args:
-#             return SessionHandler().getAllSessions()
-#
-#
-# @app.route('/InstaChat/sessions/<int:session_id>', methods=['GET', 'PUT', 'DELETE'])
-# def getSessionById(session_id):
-#     if request.method == 'GET':
-#         return SessionHandler().getSessionById(session_id)
-#     elif request.method == 'PUT':
-#         return SessionHandler().updateSession(session_id, request.json)
-#     elif request.method == 'DELETE':
-#         return SessionHandler().deleteSession(session_id)
-#     else:
-#         return jsonify(Error = "Method not allowed."), 405
-
-
 
 
 if __name__ == '__main__':

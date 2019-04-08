@@ -178,22 +178,6 @@ ALTER TABLE instachat.phone_phone_id_seq OWNER TO instadev;
 
 ALTER SEQUENCE instachat.phone_phone_id_seq OWNED BY instachat.phone.phone_id;
 
-
---
--- Name: post; Type: TABLE; Schema: instachat; Owner: instadev
---
-
-CREATE TABLE instachat.post (
-    post_id integer NOT NULL,
-    post_caption character varying(280),
-    post_date character varying(10),
-    p_created_by integer,
-    c_post_belongs integer
-);
-
-
-ALTER TABLE instachat.post OWNER TO instadev;
-
 --
 -- Name: react; Type: TABLE; Schema: instachat; Owner: instadev
 --
@@ -294,34 +278,6 @@ CREATE TABLE instachat."user" (
 
 ALTER TABLE instachat."user" OWNER TO instadev;
 
---
--- Name: chats; Type: TABLE; Schema: public; Owner: instadev
---
-
-CREATE TABLE public.chats (
-    chat_id integer NOT NULL,
-    chat_name character varying(20),
-    number_of_users integer,
-    user_id character varying(200),
-    active_user_count integer,
-    owner_id integer
-);
-
-
-ALTER TABLE public.chats OWNER TO instadev;
-
---
--- Name: post; Type: TABLE; Schema: public; Owner: instadev
---
-
-CREATE TABLE public.post (
-    post_id integer NOT NULL,
-    post_caption character varying(280),
-    post_date character varying(10)
-);
-
-
-ALTER TABLE public.post OWNER TO instadev;
 
 --
 -- Name: chat_id; Type: DEFAULT; Schema: instachat; Owner: instadev
@@ -516,24 +472,6 @@ COPY instachat."user" (user_id, first_name, last_name, u_email_address, u_passwo
 
 
 --
--- Data for Name: chats; Type: TABLE DATA; Schema: public; Owner: instadev
---
-
-COPY public.chats (chat_id, chat_name, number_of_users, user_id, active_user_count, owner_id) FROM stdin;
-1	testing	5	[Pedrito, Manuel, Bienve, Wilson, Amir]	4	283
-\.
-
-
---
--- Data for Name: post; Type: TABLE DATA; Schema: public; Owner: instadev
---
-
-COPY public.post (post_id, post_caption, post_date) FROM stdin;
-1	sin imagen	4/1/2019
-\.
-
-
---
 -- Name: belongs_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
@@ -619,22 +557,6 @@ ALTER TABLE ONLY instachat."user"
 
 ALTER TABLE ONLY instachat."user"
     ADD CONSTRAINT user_u_email_address_key UNIQUE (u_email_address);
-
-
---
--- Name: chats_pkey; Type: CONSTRAINT; Schema: public; Owner: instadev
---
-
-ALTER TABLE ONLY public.chats
-    ADD CONSTRAINT chats_pkey PRIMARY KEY (chat_id);
-
-
---
--- Name: post_pkey; Type: CONSTRAINT; Schema: public; Owner: instadev
---
-
-ALTER TABLE ONLY public.post
-    ADD CONSTRAINT post_pkey PRIMARY KEY (post_id);
 
 
 --
@@ -763,16 +685,6 @@ ALTER TABLE ONLY instachat.u_contacts
 
 ALTER TABLE ONLY instachat.u_contacts
     ADD CONSTRAINT u_contacts_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id);
-
-
---
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --

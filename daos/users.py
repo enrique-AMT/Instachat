@@ -16,7 +16,16 @@ class UsersDAO:
     cursor.execute(query)
     result = []
     for row in cursor:
-      result.append(row)
+        result.append(row)
+    return result
+
+  def getDetailedUsers(self):
+    cursor = self.conn.cursor()
+    query = "select user_id, first_name, last_name from instachat.user;"
+    cursor.execute(query)
+    result = []
+    for row in cursor:
+        result.append(row)
     return result
 
   def getUserById(self, user_id):

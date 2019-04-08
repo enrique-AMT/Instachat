@@ -12,8 +12,7 @@ class PostsDAO:
 
   def getAllPosts(self):
     cursor = self.conn.cursor()
-    cursor.execute("select post_id, post_caption, post_date, p_created_by"
-                   " from instachat.post;")
+    cursor.execute("select * from instachat.post;")
     result = []
     for row in cursor:
       result.append(row)
@@ -40,12 +39,17 @@ class PostsDAO:
       result.append(row)
     return result
 
-  def getPostsInChatX(self, chat_id, post_id):
+  def getPostsInChatX(self, chat_id):
     cursor = self.conn.cursor()
-    cursor.execute("select post_caption, hash_name, first_name, last_name, phone, u_email_address, post_date" 
-      " from instachat.post natural inner join instachat.hashtag"
-      " natural inner join instachat.user natural inner join instachat.phone "
-      " where c_post_belongs= %s and post_id = %s;",[chat_id, post_id])
+    cursor.execute("select post_id, post_caption, user_id from instachat.post natural inner join instachat.user "
+                   "natural inner join instachat.chat where chat_id = %s and user_id in "
+                   "(select p_created_by from instachat.chat where c_post_belongs = %s);",[chat_id, chat_id])
+
+    # "select post_caption, hash_name, first_name, last_name, phone, u_email_address, post_date"
+    # " from instachat.post natural inner join instachat.hashtag"
+    # " natural inner join instachat.user natural inner join instachat.phone "
+    # " where c_post_belongs= %s and post_id = %s;", [chat_id, post_id]
+
     result = cursor.fetchone()
     return result
 
