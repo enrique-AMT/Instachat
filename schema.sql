@@ -181,15 +181,37 @@ ALTER SEQUENCE instachat.phone_phone_id_seq OWNED BY instachat.phone.phone_id;
 
 
 --
+-- Name: post_post_id_seq; Type: SEQUENCE; Schema: instachat; Owner: instadev
+--
+
+CREATE SEQUENCE instachat.post_post_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE instachat.post_post_id_seq OWNER TO instadev;
+
+--
+-- Name: post_post_id_seq; Type: SEQUENCE OWNED BY; Schema: instachat; Owner: instadev
+--
+
+ALTER SEQUENCE instachat.post_post_id_seq OWNED BY instachat.phone.phone_id;
+
+
+--
 -- Name: post; Type: TABLE; Schema: instachat; Owner: instadev
 --
 
 CREATE TABLE instachat.post (
-    post_id integer NOT NULL,
     post_caption character varying(280),
     post_date character varying(10),
     p_created_by integer,
-    c_post_belongs integer
+    c_post_belongs integer,
+    post_id integer DEFAULT nextval('instachat.post_post_id_seq'::regclass) NOT NULL
 );
 
 
@@ -419,9 +441,10 @@ COPY instachat.phone (phone_id, u_phone, phone) FROM stdin;
 -- Data for Name: post; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat.post (post_id, post_caption, post_date, p_created_by, c_post_belongs) FROM stdin;
-1	A colgar a unos cuantos!	04-01-2019	3	1
-2	Dale si!	04-01-2019	2	1
+COPY instachat.post (post_caption, post_date, p_created_by, c_post_belongs, post_id) FROM stdin;
+A colgar a unos cuantos!	04-01-2019	3	1	1
+Dale si!	04-01-2019	2	1	2
+test	04/07/2019	1	1	3
 \.
 
 
@@ -505,6 +528,13 @@ SELECT pg_catalog.setval('instachat.image_image_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
+
+
+--
+-- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 3, true);
 
 
 --
