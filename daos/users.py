@@ -21,18 +21,13 @@ class UsersDAO:
 
   def getUserById(self, user_id):
     cursor = self.conn.cursor()
-    user_list = self.getAllUsers()
-    if len(user_list) < user_id or user_id < 1:
-        return jsonify(Error='User not found'), 404
     cursor.execute("select * from instachat.user where user_id = %s;", [user_id])
-    result = []
-    for row in cursor:
-      result.append(row)
+    result = cursor.fetchone()
     return result
 
   def getUserContactList(self, user_id):
     cursor = self.conn.cursor()
-    cursor.execute("select user_id, first_name, last_name from instachat.user where user_id in (select contact_id from"
+    cursor.execute("select user_id, first_name, last_name from instachat.user where user_id in (select contact_of from"
                      " instachat.u_contacts where user_id = %s);", [user_id])
     result = []
     for row in cursor:

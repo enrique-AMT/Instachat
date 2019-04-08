@@ -8,14 +8,13 @@ class UserHandler:
         return result
 
     def build_full_user_dict(self, row):
-        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3], 'phone': row[4]}
+        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3], 'password': row[4]}
         return result
 
-    def build_user_attributes(self, user_id, user_name, user_lastName, user_phone,user_contact_list,
-                              user_email, user_password):
+    def build_user_attributes(self, user_id, first_name, last_name, u_email_address, u_password):
 
-        result = {'user_id': user_id, 'user_name': user_name, 'user_lastName':user_lastName, 'user_phone': user_phone,
-                  'user_contact_list': user_contact_list, 'user_email': user_email,'user_password': user_password}
+        result = {'user_id': user_id, 'first_name': first_name, 'last_name': last_name,
+                  'u_email_address': u_email_address, 'u_password': u_password}
 
         return result
 
@@ -31,7 +30,12 @@ class UserHandler:
 
     def getUserById(self, user_id):
         dao = UsersDAO()
-        return jsonify(Reply=dao.getUserById(user_id))
+        row = dao.getUserById(user_id)
+        if not row:
+            return jsonify(Error="User Not Found"), 404
+        else:
+            user = self.build_full_user_dict(row)
+            return jsonify(User=user)
 
     def getUsersThatReact(self, post_id, react_type):
         dao = UsersDAO()
@@ -86,7 +90,6 @@ class UserHandler:
         #     return jsonify(Error = "User not found."), 404
         # else:
         #     return jsonify(DeleteStatus = "AREA TO DELETE USER BY ID"), 200
-
 
     def getUserContactList(self, user_id):
         dao = UsersDAO()

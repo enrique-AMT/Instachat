@@ -24,13 +24,8 @@ class ReplyDAO:
 
   def getReplyById(self, reply_id):
     cursor = self.conn.cursor()
-    reply_list = self.getAllReplies()
-    if len(reply_list) < reply_id or reply_id < 1:
-      return jsonify(Error='Reply not found'), 404
     cursor.execute("select * from instachat.reply where reply_id = %s;", [reply_id])
-    result = []
-    for row in cursor:
-      result.append(row)
+    result = cursor.fetchone()
     return result
 
   def getReplyByDate(self, reply_date):

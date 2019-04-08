@@ -16,6 +16,8 @@ CORS(app)
 def greeting():
     return 'Welcome to InstaChat!'
 
+# ========================================= CHAT OPERATIONS ============================================= #
+
 
 @app.route('/InstaChat/chats', methods=['GET', 'POST'])
 def getAllChats():
@@ -28,27 +30,13 @@ def getAllChats():
         else:
             return
 
-@app.route('/InstaChat/dashboard/<string:post_date>/hashtags', methods=['GET', 'POST'])
-def getDailyHashtags(post_date):
-    if request.method == 'POST':
-        print("REQUEST: ", request.json)
-        return ChatHandler().createChat(request.json)
-    else:
-        if not request.args:
-            return HashtagsHandler().getDailyHashtags(post_date)
-        else:
-            return
 
-@app.route('/InstaChat/dashboard/posts', methods=['GET', 'POST'])
-def getDailyPosts():
-    if request.method == 'POST':
-        print("REQUEST: ", request.json)
-        return ChatHandler().createChat(request.json)
+@app.route('/InstaChat/chats/<int:chat_id>/owner', methods=['GET'])
+def getChatOwner(chat_id):
+    if request.method == 'GET':
+        return ChatHandler().getChatOwner(chat_id)
     else:
-        if not request.args:
-            return PostHandler().getDailyPosts()
-        else:
-            return
+        return jsonify(Error="Method not allowed."), 405
 
 
 @app.route('/InstaChat/chats/<int:chat_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -60,10 +48,11 @@ def getChatById(chat_id):
     elif request.method == 'DELETE':
         return ChatHandler().deleteChat(chat_id)
     else:
-        return jsonify(Error = "Method not allowed."), 405
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/chats/<int:chat_id>/posts', methods=['GET', 'PUT', 'DELETE'])
-def getAllPosts(chat_id):
+def getChatPosts(chat_id):
     if request.method == 'GET':
         return PostHandler().getChatPosts(chat_id)
     elif request.method == 'PUT':
@@ -71,7 +60,8 @@ def getAllPosts(chat_id):
     elif request.method == 'DELETE':
         return ChatHandler().deleteChat(chat_id)
     else:
-        return jsonify(Error = "Method not allowed."), 405
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/chats/<int:chat_id>/users', methods=['GET', 'PUT', 'DELETE'])
 def getChatUsers(chat_id):
@@ -82,7 +72,10 @@ def getChatUsers(chat_id):
     elif request.method == 'DELETE':
         return ChatHandler().deleteChat(chat_id)
     else:
-        return jsonify(Error = "Method not allowed."), 405
+        return jsonify(Error="Method not allowed."), 405
+
+
+# ========================================= USER OPERATIONS ============================================= #
 
 
 @app.route('/InstaChat/users', methods=['POST', 'GET'])
@@ -105,6 +98,7 @@ def getUserById(user_id):
         return UserHandler().deleteUser(user_id)
     else:
         return jsonify(Error = "Method not allowed."), 405
+
 
 @app.route('/InstaChat/users/<int:user_id>/contacts', methods=['GET', 'PUT', 'DELETE'])
 def getUserContactList(user_id):
@@ -129,6 +123,7 @@ def getUserChatList(user_id):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaChat/users/posts/<int:post_id>/<string:react_type>', methods=['GET'])
 def getUsersThatReactToPostX(post_id, react_type):
     if request.method == 'GET':
@@ -136,21 +131,61 @@ def getUsersThatReactToPostX(post_id, react_type):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+# ========================================= DASHBOARD OPERATIONS ============================================= #
+
+
+@app.route('/InstaChat/dashboard/<string:post_date>/hashtags', methods=['GET', 'POST'])
+def getDailyHashtags(post_date):
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return HashtagsHandler().getDailyHashtags(post_date)
+        else:
+            return
+
+
+@app.route('/InstaChat/dashboard/posts', methods=['GET', 'POST'])
+def getDailyPosts():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return PostHandler().getDailyPosts()
+        else:
+            return
+
+# ========================================= REACT OPERATIONS ============================================= #
+
+
 @app.route('/InstaChat/reacts', methods=['POST', 'GET'])
 def getAllReacts():
     if request.method == 'POST':
-      print("REQUEST: ", request.json)
-      return ReactHandler().createReact(request.json)
+        print("REQUEST: ", request.json)
+        return ReactHandler().createReact(request.json)
     else:
-      if not request.args:
-        return ReactHandler().getAllReacts()
+        if not request.args:
+            return ReactHandler().getAllReacts()
+
+
+@app.route('/InstaChat/reacts/<int:react_id>', methods=['GET'])
+def getReactById(react_id):
+    if request.method == 'GET':
+        return ReactHandler().getReactById(react_id)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/posts/<int:post_id>/reacts/<string:react_type>', methods=['GET'])
 def getReactsOnPost(post_id, react_type):
-  if request.method == 'GET':
-    return ReactHandler().getReactsOnPost(post_id, react_type)
-  else:
-    return jsonify(Error="Method not allowed."), 405
+    if request.method == 'GET':
+        return ReactHandler().getReactsOnPost(post_id, react_type)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/replies', methods=['POST', 'GET'])
 def getAllReplies():
