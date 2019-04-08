@@ -1,9 +1,10 @@
 from flask import Flask, jsonify, request
 from handlers.chats import ChatHandler
 from handlers.posts import PostHandler
-from handlers.sessions import SessionHandler
+# from handlers.sessions import SessionHandler
 from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
+from handlers.reacts import ReactHandler
 from handlers.hashtags import HashtagsHandler
 from flask_cors import CORS, cross_origin
 
@@ -14,6 +15,8 @@ CORS(app)
 @app.route('/')
 def greeting():
     return 'Welcome to InstaChat!'
+
+# ========================================= CHAT OPERATIONS ============================================= #
 
 
 @app.route('/InstaChat/chats', methods=['GET', 'POST'])
@@ -27,27 +30,13 @@ def getAllChats():
         else:
             return
 
-@app.route('/InstaChat/dashboard/<string:post_date>/hashtags', methods=['GET', 'POST'])
-def getDailyHashtags(post_date):
-    if request.method == 'POST':
-        print("REQUEST: ", request.json)
-        return ChatHandler().createChat(request.json)
-    else:
-        if not request.args:
-            return HashtagsHandler().getDailyHashtags(post_date)
-        else:
-            return
 
-@app.route('/InstaChat/dashboard/posts', methods=['GET', 'POST'])
-def getDailyPosts():
-    if request.method == 'POST':
-        print("REQUEST: ", request.json)
-        return ChatHandler().createChat(request.json)
+@app.route('/InstaChat/chats/<int:chat_id>/owner', methods=['GET'])
+def getChatOwner(chat_id):
+    if request.method == 'GET':
+        return ChatHandler().getChatOwner(chat_id)
     else:
-        if not request.args:
-            return PostHandler().getDailyPosts()
-        else:
-            return
+        return jsonify(Error="Method not allowed."), 405
 
 
 @app.route('/InstaChat/chats/<int:chat_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -59,10 +48,11 @@ def getChatById(chat_id):
     elif request.method == 'DELETE':
         return ChatHandler().deleteChat(chat_id)
     else:
-        return jsonify(Error = "Method not allowed."), 405
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/chats/<int:chat_id>/posts', methods=['GET', 'PUT', 'DELETE'])
-def getAllPosts(chat_id):
+def getChatPosts(chat_id):
     if request.method == 'GET':
         return PostHandler().getChatPosts(chat_id)
     elif request.method == 'PUT':
@@ -70,7 +60,8 @@ def getAllPosts(chat_id):
     elif request.method == 'DELETE':
         return ChatHandler().deleteChat(chat_id)
     else:
-        return jsonify(Error = "Method not allowed."), 405
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/chats/<int:chat_id>/users', methods=['GET', 'PUT', 'DELETE'])
 def getChatUsers(chat_id):
@@ -81,7 +72,10 @@ def getChatUsers(chat_id):
     elif request.method == 'DELETE':
         return ChatHandler().deleteChat(chat_id)
     else:
-        return jsonify(Error = "Method not allowed."), 405
+        return jsonify(Error="Method not allowed."), 405
+
+
+# ========================================= USER OPERATIONS ============================================= #
 
 
 @app.route('/InstaChat/users', methods=['POST', 'GET'])
@@ -105,6 +99,7 @@ def getUserById(user_id):
     else:
         return jsonify(Error = "Method not allowed."), 405
 
+
 @app.route('/InstaChat/users/<int:user_id>/contacts', methods=['GET', 'PUT', 'DELETE'])
 def getUserContactList(user_id):
     if request.method == 'GET':
@@ -127,6 +122,70 @@ def getUserChatList(user_id):
         return UserHandler().deleteUser(user_id)
     else:
         return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaChat/users/posts/<int:post_id>/<string:react_type>', methods=['GET'])
+def getUsersThatReactToPostX(post_id, react_type):
+    if request.method == 'GET':
+        return UserHandler().getUsersThatReact(post_id, react_type)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+# ========================================= DASHBOARD OPERATIONS ============================================= #
+
+
+@app.route('/InstaChat/dashboard/<string:post_date>/hashtags', methods=['GET', 'POST'])
+def getDailyHashtags(post_date):
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return HashtagsHandler().getDailyHashtags(post_date)
+        else:
+            return
+
+
+@app.route('/InstaChat/dashboard/posts', methods=['GET', 'POST'])
+def getDailyPosts():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return PostHandler().getDailyPosts()
+        else:
+            return
+
+# ========================================= REACT OPERATIONS ============================================= #
+
+
+@app.route('/InstaChat/reacts', methods=['POST', 'GET'])
+def getAllReacts():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ReactHandler().createReact(request.json)
+    else:
+        if not request.args:
+            return ReactHandler().getAllReacts()
+
+
+@app.route('/InstaChat/reacts/<int:react_id>', methods=['GET'])
+def getReactById(react_id):
+    if request.method == 'GET':
+        return ReactHandler().getReactById(react_id)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaChat/posts/<int:post_id>/reacts/<string:react_type>', methods=['GET'])
+def getReactsOnPost(post_id, react_type):
+    if request.method == 'GET':
+        return ReactHandler().getReactsOnPost(post_id, react_type)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/replies', methods=['POST', 'GET'])
 def getAllReplies():
@@ -161,9 +220,9 @@ def getAllPost():
 
 
 @app.route('/InstaChat/chats/<int:chat_id>/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
-def getPostById(chat_id, post_id):
+def getPostsInChatX(chat_id, post_id):
     if request.method == 'GET':
-        return PostHandler().getPostById(chat_id, post_id)
+        return PostHandler().getPostsInChatX(chat_id, post_id)
     elif request.method == 'PUT':
         return PostHandler().updatePost(post_id, request.json)
     elif request.method == 'DELETE':
@@ -194,26 +253,26 @@ def getPostReplies(post_id):
         return jsonify(Error = "Method not allowed."), 405
 
 
-@app.route('/InstaChat/sessions', methods=['POST', 'GET'])
-def getAllSessions():
-    if request.method == 'POST':
-        print("REQUEST: ", request.json)
-        return SessionHandler().insertSessionJson(request.json)
-    else:
-        if not request.args:
-            return SessionHandler().getAllSessions()
-
-
-@app.route('/InstaChat/sessions/<int:session_id>', methods=['GET', 'PUT', 'DELETE'])
-def getSessionById(session_id):
-    if request.method == 'GET':
-        return SessionHandler().getSessionById(session_id)
-    elif request.method == 'PUT':
-        return SessionHandler().updateSession(session_id, request.json)
-    elif request.method == 'DELETE':
-        return SessionHandler().deleteSession(session_id)
-    else:
-        return jsonify(Error = "Method not allowed."), 405
+# @app.route('/InstaChat/sessions', methods=['POST', 'GET'])
+# def getAllSessions():
+#     if request.method == 'POST':
+#         print("REQUEST: ", request.json)
+#         return SessionHandler().insertSessionJson(request.json)
+#     else:
+#         if not request.args:
+#             return SessionHandler().getAllSessions()
+#
+#
+# @app.route('/InstaChat/sessions/<int:session_id>', methods=['GET', 'PUT', 'DELETE'])
+# def getSessionById(session_id):
+#     if request.method == 'GET':
+#         return SessionHandler().getSessionById(session_id)
+#     elif request.method == 'PUT':
+#         return SessionHandler().updateSession(session_id, request.json)
+#     elif request.method == 'DELETE':
+#         return SessionHandler().deleteSession(session_id)
+#     else:
+#         return jsonify(Error = "Method not allowed."), 405
 
 
 

@@ -21,13 +21,8 @@ class ReactsDAO:
 
   def getReactById(self, react_id):
     cursor = self.conn.cursor()
-    chat_list = self.getAllReacts()
-    if len(chat_list) < react_id or react_id < 1:
-        return jsonify(Error='Reacts not found'), 404
     cursor.execute("select * from instachat.react where react_id = %s;", [react_id])
-    result = []
-    for row in cursor:
-        result.append(row)
+    result = cursor.fetchone()
     return result
 
   def getReactByDate(self, react_date):
@@ -35,8 +30,20 @@ class ReactsDAO:
     cursor.execute("select * from instachat.react where react_date = %s;", [react_date])
     result = []
     if len(cursor) == 0:
-        return jsonify(React="No recats on this date."), 404
+        return jsonify(React="No reacts on this date."), 404
     else:
         for row in cursor:
           result.append(row)
+    return result
+
+  def getReactsOnPost(self, post_id, react_type):
+    cursor = self.conn.cursor()
+    cursor.execute("select count(*) from instachat.react where p_reacted = %s and react_type = %s;",
+                   [react_type, post_id, react_type])
+    result = []
+    if len(cursor) == 0:
+        return jsonify(React="No reacts on this post."), 404
+    else:
+        for row in cursor:
+            result.append(row)
     return result

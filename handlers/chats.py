@@ -6,11 +6,11 @@ class ChatHandler:
 
 
     def build_chat_dict(self, row):
-        chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id' : row[2], 'number_of_users' : row[3]}
+        chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id': row[2]}
         return chat_list
 
-    def build_chat_attributes(self, chat_name, number_of_users, owner_id):
-        result = {'chat_name': chat_name, 'number_of_users': number_of_users, 'owner_id': owner_id}
+    def build_chat_attributes(self, chat_name, owner_id):
+        result = {'chat_name': chat_name, 'owner_id': owner_id}
 
         return result
 
@@ -27,22 +27,32 @@ class ChatHandler:
         dao = ChatsDAO()
         row = dao.getChatById(chat_id)
         if not row:
-          return jsonify(Error="Chat Not Found"), 404
+            return jsonify(Error="Chat Not Found"), 404
         else:
-          chat = self.build_chat_dict(row)
-          return jsonify(Chat=chat)
+            chat = self.build_chat_dict(row)
+            return jsonify(Chat=chat)
 
     def getChatUsers(self, chat_id):
-      dao = ChatsDAO()
-      user_list = dao.getChatUsers(chat_id)
-      if not user_list:
-        return jsonify(Error="Users Not Found"), 404
-      else:
-        result_list = []
-        for row in user_list:
-          user = UserHandler.build_user_dict(UserHandler, row)
-          result_list.append(user)
-        return jsonify(Chat=result_list)
+        dao = ChatsDAO()
+        chat = dao.getChatById(chat_id)
+        user_list = dao.getChatUsers(chat_id)
+        if not user_list:
+            return jsonify(Error="Users Not Found"), 404
+        elif not chat:
+            return jsonify(Error="Chat not found"), 404
+        else:
+            result_list = []
+            for row in user_list:
+                user = UserHandler.build_user_dict(UserHandler, row)
+                result_list.append(user)
+            return jsonify(Chat=result_list)
+
+    def getChatOwner(self, chat_id):
+        chat = ChatsDAO().getChatById(chat_id)
+        if not chat:
+            return jsonify(Error="Chat Not Found"), 404
+        else:
+            return jsonify(Chat=ChatsDAO().getChatOwner(chat_id))
 
     def createChat(self, json):
       print("todo")
