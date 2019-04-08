@@ -37,8 +37,6 @@ class HashtagsHandler:
 
     def getDailyHashtags(self, post_date):
       dao = HashtagsDAO()
-      post_date = post_date[0:2]+ "/" + post_date[2:4] + "/" + post_date[-4:]
-      print(post_date)
       hashtag_list = dao.getDailyHashtags(post_date)
       if not post_date:
         return jsonify(Error="Session Not Found"), 404
