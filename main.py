@@ -4,6 +4,7 @@ from handlers.posts import PostHandler
 # from handlers.sessions import SessionHandler
 from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
+from handlers.reacts import ReactHandler
 from handlers.hashtags import HashtagsHandler
 from flask_cors import CORS, cross_origin
 
@@ -135,6 +136,22 @@ def getUsersThatReactToPostX(post_id, react_type):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaChat/reacts', methods=['POST', 'GET'])
+def getAllReacts():
+    if request.method == 'POST':
+      print("REQUEST: ", request.json)
+      return ReactHandler().createReact(request.json)
+    else:
+      if not request.args:
+        return ReactHandler().getAllReacts()
+
+@app.route('/InstaChat/posts/<int:post_id>/reacts/<string:react_type>', methods=['GET'])
+def getReactsOnPost(post_id, react_type):
+  if request.method == 'GET':
+    return ReactHandler().getReactsOnPost(post_id, react_type)
+  else:
+    return jsonify(Error="Method not allowed."), 405
+
 @app.route('/InstaChat/replies', methods=['POST', 'GET'])
 def getAllReplies():
     if request.method == 'POST':
@@ -168,9 +185,9 @@ def getAllPost():
 
 
 @app.route('/InstaChat/chats/<int:chat_id>/posts/<int:post_id>', methods=['GET', 'PUT', 'DELETE'])
-def getPostById(chat_id, post_id):
+def getPostsInChatX(chat_id, post_id):
     if request.method == 'GET':
-        return PostHandler().getPostById(chat_id, post_id)
+        return PostHandler().getPostsInChatX(chat_id, post_id)
     elif request.method == 'PUT':
         return PostHandler().updatePost(post_id, request.json)
     elif request.method == 'DELETE':

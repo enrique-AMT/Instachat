@@ -40,3 +40,15 @@ class ReactsDAO:
         for row in cursor:
           result.append(row)
     return result
+
+  def getReactsOnPost(self, post_id, react_type):
+    cursor = self.conn.cursor()
+    cursor.execute("select count(*) from instachat.react where p_reacted = %s and react_type = %s;",
+                   [react_type, post_id, react_type])
+    result = []
+    if len(cursor) == 0:
+        return jsonify(React="No reacts on this post."), 404
+    else:
+        for row in cursor:
+            result.append(row)
+    return result

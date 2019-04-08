@@ -2,7 +2,7 @@ from config.dbconfig import pg_config
 import psycopg2
 from flask import jsonify
 from daos.reacts import ReactsDAO
-
+from daos.posts import PostsDAO
 
 class ReactHandler:
 
@@ -30,7 +30,12 @@ class ReactHandler:
 
     def getReactByDate(self, react_date):
         dao = ReactsDAO()
-        return jsonify(Reply=dao.getReplyByDate(react_date))
+        return jsonify(React=dao.getReactByDate(react_date))
+
+    def getReactsOnPost(self, post_id, react_type):
+        dao = ReactsDAO()
+        PostsDAO().getPostById(post_id)
+        return jsonify(React=dao.getReactsOnPost(post_id, react_type))
 
     def createReact(self):
       print("TODO")

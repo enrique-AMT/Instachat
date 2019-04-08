@@ -30,12 +30,16 @@ class PostHandler:
         return result
 
     def getAllPosts(self):
-      dao = PostsDAO()
-      posts = dao.getAllPosts()
-      postsList = []
-      for row in posts:
-        postsList.append(self.build_post_dict(row))
-      return jsonify(Posts=postsList)
+        dao = PostsDAO()
+        posts = dao.getAllPosts()
+        postsList = []
+        for row in posts:
+          postsList.append(self.build_post_dict(row))
+        return jsonify(Posts=postsList)
+
+    def getPostById(self, post_id):
+        dao = PostsDAO()
+        return jsonify(Posts=dao.getPostById(post_id))
 
     def getChatPosts(self, chat_id):
       dao = PostsDAO()
@@ -45,9 +49,9 @@ class PostHandler:
         postsList.append(self.build_post_dict(row))
       return jsonify(Posts=postsList)
 
-    def getPostById(self, chat_id, post_id):
+    def getPostsInChatX(self, chat_id, post_id):
         dao = PostsDAO()
-        row = dao.getPostById(chat_id, post_id)
+        row = dao.getPostsInChatX(chat_id, post_id)
         if not row:
             return jsonify(Error="Post Not Found"), 404
         else:
