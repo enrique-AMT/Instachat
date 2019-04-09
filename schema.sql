@@ -93,8 +93,8 @@ ALTER SEQUENCE instachat.chat_chat_id_seq OWNED BY instachat.chat.chat_id;
 --
 
 CREATE TABLE instachat.has_hashtag (
-    hashtag_id integer NOT NULL,
-    p_with_hashtag integer NOT NULL
+    p_with_hashtag integer NOT NULL,
+    hashtag_id integer
 );
 
 
@@ -105,12 +105,34 @@ ALTER TABLE instachat.has_hashtag OWNER TO instadev;
 --
 
 CREATE TABLE instachat.hashtag (
-    hashtag_id integer NOT NULL,
-    hash_name character varying(128)
+    hash_name character varying(128),
+    hashtag_id integer NOT NULL
 );
 
 
 ALTER TABLE instachat.hashtag OWNER TO instadev;
+
+--
+-- Name: hashtag_hashtag_id_seq; Type: SEQUENCE; Schema: instachat; Owner: instadev
+--
+
+CREATE SEQUENCE instachat.hashtag_hashtag_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE instachat.hashtag_hashtag_id_seq OWNER TO instadev;
+
+--
+-- Name: hashtag_hashtag_id_seq; Type: SEQUENCE OWNED BY; Schema: instachat; Owner: instadev
+--
+
+ALTER SEQUENCE instachat.hashtag_hashtag_id_seq OWNED BY instachat.hashtag.hashtag_id;
+
 
 --
 -- Name: image; Type: TABLE; Schema: instachat; Owner: instadev
@@ -291,6 +313,43 @@ ALTER SEQUENCE instachat.reply_reply_id_seq OWNED BY instachat.reply.reply_id;
 
 
 --
+-- Name: user; Type: TABLE; Schema: instachat; Owner: instadev
+--
+
+CREATE TABLE instachat."user" (
+    user_id integer NOT NULL,
+    first_name character varying(20),
+    last_name character varying(20),
+    u_email_address character varying(20) NOT NULL,
+    u_password character varying(72) NOT NULL,
+    username character varying(20)
+);
+
+
+ALTER TABLE instachat."user" OWNER TO instadev;
+
+--
+-- Name: serial_user_id_seq; Type: SEQUENCE; Schema: instachat; Owner: instadev
+--
+
+CREATE SEQUENCE instachat.serial_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE instachat.serial_user_id_seq OWNER TO instadev;
+
+--
+-- Name: serial_user_id_seq; Type: SEQUENCE OWNED BY; Schema: instachat; Owner: instadev
+--
+
+ALTER SEQUENCE instachat.serial_user_id_seq OWNED BY instachat."user".user_id;
+
+
+--
 -- Name: u_contacts; Type: TABLE; Schema: instachat; Owner: instadev
 --
 
@@ -301,21 +360,6 @@ CREATE TABLE instachat.u_contacts (
 
 
 ALTER TABLE instachat.u_contacts OWNER TO instadev;
-
---
--- Name: user; Type: TABLE; Schema: instachat; Owner: instadev
---
-
-CREATE TABLE instachat."user" (
-    user_id integer NOT NULL,
-    first_name character varying(20),
-    last_name character varying(20),
-    u_email_address character varying(20) NOT NULL,
-    u_password character varying(72) NOT NULL
-);
-
-
-ALTER TABLE instachat."user" OWNER TO instadev;
 
 --
 -- Name: chats; Type: TABLE; Schema: public; Owner: instadev
@@ -347,10 +391,31 @@ CREATE TABLE public.post (
 ALTER TABLE public.post OWNER TO instadev;
 
 --
+-- Name: serial_user_id_seq; Type: SEQUENCE; Schema: public; Owner: instadev
+--
+
+CREATE SEQUENCE public.serial_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.serial_user_id_seq OWNER TO instadev;
+
+--
 -- Name: chat chat_id; Type: DEFAULT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.chat ALTER COLUMN chat_id SET DEFAULT nextval('instachat.chat_chat_id_seq'::regclass);
+
+
+--
+-- Name: hashtag hashtag_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.hashtag ALTER COLUMN hashtag_id SET DEFAULT nextval('instachat.hashtag_hashtag_id_seq'::regclass);
 
 
 --
@@ -382,6 +447,13 @@ ALTER TABLE ONLY instachat.reply ALTER COLUMN reply_id SET DEFAULT nextval('inst
 
 
 --
+-- Name: user user_id; Type: DEFAULT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat."user" ALTER COLUMN user_id SET DEFAULT nextval('instachat.serial_user_id_seq'::regclass);
+
+
+--
 -- Data for Name: belongs; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
@@ -408,7 +480,7 @@ COPY instachat.chat (chat_id, chat_name, owner_id) FROM stdin;
 -- Data for Name: has_hashtag; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat.has_hashtag (hashtag_id, p_with_hashtag) FROM stdin;
+COPY instachat.has_hashtag (p_with_hashtag, hashtag_id) FROM stdin;
 1	1
 \.
 
@@ -417,8 +489,8 @@ COPY instachat.has_hashtag (hashtag_id, p_with_hashtag) FROM stdin;
 -- Data for Name: hashtag; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat.hashtag (hashtag_id, hash_name) FROM stdin;
-1	mecolgue
+COPY instachat.hashtag (hash_name, hashtag_id) FROM stdin;
+mecolgue	1
 \.
 
 
@@ -495,11 +567,12 @@ COPY instachat.u_contacts (user_id, contact_of) FROM stdin;
 -- Data for Name: user; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat."user" (user_id, first_name, last_name, u_email_address, u_password) FROM stdin;
-1	Pedro	Rivera	p.rivera@upr.edu	jaja saludos
-3	Juan	Lopez	juan.lopez32@upr.edu	testing1212
-4	Bienvenido	Velez	bienvenido.velez@upr	java2020
-2	Amir	Chinaei	amir.chinaei@upr.edu	nosvemos
+COPY instachat."user" (user_id, first_name, last_name, u_email_address, u_password, username) FROM stdin;
+1	Pedro	Rivera	p.rivera@upr.edu	jaja saludos	p.rivera
+2	Amir	Chinaei	amir.chinaei@upr.edu	nosvemos	amir.chinaei
+3	Juan	Lopez	juan.lopez32@upr.edu	testing1212	juan.lopez
+4	Bienvenido	Velez	bienvenido.velez@upr	java2020	bienvenido.velez
+5	Manuel	Rodriguez	mrodriguez7@upr.edu	db2020	manuelr417
 \.
 
 
@@ -526,6 +599,13 @@ COPY public.post (post_id, post_caption, post_date) FROM stdin;
 --
 
 SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 2, true);
+
+
+--
+-- Name: hashtag_hashtag_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.hashtag_hashtag_id_seq', 1, true);
 
 
 --
@@ -564,6 +644,20 @@ SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 2, true);
 
 
 --
+-- Name: serial_user_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
+--
+
+SELECT pg_catalog.setval('instachat.serial_user_id_seq', 5, true);
+
+
+--
+-- Name: serial_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: instadev
+--
+
+SELECT pg_catalog.setval('public.serial_user_id_seq', 1, false);
+
+
+--
 -- Name: belongs belongs_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
@@ -577,14 +671,6 @@ ALTER TABLE ONLY instachat.belongs
 
 ALTER TABLE ONLY instachat.chat
     ADD CONSTRAINT chat_pkey PRIMARY KEY (chat_id);
-
-
---
--- Name: has_hashtag has_hashtag_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
---
-
-ALTER TABLE ONLY instachat.has_hashtag
-    ADD CONSTRAINT has_hashtag_pkey PRIMARY KEY (hashtag_id, p_with_hashtag);
 
 
 --
@@ -657,6 +743,14 @@ ALTER TABLE ONLY instachat."user"
 
 ALTER TABLE ONLY instachat."user"
     ADD CONSTRAINT user_u_email_address_key UNIQUE (u_email_address);
+
+
+--
+-- Name: user user_username_key; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat."user"
+    ADD CONSTRAINT user_username_key UNIQUE (username);
 
 
 --

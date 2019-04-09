@@ -49,6 +49,15 @@ class UserHandler:
             user = self.build_full_user_dict(row)
             return jsonify(User=user)
 
+    def getUserByUsername(self, username):
+        dao = UsersDAO()
+        row = dao.getUserByUsername(username)
+        if not row:
+            return jsonify(Error="User Not Found"), 404
+        else:
+            user = self.build_full_user_dict(row)
+            return jsonify(User=user)
+
     def getUsersThatReact(self, post_id, react_type):
         dao = UsersDAO()
         user_list = dao.getUsersThatReact(post_id, react_type)

@@ -34,6 +34,12 @@ class UsersDAO:
     result = cursor.fetchone()
     return result
 
+  def getUserByUsername(self, username):
+    cursor = self.conn.cursor()
+    cursor.execute("select * from instachat.user where username = %s;", [username])
+    result = cursor.fetchone()
+    return result
+
   def getUserContactList(self, user_id):
     cursor = self.conn.cursor()
     cursor.execute("select user_id, first_name, last_name from instachat.user where user_id in (select contact_of from"

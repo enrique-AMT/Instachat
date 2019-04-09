@@ -99,6 +99,17 @@ def getUserById(user_id):
     else:
         return jsonify(Error = "Method not allowed."), 405
 
+@app.route('/InstaChat/users/<string:username>', methods=['GET', 'PUT', 'DELETE'])
+def getUserByUsername(username):
+    if request.method == 'GET':
+        return UserHandler().getUserByUsername(username)
+    elif request.method == 'PUT':
+        return UserHandler().updateUser(username, request.json)
+    elif request.method == 'DELETE':
+        return UserHandler().deleteUser(username)
+    else:
+        return jsonify(Error = "Method not allowed."), 405
+
 
 @app.route('/InstaChat/users/<int:user_id>/contacts', methods=['GET', 'PUT', 'DELETE'])
 def getUserContactList(user_id):
