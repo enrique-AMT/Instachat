@@ -7,28 +7,37 @@ class UserHandler:
         result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2]}
         return result
 
+    def build_user_react_dict(self, row):
+        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'react_date': row[3]}
+        return result
+
     def build_full_user_dict(self, row):
-        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3],
-                  'password': row[4], 'u_phone': row[5]}
+        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3], 'password': row[4]}
         return result
 
     def build_user_attributes(self, user_id, first_name, last_name, u_email_address, u_password):
 
         result = {'user_id': user_id, 'first_name': first_name, 'last_name': last_name,
                   'u_email_address': u_email_address, 'u_password': u_password}
-        return result
 
-    def build_chat_dict(self, row):
-        chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id': row[2]}
-        return chat_list
+        return result
 
     def getAllUsers(self):
         dao = UsersDAO()
         user_list = dao.getAllUsers()
         result_list = []
         for row in user_list:
-          result = self.build_user_dict(row)
-          result_list.append(result)
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(User=result_list)
+
+    def getDetailedUsers(self):
+        dao = UsersDAO()
+        user_list = dao.getDetailedUsers()
+        result_list = []
+        for row in user_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
         return jsonify(User=result_list)
 
     def getUserById(self, user_id):
@@ -46,7 +55,24 @@ class UserHandler:
         if not user_list:
             return jsonify(Error="User not found"), 404
         else:
-            return jsonify(Users=user_list)
+            result_list = []
+            for row in user_list:
+                result = self.build_user_react_dict(row)
+                result_list.append(result)
+            return jsonify(User=result_list)
+
+    def getUserContactList(self, user_id):
+        dao = UsersDAO()
+        row = dao.getUserById(user_id)
+        if not row:
+            return jsonify(Error="User Not Found"), 404
+        else:
+            contact_list = dao.getUserContactList(user_id)
+            result_list = []
+            for row in contact_list:
+                result = self.build_user_dict(row)
+                result_list.append(result)
+            return jsonify(Contact=result_list)
 
     def createUser(self, json):
         print("TODO")
@@ -94,20 +120,9 @@ class UserHandler:
         # else:
         #     return jsonify(DeleteStatus = "AREA TO DELETE USER BY ID"), 200
 
-    def getUserContactList(self, user_id):
-        dao = UsersDAO()
-        contact_list = dao.getUserContactList(user_id)
-        result_list = []
-        for row in contact_list:
-          result = self.build_user_dict(row)
-          result_list.append(result)
-        return jsonify(Contact=result_list)
-
     def getUserChatList(self, user_id):
-        dao = UsersDAO()
-        chat_list = dao.getUserChatList(user_id)
-        result_list = []
-        for row in chat_list:
-          result = self.build_chat_dict(row)
-          result_list.append(result)
-        return jsonify(Chat=result_list)
+        print("TODO")
+        # if len(user_list) < user_id or user_id < 1:
+        #     return jsonify(Error='User not found'), 404
+        # else:
+        #     return jsonify(User=user_list[user_id-1])
