@@ -30,20 +30,22 @@ class UsersDAO:
 
   def getUserById(self, user_id):
     cursor = self.conn.cursor()
-    cursor.execute("select * from instachat.user where user_id = %s;", [user_id])
+    cursor.execute("select user_id, first_name, last_name, u_email_address, u_password, username, phone from "
+                   "instachat.user left outer join instachat.phone on user_id = u_phone where user_id = %s;", [user_id])
     result = cursor.fetchone()
     return result
 
   def getUserByUsername(self, username):
     cursor = self.conn.cursor()
-    cursor.execute("select * from instachat.user where username = %s;", [username])
+    cursor.execute("select user_id, first_name, last_name, u_email_address, u_password, username, phone from "
+                   "instachat.user left outer join instachat.phone on user_id = u_phone where username = %s;", [username])
     result = cursor.fetchone()
     return result
 
   def getUserContactList(self, user_id):
     cursor = self.conn.cursor()
-    cursor.execute("select user_id, first_name, last_name from instachat.user where user_id in (select contact_of from"
-                     " instachat.u_contacts where user_id = %s);", [user_id])
+    cursor.execute("select user_id, first_name, last_name from instachat.user where user_id in (select user_id from"
+                     " instachat.u_contacts where contact_of = %s);", [user_id])
     result = []
     for row in cursor:
       result.append(row)
