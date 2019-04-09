@@ -10,14 +10,15 @@ class PostHandler:
 
     def build_post_dict(self, row):
         result = {}
+        print(row)
         result['post_id'] = row[0]
         result['post_caption'] = row[1]
         result['post_date'] = row[2]
         result['p_created_by'] = row[3]
-        if(row[6]):
-            result['image_file'] = row[6]
-        if(row[11]):
-            result['hashtag_name'] = row[11]
+        if(row[4]):
+            result['image_file'] = row[4]
+        if(row[5]):
+            result['hashtag_name'] = row[5]
 
         return result
 
