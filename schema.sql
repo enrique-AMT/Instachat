@@ -521,8 +521,9 @@ COPY instachat.phone (phone_id, u_phone, phone) FROM stdin;
 COPY instachat.post (post_caption, post_date, p_created_by, c_post_belongs, post_id) FROM stdin;
 A colgar a unos cuantos!	04-01-2019	3	1	1
 Dale si!	04-01-2019	2	1	2
-test	04/07/2019	1	1	3
 testing jaja	04-01-2019	1	1	4
+testing chat 2	04-01-2019	1	2	5
+test	04-07-2019	1	1	3
 \.
 
 
@@ -626,7 +627,7 @@ SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 2, true);
 -- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.post_post_id_seq', 4, true);
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 5, true);
 
 
 --
