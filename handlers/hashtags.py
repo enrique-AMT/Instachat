@@ -9,7 +9,7 @@ class HashtagsHandler:
         return hashtag_list
 
     def build_daily_hashtag_dict(self, row, index):
-        hashtag_list = {'hashtag_id': row[0], 'hash_name': row[1], 'position': index}
+        hashtag_list = {'hash_name': row[0], 'hashtag_count': row[1], 'position': index}
         return hashtag_list
 
     def build_chat_attributes(self, chat_name, number_of_users, owner_id):
