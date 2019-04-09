@@ -262,7 +262,8 @@ CREATE TABLE instachat.reply (
     reply_id integer NOT NULL,
     reply_date character(10),
     reply_text character varying(250),
-    p_replied integer
+    p_replied integer,
+    user_that_replied integer
 );
 
 
@@ -472,7 +473,9 @@ COPY instachat.react (react_id, react_type, react_date, user_that_react, p_react
 -- Data for Name: reply; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat.reply (reply_id, reply_date, reply_text, p_replied) FROM stdin;
+COPY instachat.reply (reply_id, reply_date, reply_text, p_replied, user_that_replied) FROM stdin;
+1	04-01-2019	jajaja full mano	1	3
+2	04-01-2019	na mano no relajes asi jajaja	1	4
 \.
 
 
@@ -557,7 +560,7 @@ SELECT pg_catalog.setval('instachat.react_react_id_seq', 7, true);
 -- Name: reply_reply_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 1, false);
+SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 2, true);
 
 
 --
@@ -774,6 +777,14 @@ ALTER TABLE ONLY instachat.react
 
 ALTER TABLE ONLY instachat.reply
     ADD CONSTRAINT reply_p_replied_fkey FOREIGN KEY (p_replied) REFERENCES instachat.post(post_id);
+
+
+--
+-- Name: reply reply_user_that_replied_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.reply
+    ADD CONSTRAINT reply_user_that_replied_fkey FOREIGN KEY (user_that_replied) REFERENCES instachat."user"(user_id);
 
 
 --

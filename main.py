@@ -244,7 +244,7 @@ def getPostReactions(post_id):
 @app.route('/InstaChat/posts/<int:post_id>/replies', methods=['GET', 'PUT', 'DELETE'])
 def getPostReplies(post_id):
     if request.method == 'GET':
-        return PostHandler().getPostById(post_id)
+        return ReplyHandler().getPostReplies(post_id)
     elif request.method == 'PUT':
         return PostHandler().updatePost(post_id, request.json)
     elif request.method == 'DELETE':

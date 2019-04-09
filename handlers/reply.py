@@ -9,7 +9,8 @@ from daos.reply import ReplyDAO
 class ReplyHandler:
 
     def build_reply_dict(self, row):
-        result = {'reply_id': row[0], 'reply_date': row[1], 'reply_text': row[2], 'p_replied': row[3]}
+        result = {'reply_id': row[0], 'reply_date': row[1], 'reply_text': row[2], 'p_replied': row[3],
+                  'user_that_replied': row[4]}
         return result
 
     def build_reply_attributes(self, reply_id, reply_date, reply_text, p_replied):
@@ -17,7 +18,7 @@ class ReplyHandler:
         result['reply_id'] = reply_id
         result['reply_date'] = reply_date
         result['reply_text'] = reply_text
-        result['p_replied'] - p_replied
+        result['p_replied'] = p_replied
         return result
 
     def getAllReplies(self):
@@ -46,6 +47,14 @@ class ReplyHandler:
     def getReactOnReply(self, reply_id):
         dao = ReplyDAO()
         return jsonify(Reply=dao.getReactsOnReply(reply_id))
+
+    def getPostReplies(self, post_id):
+        dao = ReplyDAO()
+        replies = dao.getPostReplies(post_id)
+        reply_list = []
+        for row in replies:
+            reply_list.append(self.build_reply_dict(row))
+        return jsonify(Reply=reply_list)
 
 
     def createReply(self, json):
