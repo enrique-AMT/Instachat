@@ -7,6 +7,10 @@ class UserHandler:
         result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2]}
         return result
 
+    def build_user_react_dict(self, row):
+        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'react_date': row[3]}
+        return result
+
     def build_full_user_dict(self, row):
         result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3], 'password': row[4]}
         return result
@@ -51,7 +55,11 @@ class UserHandler:
         if not user_list:
             return jsonify(Error="User not found"), 404
         else:
-            return jsonify(Users=user_list)
+            result_list = []
+            for row in user_list:
+                result = self.build_user_react_dict(row)
+                result_list.append(result)
+            return jsonify(User=result_list)
 
     def getUserContactList(self, user_id):
         dao = UsersDAO()

@@ -11,6 +11,14 @@ class ReactHandler:
                       'p_reacted': row[4], 'reply_reacted': row[5]}
         return react_list
 
+    def build_like_count_dict(self, row):
+        result = {'post_id': row[0], 'Total_of_likes': row[1]}
+        return result
+
+    def build_dislike_count_dict(self, row):
+        result = {'post_id': row[0], 'Total_of_dislikes': row[1]}
+        return result
+
     def build_react_attributes(self, react_id, react_type, react_date, user_that_react, p_replied, reply_reacted):
         result = {'react_id': react_id, 'react_type': react_type, 'react_date': react_date,
                   'user_that_react': user_that_react, 'p_replied': p_replied, 'reply_reacted': reply_reacted}
@@ -41,8 +49,19 @@ class ReactHandler:
 
     def getReactsOnPost(self, post_id, react_type):
         dao = ReactsDAO()
-        PostsDAO().getPostById(post_id)
-        return jsonify(React=dao.getReactsOnPost(post_id, react_type))
+        reacts = dao.getReactsOnPost(post_id, react_type)
+        if not reacts:
+            return jsonify(Error="No reacts"), 404
+        else:
+            result_list = []
+            for row in reacts:
+                if react_type == 'like':
+                    result = self.build_like_count_dict(row)
+                    result_list.append(result)
+                elif react_type == 'dislike':
+                    result = self.build_dislike_count_dict(row)
+                    result_list.append(result)
+            return jsonify(User=result_list)
 
     def createReact(self):
       print("TODO")

@@ -35,7 +35,7 @@ class ReactsDAO:
 
   def getReactsOnPost(self, post_id, react_type):
     cursor = self.conn.cursor()
-    cursor.execute("select count(*) as total, p_reacted from instachat.react where p_reacted = %s and react_type = %s "
+    cursor.execute("select p_reacted, count(*) from instachat.react where p_reacted = %s and react_type = %s "
                    "group by p_reacted;",[post_id, react_type])
     result = []
     for row in cursor:
