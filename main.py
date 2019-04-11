@@ -143,7 +143,7 @@ def getUsersThatReactToPostX(post_id, react_type):
         return jsonify(Error="Method not allowed."), 405
 
 
-# ========================================= DASHBOARD OPERATIONS ============================================= #
+# ========================================= DASHBOARD OPERATIONS ============================================== #
 
 
 @app.route('/InstaChat/dashboard/<string:post_date>/hashtags', methods=['GET', 'POST'])
