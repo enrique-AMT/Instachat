@@ -12,8 +12,17 @@ class UserHandler:
         return result
 
     def build_full_user_dict(self, row):
-        result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'u_email_address': row[3], 'password': row[4]}
-        return result
+      result = {}
+      result['user_id'] = row[0]
+      result['first_name'] = row[1]
+      result['last_name'] = row[2]
+      result['u_email_address'] = row[3]
+      result['u_password'] = row[4]
+      result['username'] = row[5]
+      if row[6]:
+        result['phone'] = row[6]
+
+      return result
 
     def build_user_attributes(self, user_id, first_name, last_name, u_email_address, u_password):
 
@@ -43,6 +52,15 @@ class UserHandler:
     def getUserById(self, user_id):
         dao = UsersDAO()
         row = dao.getUserById(user_id)
+        if not row:
+            return jsonify(Error="User Not Found"), 404
+        else:
+            user = self.build_full_user_dict(row)
+            return jsonify(User=user)
+
+    def getUserByUsername(self, username):
+        dao = UsersDAO()
+        row = dao.getUserByUsername(username)
         if not row:
             return jsonify(Error="User Not Found"), 404
         else:

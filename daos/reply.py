@@ -22,6 +22,14 @@ class ReplyDAO:
       result.append(row)
     return result
 
+  def getPostReplies(self, post_id):
+    cursor = self.conn.cursor()
+    cursor.execute("select * from instachat.reply where p_replied = %s;", [post_id])
+    result = []
+    for row in cursor:
+        result.append(row)
+    return result
+
   def getReplyById(self, reply_id):
     cursor = self.conn.cursor()
     cursor.execute("select * from instachat.reply where reply_id = %s;", [reply_id])

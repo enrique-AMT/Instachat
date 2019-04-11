@@ -1,6 +1,5 @@
 from flask import jsonify
 from daos.posts import PostsDAO
-from daos.chats import ChatsDAO
 
 # posts_list = [{"post_id": 1, "user_id": "1", "imageURL": "www.test.com", "post_caption": "HI", "post_likes": "10",
 #               "post_dislikes": "1", "reply_id": "5", "post_Date": "2/15/2019", "topic_id": "9"}]
@@ -11,9 +10,15 @@ class PostHandler:
 
     def build_post_dict(self, row):
         result = {}
+        print(row)
         result['post_id'] = row[0]
         result['post_caption'] = row[1]
         result['post_date'] = row[2]
+        result['p_created_by'] = row[3]
+        if(row[4]):
+            result['image_file'] = row[4]
+        if(row[5]):
+            result['hashtag_name'] = row[5]
 
         return result
 
@@ -24,7 +29,7 @@ class PostHandler:
       return result
 
     def build_post_attributes(self, pid, p_caption, p_date):
-        result = {}
+        result = []
         result['post_id'] = pid
         result['post_caption'] = p_caption
         result['post_date'] = p_date
@@ -35,7 +40,7 @@ class PostHandler:
         posts = dao.getAllPosts()
         postsList = []
         for row in posts:
-            postsList.append(self.build_post_dict(row))
+          postsList.append(self.build_post_dict(row))
         return jsonify(Posts=postsList)
 
     def getPostById(self, post_id):
@@ -50,13 +55,12 @@ class PostHandler:
         postsList.append(self.build_post_dict(row))
       return jsonify(Posts=postsList)
 
-    def getPostsInChatX(self, chat_id):
+    def getPostsInChatX(self, chat_id, post_id):
         dao = PostsDAO()
-        chat = ChatsDAO().getChatById(chat_id)
-        if not chat:
-            return jsonify(Error="Chat not found"), 404
+        row = dao.getPostsInChatX(chat_id, post_id)
+        if not row:
+            return jsonify(Error="Post Not Found"), 404
         else:
-            row = dao.getPostsInChatX(chat_id)
             post = self.build_post_dict(row)
             return jsonify(Post=post)
 
