@@ -61,3 +61,12 @@ class UsersDAO:
     for row in cursor:
         result.append(row)
     return result
+
+  def getUserChats(self, user_id):
+    cursor = self.conn.cursor()
+    cursor.execute("select chat_id, chat_name, owner_id from instachat.chat where chat_id in (select c_user_belongs from "
+                   "instachat.belongs where u_belongs = %s);", [user_id])
+    result = []
+    for row in cursor:
+      result.append(row)
+    return result

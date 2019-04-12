@@ -11,6 +11,10 @@ class UserHandler:
         result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'react_date': row[3]}
         return result
 
+    def build_user_chat_dict(self,row):
+      chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id': row[2]}
+      return chat_list
+
     def build_full_user_dict(self, row):
       result = {}
       result['user_id'] = row[0]
@@ -92,6 +96,19 @@ class UserHandler:
                 result_list.append(result)
             return jsonify(Contact=result_list)
 
+    def getUserChatList(self,user_id):
+      dao = UsersDAO()
+      row = dao.getUserChats(user_id)
+      if not row:
+        return jsonify(Error="User Not Found"), 404
+      else:
+        chat_list = dao.getUserChats(user_id)
+        result_list = []
+        for row in chat_list:
+          result = self.build_user_chat_dict(row)
+          result_list.append(result)
+        return jsonify(Chat=result_list)
+
     def createUser(self, json):
         print("TODO")
         # global uid
@@ -138,9 +155,3 @@ class UserHandler:
         # else:
         #     return jsonify(DeleteStatus = "AREA TO DELETE USER BY ID"), 200
 
-    def getUserChatList(self, user_id):
-        print("TODO")
-        # if len(user_list) < user_id or user_id < 1:
-        #     return jsonify(Error='User not found'), 404
-        # else:
-        #     return jsonify(User=user_list[user_id-1])
