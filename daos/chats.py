@@ -54,4 +54,13 @@ class ChatsDAO:
         result.append(row)
     return result
 
+  def createChat(self, chat_name, owner_id):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.chat(chat_name, owner_id) "
+                   "values(%s, %s) returning chat_id;",
+                   [chat_name, owner_id])
+    chat_id = cursor.fetchone()[0]
+    self.conn.commit()
+    return chat_id
+
 

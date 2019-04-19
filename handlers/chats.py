@@ -55,22 +55,15 @@ class ChatHandler:
             return jsonify(Chat=ChatsDAO().getChatOwner(chat_id))
 
     def createChat(self, json):
-      print("todo")
-        # global cid
-        # chat_name = json['chat_name']
-        # number_of_users = json['number_of_users']
-        # user_id = json['user_id']
-        # active_user_count = json['active_user_count']
-        # owner_id = json['owner_id']
-        # if chat_name and number_of_users and user_id and active_user_count and owner_id:
-        #     chats_list.append(
-        #         {'chat_id': cid, 'chat_name': chat_name, 'number_of_users': number_of_users, 'user_id':
-        #             user_id, 'active_user_count': active_user_count, 'owner_id': owner_id})
-        #     result = self.build_chat_attributes(cid, chat_name, number_of_users, user_id, active_user_count, owner_id)
-        #     cid = (cid + 1)
-        #     return jsonify(Chat=result), 201
-        # else:
-        #     return jsonify(Error="Unexpected attributes in post request"), 400
+      chat_name = json['chat_name']
+      owner_id = json['owner_id']
+      if chat_name and owner_id:
+        dao = ChatsDAO()
+        chat_id = dao.createChat(chat_name, owner_id)
+        result = self.build_chat_attributes(chat_name, owner_id)
+        return jsonify(Chat=result), 201
+      else:
+        return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updateChat(self, chat_id, json):
       print("todo")
