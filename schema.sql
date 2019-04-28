@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.6 (Ubuntu 10.6-0ubuntu0.18.04.1)
--- Dumped by pg_dump version 10.6 (Ubuntu 10.6-0ubuntu0.18.04.1)
+-- Dumped from database version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
+-- Dumped by pg_dump version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -94,7 +94,7 @@ ALTER SEQUENCE instachat.chat_chat_id_seq OWNED BY instachat.chat.chat_id;
 
 CREATE TABLE instachat.has_hashtag (
     p_with_hashtag integer NOT NULL,
-    hashtag_id integer
+    hashtag_id integer NOT NULL
 );
 
 
@@ -463,6 +463,8 @@ COPY instachat.belongs (u_belongs, c_user_belongs) FROM stdin;
 3	1
 4	1
 1	1
+6	1
+7	3
 \.
 
 
@@ -473,6 +475,7 @@ COPY instachat.belongs (u_belongs, c_user_belongs) FROM stdin;
 COPY instachat.chat (chat_id, chat_name, owner_id) FROM stdin;
 1	work	4
 2	macaracachimbas	1
+3	testing delete	4
 \.
 
 
@@ -501,6 +504,7 @@ mecolgue	1
 COPY instachat.image (image_id, image_file, p_with_image) FROM stdin;
 1	hola.png	1
 2	hola2.png	3
+3	hola.png	6
 \.
 
 
@@ -524,6 +528,10 @@ Dale si!	04-01-2019	2	1	2
 testing jaja	04-01-2019	1	1	4
 testing chat 2	04-01-2019	1	2	5
 test	04-07-2019	1	1	3
+Yulin 2020	04-12-2019	1	1	6
+test	01-01-0101	7	2	7
+testtesttest	01-01-9999	7	2	8
+Smile	99-99-9999	7	2	9
 \.
 
 
@@ -539,6 +547,9 @@ COPY instachat.react (react_id, react_type, react_date, user_that_react, p_react
 5	like	03-10-2018	1	1	\N
 6	dislike	12-15-2017	2	1	\N
 7	dislike	12-15-2015	4	2	\N
+10	like	\N	6	6	\N
+11	like	01-01-2000	3	6	\N
+12	dislike	01-01-2000	1	6	\N
 \.
 
 
@@ -561,6 +572,7 @@ COPY instachat.u_contacts (user_id, contact_of) FROM stdin;
 3	1
 4	1
 1	2
+6	1
 \.
 
 
@@ -574,6 +586,8 @@ COPY instachat."user" (user_id, first_name, last_name, u_email_address, u_passwo
 3	Juan	Lopez	juan.lopez32@upr.edu	testing1212	juan.lopez
 4	Bienvenido	Velez	bienvenido.velez@upr	java2020	bienvenido.velez
 5	Manuel	Rodriguez	mrodriguez7@upr.edu	db2020	manuelr417
+6	tito	kayak	tito@prlibre.com	tito	tito
+7	Testing Delete	TEST	test@gmail.com	test	testest
 \.
 
 
@@ -599,7 +613,7 @@ COPY public.post (post_id, post_caption, post_date) FROM stdin;
 -- Name: chat_chat_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 2, true);
+SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 3, true);
 
 
 --
@@ -613,28 +627,28 @@ SELECT pg_catalog.setval('instachat.hashtag_hashtag_id_seq', 1, true);
 -- Name: image_image_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.image_image_id_seq', 2, true);
+SELECT pg_catalog.setval('instachat.image_image_id_seq', 3, true);
 
 
 --
 -- Name: phone_phone_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 2, true);
+SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
 
 
 --
 -- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.post_post_id_seq', 5, true);
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 9, true);
 
 
 --
 -- Name: react_react_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.react_react_id_seq', 7, true);
+SELECT pg_catalog.setval('instachat.react_react_id_seq', 12, true);
 
 
 --
@@ -648,7 +662,7 @@ SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 2, true);
 -- Name: serial_user_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.serial_user_id_seq', 5, true);
+SELECT pg_catalog.setval('instachat.serial_user_id_seq', 8, true);
 
 
 --
@@ -672,6 +686,14 @@ ALTER TABLE ONLY instachat.belongs
 
 ALTER TABLE ONLY instachat.chat
     ADD CONSTRAINT chat_pkey PRIMARY KEY (chat_id);
+
+
+--
+-- Name: has_hashtag has_hashtag_pkey; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.has_hashtag
+    ADD CONSTRAINT has_hashtag_pkey PRIMARY KEY (hashtag_id, p_with_hashtag);
 
 
 --
@@ -775,15 +797,15 @@ ALTER TABLE ONLY public.post
 --
 
 ALTER TABLE ONLY instachat.belongs
-    ADD CONSTRAINT belongs_c_user_belongs_fkey FOREIGN KEY (c_user_belongs) REFERENCES instachat.chat(chat_id);
+    ADD CONSTRAINT belongs_c_user_belongs_fkey FOREIGN KEY (c_user_belongs) REFERENCES instachat.chat(chat_id) ON DELETE CASCADE;
 
 
 --
--- Name: belongs belongs_u_belongs_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+-- Name: belongs belons_u_belongs_fkey; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
 --
 
 ALTER TABLE ONLY instachat.belongs
-    ADD CONSTRAINT belongs_u_belongs_fkey FOREIGN KEY (u_belongs) REFERENCES instachat."user"(user_id);
+    ADD CONSTRAINT belons_u_belongs_fkey FOREIGN KEY (u_belongs) REFERENCES instachat."user"(user_id) ON DELETE CASCADE;
 
 
 --
@@ -896,6 +918,14 @@ ALTER TABLE ONLY instachat.u_contacts
 
 ALTER TABLE ONLY instachat.u_contacts
     ADD CONSTRAINT u_contacts_user_id_fkey FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id);
+
+
+--
+-- Name: u_contacts u_contacts_user_id_fkey1; Type: FK CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.u_contacts
+    ADD CONSTRAINT u_contacts_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id);
 
 
 --

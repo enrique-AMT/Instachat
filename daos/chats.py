@@ -67,7 +67,7 @@ class ChatsDAO:
 
   def removeChat(self, chat_id):
     cursor = self.conn.cursor()
-    cursor.execute("delete from instachat.chat where chat_id = %s", [chat_id])
+    cursor.execute("delete from instachat.chat where chat_id = %s ", [chat_id])
     self.conn.commit()
     return chat_id
 
