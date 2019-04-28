@@ -2,7 +2,9 @@ from config.dbconfig import pg_config
 from flask import jsonify
 import psycopg2
 
+
 class ChatsDAO:
+
   def __init__(self):
     connection_url = "dbname=%s user=%s password=%s host=%s" % (pg_config['dbname'],
                                                                 pg_config['user'],
@@ -53,5 +55,20 @@ class ChatsDAO:
     for row in cursor:
         result.append(row)
     return result
+
+  def createChat(self, chat_name, owner_id):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.chat(chat_name, owner_id) "
+                   "values(%s, %s) returning chat_id;",
+                   [chat_name, owner_id])
+    chat_id = cursor.fetchone()[0]
+    self.conn.commit()
+    return chat_id
+
+  def removeChat(self, chat_id):
+    cursor = self.conn.cursor()
+    cursor.execute("delete from instachat.chat where chat_id = %s", [chat_id])
+    self.conn.commit()
+    return chat_id
 
 

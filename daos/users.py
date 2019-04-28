@@ -48,7 +48,7 @@ class UsersDAO:
                      " instachat.u_contacts where contact_of = %s);", [user_id])
     result = []
     for row in cursor:
-      result.append(row)
+        result.append(row)
     return result
 
   def getUsersThatReact(self, post_id, react_type):
@@ -61,3 +61,42 @@ class UsersDAO:
     for row in cursor:
         result.append(row)
     return result
+
+  def getUserChats(self, user_id):
+    cursor = self.conn.cursor()
+    cursor.execute("select chat_id, chat_name, owner_id from instachat.chat where chat_id in (select c_user_belongs from "
+                   "instachat.belongs where u_belongs = %s);", [user_id])
+    result = []
+    for row in cursor:
+        result.append(row)
+    return result
+
+  def checkUsersOnChat(self, user_id, chat_id):
+    cursor = self.conn.cursor()
+    cursor.execute("select u_belongs from instachat.belongs where c_user_belongs = %s and u_belongs = %s;",
+                   [chat_id, user_id])
+    result = []
+    for row in cursor:
+        result.append(row)
+    return result
+
+  def removeUserFromChat(self, user_id, chat_id):
+    cursor = self.conn.cursor()
+    cursor.execute("delete from instachat.belongs where u_belongs = %s and c_user_belongs = %s", [user_id, chat_id])
+    self.conn.commit()
+    return user_id
+
+  def checkUserContacts(self, u_id, contact_id):
+    cursor = self.conn.cursor()
+    cursor.execute("select user_id from instachat.u_contacts where user_id = %s and contact_of = %s",
+                   [contact_id, u_id])
+    result = []
+    for row in cursor:
+        result.append(row)
+    return result
+
+  def removeUserFromContacts(self, user_id, contact_id):
+    cursor = self.conn.cursor()
+    cursor.execute("delete from instachat.u_contacts where contact_of = %s and user_id = %s", [user_id, contact_id])
+    self.conn.commit()
+    return user_id

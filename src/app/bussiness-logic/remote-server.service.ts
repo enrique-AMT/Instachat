@@ -8,20 +8,6 @@ import {
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { map, catchError } from 'rxjs/operators';
-// import {
-//   ServerMake,
-//   DataCenter,
-//   ServiceAgreement,
-//   Contract,
-//   Account,
-//   SubAccount,
-//   ServerType,
-//   ServerSize,
-//   ServerOS,
-//   Asset
-// } from './../models/Asset';
-// import { UploadedFiles, ServerFile } from './../models/UploadedFiles';
-// import { Response } from './../models/RemoteResponse';
 import { User } from './User';
 import {Posts} from './Posts';
 import {DashboardPost} from '../dashboard/dashboard.component';
@@ -112,9 +98,9 @@ export class RemoteServerService {
   }
 
 
-  public getTrendingHashtags(date: string): Observable<[DashboardHashtag[]]> {
+  public getTrendingHashtags(date: string): Observable<DashboardHashtag[]> {
     return this.http
-      .get<[DashboardHashtag[]]>(
+      .get<DashboardHashtag[]>(
         'http://localhost:5000/InstaChat/dashboard/' + date + '/hashtags'
       );
   }

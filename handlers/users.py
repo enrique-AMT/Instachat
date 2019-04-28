@@ -1,6 +1,7 @@
 from flask import jsonify
 from daos.users import UsersDAO
 
+
 class UserHandler:
 
     def build_user_dict(self, row):
@@ -11,18 +12,25 @@ class UserHandler:
         result = {'user_id': row[0], 'first_name': row[1], 'last_name': row[2], 'react_date': row[3]}
         return result
 
-    def build_full_user_dict(self, row):
-      result = {}
-      result['user_id'] = row[0]
-      result['first_name'] = row[1]
-      result['last_name'] = row[2]
-      result['u_email_address'] = row[3]
-      result['u_password'] = row[4]
-      result['username'] = row[5]
-      if row[6]:
-        result['phone'] = row[6]
+    def build_user_chat_dict(self,row):
+        chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id': row[2]}
+        return chat_list
 
-      return result
+    def build_removed_user_dict(self, row):
+        result = {'username': row[0], 'chat_name': row[1]}
+
+    def build_full_user_dict(self, row):
+        result = {}
+        result['user_id'] = row[0]
+        result['first_name'] = row[1]
+        result['last_name'] = row[2]
+        result['u_email_address'] = row[3]
+        result['u_password'] = row[4]
+        result['username'] = row[5]
+        if row[6]:
+            result['phone'] = row[6]
+
+        return result
 
     def build_user_attributes(self, user_id, first_name, last_name, u_email_address, u_password):
 
@@ -92,6 +100,37 @@ class UserHandler:
                 result_list.append(result)
             return jsonify(Contact=result_list)
 
+    def getUserChatList(self,user_id):
+        dao = UsersDAO()
+        row = dao.getUserChats(user_id)
+        if not row:
+            return jsonify(Error="User Not Found"), 404
+        else:
+            chat_list = dao.getUserChats(user_id)
+            result_list = []
+            for row in chat_list:
+                result = self.build_user_chat_dict(row)
+                result_list.append(result)
+            return jsonify(Chat=result_list)
+
+    def removeUserFromChat(self, user_id, chat_id):
+        dao = UsersDAO()
+        row = dao.checkUsersOnChat(user_id, chat_id)
+        if not row:
+            return jsonify(Error="Request cannot be completed"), 404
+        else:
+            dao.removeUserFromChat(user_id, chat_id)
+            return jsonify(DeleteStatus="OK"), 200
+
+    def removeUserFromContacts(self, user_id, contact_id):
+        dao = UsersDAO()
+        row = dao.checkUserContacts(user_id, contact_id)
+        if not row:
+            return jsonify(Error="Request cannot be completed"), 404
+        else:
+            dao.removeUserFromContacts(user_id, contact_id)
+            return jsonify(DeleteStatus="OK"), 200
+
     def createUser(self, json):
         print("TODO")
         # global uid
@@ -138,9 +177,3 @@ class UserHandler:
         # else:
         #     return jsonify(DeleteStatus = "AREA TO DELETE USER BY ID"), 200
 
-    def getUserChatList(self, user_id):
-        print("TODO")
-        # if len(user_list) < user_id or user_id < 1:
-        #     return jsonify(Error='User not found'), 404
-        # else:
-        #     return jsonify(User=user_list[user_id-1])

@@ -108,7 +108,7 @@ def getUserByUsername(username):
     elif request.method == 'DELETE':
         return UserHandler().deleteUser(username)
     else:
-        return jsonify(Error = "Method not allowed."), 405
+        return jsonify(Error="Method not allowed."), 405
 
 
 @app.route('/InstaChat/users/<int:user_id>/contacts', methods=['GET', 'PUT', 'DELETE'])
@@ -118,7 +118,7 @@ def getUserContactList(user_id):
     elif request.method == 'PUT':
         return UserHandler().updateUser(user_id, request.json)
     elif request.method == 'DELETE':
-        return UserHandler().deleteUser(user_id)
+        return UserHandler().removeUserFromContacts(user_id)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -264,28 +264,30 @@ def getPostReplies(post_id):
         return jsonify(Error = "Method not allowed."), 405
 
 
-# @app.route('/InstaChat/sessions', methods=['POST', 'GET'])
-# def getAllSessions():
-#     if request.method == 'POST':
-#         print("REQUEST: ", request.json)
-#         return SessionHandler().insertSessionJson(request.json)
-#     else:
-#         if not request.args:
-#             return SessionHandler().getAllSessions()
-#
-#
-# @app.route('/InstaChat/sessions/<int:session_id>', methods=['GET', 'PUT', 'DELETE'])
-# def getSessionById(session_id):
-#     if request.method == 'GET':
-#         return SessionHandler().getSessionById(session_id)
-#     elif request.method == 'PUT':
-#         return SessionHandler().updateSession(session_id, request.json)
-#     elif request.method == 'DELETE':
-#         return SessionHandler().deleteSession(session_id)
-#     else:
-#         return jsonify(Error = "Method not allowed."), 405
+# ========================================== REMOVE OPERATIONS ================================================= #
+
+@app.route('/InstaChat/chats/<int:chat_id>/users/<int:user_id>', methods=['DELETE'])
+def removeUserFromChat(chat_id, user_id):
+    if request.method == 'DELETE':
+        return UserHandler().removeUserFromChat(user_id, chat_id)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
+@app.route('/InstaChat/users/<int:user_id>/contacts/<int:contact_id>', methods=['DELETE'])
+def removeUserFromContactList(user_id, contact_id):
+    if request.method == 'DELETE':
+        return UserHandler().removeUserFromContacts(user_id, contact_id)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaChat/chats/<int:chat_id>/owner/<int:owner_id>', methods=['DELETE'])
+def removeChat(chat_id, owner_id):
+    if request.method == 'DELETE':
+        return ChatHandler().removeChat(chat_id, owner_id)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 if __name__ == '__main__':
