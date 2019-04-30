@@ -1,5 +1,7 @@
 from flask import jsonify
 from daos.reply import ReplyDAO
+from daos.posts import PostsDAO
+from daos.users import UsersDAO
 
 # rid = 2
 
@@ -13,9 +15,8 @@ class ReplyHandler:
                   'user_that_replied': row[4]}
         return result
 
-    def build_reply_attributes(self, reply_id, reply_date, reply_text, p_replied):
+    def build_reply_attributes(self, reply_date, reply_text, p_replied, user_that_replied):
         result = {}
-        result['reply_id'] = reply_id
         result['reply_date'] = reply_date
         result['reply_text'] = reply_text
         result['p_replied'] = p_replied
@@ -56,23 +57,23 @@ class ReplyHandler:
             reply_list.append(self.build_reply_dict(row))
         return jsonify(Reply=reply_list)
 
-
-    def createReply(self, json):
-        print("TODO")
-        # global rid
-        # user_id = json['user_id']
-        # post_id = json['post_id']
-        # reply_text = json['reply_text']
-        # reply_date = json['reply_date']
-        #
-        # if user_id and post_id and reply_text and reply_date:
-        #     replies_list.append([{"reply_id": rid, "user_id": user_id, "post_id": post_id,
-        #                           "reply_text": reply_text, "reply_date": reply_date}])
-        #     result = self.build_reply_attributes(rid, user_id, post_id, reply_text, reply_date)
-        #     rid = (rid + 1)
-        #     return jsonify(Reply=result), 201
-        # else:
-        #     return jsonify(Error="Unexpected attributes in post request"), 400
+    def insertReply(self, json):
+        reply_date = json['reply_date']
+        reply_text = json['reply_text']
+        p_replied = json['p_replied']
+        user_that_replied = json['user_that_replied']
+        post = PostsDAO().getPostById(p_replied)
+        user = UsersDAO().getUserById(user_that_replied)
+        if not post:
+            return jsonify(Error="Post not found."), 404
+        elif not user:
+            return jsonify(Error="User not found."), 404
+        elif reply_date and reply_text and p_replied and user_that_replied:
+            ReplyDAO().insertReply(reply_date, reply_text, p_replied, user_that_replied)
+            result = self.build_reply_attributes(reply_date, reply_text, p_replied, user_that_replied)
+            return jsonify(Reply=result), 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updateReply(self, reply_id, json):
         print("TODO")

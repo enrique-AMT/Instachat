@@ -3,6 +3,9 @@ import psycopg2
 from flask import jsonify
 from daos.reacts import ReactsDAO
 from daos.posts import PostsDAO
+from daos.users import UsersDAO
+from daos.reply import ReplyDAO
+
 
 class ReactHandler:
 
@@ -19,11 +22,46 @@ class ReactHandler:
         result = {'post_id': row[0], 'Total_of_dislikes': row[1]}
         return result
 
-    def build_react_attributes(self, react_id, react_type, react_date, user_that_react, p_replied, reply_reacted):
-        result = {'react_id': react_id, 'react_type': react_type, 'react_date': react_date,
-                  'user_that_react': user_that_react, 'p_replied': p_replied, 'reply_reacted': reply_reacted}
-
+    def build_react_attributes_P(self, react_type, react_date, user_that_react, p_reacted):
+        result = {'react_type': react_type, 'react_date': react_date, 'user_that_react': user_that_react,
+                  'p_reacted': p_reacted}
         return result
+
+    def build_react_attributes_R(self, react_type, react_date, user_that_react, reply_reacted):
+        result = {'react_type': react_type, 'react_date': react_date, 'user_that_react': user_that_react,
+                  'reply_reacted': reply_reacted}
+        return result
+
+    def insertReact(self, json):
+        react_type = json['react_type']
+        react_date = json['react_date']
+        user_that_react = json['user_that_react']
+        p_reacted = -1
+        reply_reacted = -1
+        user = UsersDAO().getUserById(user_that_react)
+        if json.get('p_reacted'):
+            p_reacted = json['p_reacted']
+            post = PostsDAO().getPostById(p_reacted)
+            if not post:
+                return jsonify(Error="Post not found."), 404
+        elif json.get('reply_reacted'):
+            reply_reacted = json['reply_reacted']
+            reply = ReplyDAO().getReplyById(reply_reacted)
+            if not reply:
+                return jsonify(Error="Reply not found."), 404
+
+        if not user:
+            return jsonify(Error="User not found."), 404
+        elif react_type and react_date and user_that_react and json.get('p_reacted'):
+            ReactsDAO().insertReactP(react_type, react_date, user_that_react, p_reacted)
+            result = self.build_react_attributes_P(react_type, react_date, user_that_react, p_reacted)
+            return jsonify(React=result), 201
+        elif react_type and react_date and user_that_react and json.get('reply_reacted'):
+            ReactsDAO().insertReactR(react_type, react_date, user_that_react, reply_reacted)
+            result = self.build_react_attributes_R(react_type, react_date, user_that_react, reply_reacted)
+            return jsonify(React=result), 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def getAllReacts(self):
         dao = ReactsDAO()
@@ -51,7 +89,7 @@ class ReactHandler:
         dao = ReactsDAO()
         reacts = dao.getReactsOnPost(post_id, react_type)
         if not reacts:
-            return jsonify(Error="No reacts"), 404
+            return jsonify(Reacts=reacts), 404
         else:
             result_list = []
             for row in reacts:
@@ -61,10 +99,23 @@ class ReactHandler:
                 elif react_type == 'dislike':
                     result = self.build_dislike_count_dict(row)
                     result_list.append(result)
-            return jsonify(User=result_list)
+            return jsonify(Reacts=result_list)
 
-    def createReact(self):
-      print("TODO")
+    def getReactsOnReplies(self, reply_id, react_type):
+        dao = ReactsDAO()
+        reacts = dao.getReactsOnReplies(reply_id, react_type)
+        if not reacts:
+            return jsonify(Reacts=reacts), 404
+        else:
+            result_list = []
+            for row in reacts:
+                if react_type == 'like':
+                    result = self.build_like_count_dict(row)
+                    result_list.append(result)
+                elif react_type == 'dislike':
+                    result = self.build_dislike_count_dict(row)
+                    result_list.append(result)
+            return jsonify(Reacts=result_list)
 
     def updateReact(self):
       print("TODO")

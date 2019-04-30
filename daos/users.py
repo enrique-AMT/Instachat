@@ -71,6 +71,15 @@ class UsersDAO:
         result.append(row)
     return result
 
+  def createUser(self, first_name, last_name, u_email_address, u_password, username):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.user(first_name, last_name, u_email_address, u_password, username) "
+                   "values(%s, %s, %s, %s, %s) returning user_id;",
+                   [first_name, last_name, u_email_address, u_password, username])
+    user_id = cursor.fetchone()[0]
+    self.conn.commit()
+    return user_id
+
   def checkUsersOnChat(self, user_id, chat_id):
     cursor = self.conn.cursor()
     cursor.execute("select u_belongs from instachat.belongs where c_user_belongs = %s and u_belongs = %s;",

@@ -10,6 +10,24 @@ class ReactsDAO:
                                                                 pg_config['passwd'], pg_config['host'])
     self.conn = psycopg2._connect(connection_url)
 
+  def insertReactP(self, react_type, react_date, user_that_react, p_reacted):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.react(react_type, react_date, user_that_react, p_reacted) "
+                   "values(%s, %s, %s, %s) returning react_id;",
+                   [react_type, react_date, user_that_react, p_reacted])
+    react_id = cursor.fetchone()[0]
+    self.conn.commit()
+    return react_id
+
+  def insertReactR(self, react_type, react_date, user_that_react, reply_reacted):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.react(react_type, react_date, user_that_react, reply_reacted) "
+                   "values(%s, %s, %s, %s) returning react_id;",
+                   [react_type, react_date, user_that_react, reply_reacted])
+    react_id = cursor.fetchone()[0]
+    self.conn.commit()
+    return react_id
+
   def getAllReacts(self):
     cursor = self.conn.cursor()
     query = "select * from instachat.react;"
@@ -37,6 +55,15 @@ class ReactsDAO:
     cursor = self.conn.cursor()
     cursor.execute("select p_reacted, count(*) from instachat.react where p_reacted = %s and react_type = %s "
                    "group by p_reacted;",[post_id, react_type])
+    result = []
+    for row in cursor:
+        result.append(row)
+    return result
+
+  def getReactsOnReplies(self, reply_id, react_type):
+    cursor = self.conn.cursor()
+    cursor.execute("select reply_reacted, count(*) from instachat.react where reply_reacted = %s and react_type = %s "
+                   "group by reply_reacted;",[reply_id, react_type])
     result = []
     for row in cursor:
         result.append(row)

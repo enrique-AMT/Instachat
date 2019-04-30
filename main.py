@@ -63,7 +63,7 @@ def getChatPosts(chat_id):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaChat/chats/<int:chat_id>/users', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/InstaChat/chats/<int:chat_id>/users', methods=['GET', 'PUT', 'DELETE', 'POST'])
 def getChatUsers(chat_id):
     if request.method == 'GET':
         return ChatHandler().getChatUsers(chat_id)
@@ -98,6 +98,7 @@ def getUserById(user_id):
         return UserHandler().deleteUser(user_id)
     else:
         return jsonify(Error = "Method not allowed."), 405
+
 
 @app.route('/InstaChat/users/<string:username>', methods=['GET', 'PUT', 'DELETE'])
 def getUserByUsername(username):
@@ -169,6 +170,7 @@ def getDailyPosts():
         else:
             return
 
+
 # ========================================= REACT OPERATIONS ============================================= #
 
 
@@ -176,7 +178,7 @@ def getDailyPosts():
 def getAllReacts():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
-        return ReactHandler().createReact(request.json)
+        return ReactHandler().insertReact(request.json)
     else:
         if not request.args:
             return ReactHandler().getAllReacts()
@@ -198,11 +200,22 @@ def getReactsOnPost(post_id, react_type):
         return jsonify(Error="Method not allowed."), 405
 
 
+@app.route('/InstaChat/replies/<int:reply_id>/reacts/<string:react_type>', methods=['GET'])
+def getReactsOnReplies(reply_id, react_type):
+    if request.method == 'GET':
+        return ReactHandler().getReactsOnReplies(reply_id, react_type)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+# ========================================= REPLY OPERATIONS ============================================= #
+
+
 @app.route('/InstaChat/replies', methods=['POST', 'GET'])
 def getAllReplies():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
-        return ReplyHandler().createReply(request.json)
+        return ReplyHandler().insertReply(request.json)
     else:
         if not request.args:
             return ReplyHandler().getAllReplies()
@@ -220,11 +233,14 @@ def getReplyById(reply_id):
         return jsonify(Error = "Method not allowed."), 405
 
 
+# ========================================= POST OPERATIONS ============================================= #
+
+
 @app.route('/InstaChat/posts', methods=['POST', 'GET'])
 def getAllPost():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
-        return PostHandler().insertPostJson(request.json)
+        return PostHandler().insertPost(request.json)
     else:
         if not request.args:
             return PostHandler().getAllPosts()
@@ -241,6 +257,7 @@ def getPostsInChatX(chat_id, post_id):
     else:
         return jsonify(Error = "Method not allowed."), 405
 
+
 @app.route('/InstaChat/posts/<int:post_id>/reactions', methods=['GET', 'PUT', 'DELETE'])
 def getPostReactions(post_id):
     if request.method == 'GET':
@@ -251,6 +268,7 @@ def getPostReactions(post_id):
         return PostHandler().deletePost(post_id)
     else:
         return jsonify(Error = "Method not allowed."), 405
+
 
 @app.route('/InstaChat/posts/<int:post_id>/replies', methods=['GET', 'PUT', 'DELETE'])
 def getPostReplies(post_id):
@@ -264,11 +282,14 @@ def getPostReplies(post_id):
         return jsonify(Error = "Method not allowed."), 405
 
 
-# ========================================== REMOVE OPERATIONS ================================================= #
+# ======================================== REMOVE/INSERT OPERATIONS ============================================ #
 
-@app.route('/InstaChat/chats/<int:chat_id>/users/<int:user_id>', methods=['DELETE'])
-def removeUserFromChat(chat_id, user_id):
-    if request.method == 'DELETE':
+
+@app.route('/InstaChat/chats/<int:chat_id>/users/<int:user_id>', methods=['POST', 'DELETE'])
+def removeInsertUserFromToChat(chat_id, user_id):
+    if request.method == 'POST':
+        return ChatHandler().insertUserToChat(chat_id, user_id)
+    elif request.method == 'DELETE':
         return UserHandler().removeUserFromChat(user_id, chat_id)
     else:
         return jsonify(Error="Method not allowed."), 405

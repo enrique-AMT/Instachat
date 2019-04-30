@@ -2,7 +2,9 @@ from config.dbconfig import pg_config
 from flask import jsonify
 import psycopg2
 
+
 class PostsDAO:
+
   def __init__(self):
     connection_url = "dbname=%s user=%s password=%s host=%s" % (pg_config['dbname'],
                                                                 pg_config['user'],
@@ -10,10 +12,20 @@ class PostsDAO:
 
     self.conn = psycopg2._connect(connection_url)
 
+  def insertPost(self, post_caption, post_date, p_created_by, c_post_belongs):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.post(post_caption, post_date, p_created_by, c_post_belongs) "
+                   "values(%s, %s, %s, %s) returning post_id;",
+                   [post_caption, post_date, p_created_by, c_post_belongs])
+    post_id = cursor.fetchone()[0]
+    self.conn.commit()
+    return post_id
+
   def getAllPosts(self):
     cursor = self.conn.cursor()
-    cursor.execute("select post_id, post_caption, post_date, p_created_by, image_file, hash_name from instachat.post left outer join instachat.image on post_id = p_with_image left outer "
-                   "join instachat.has_hashtag as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
+    cursor.execute("select post_id, post_caption, post_date, p_created_by, image_file, hash_name from instachat.post "
+                   "left outer join instachat.image on post_id = p_with_image left outer join instachat.has_hashtag "
+                   "as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
                    "on hh.hashtag_id=h.hashtag_id ;")
 
     result = []
@@ -24,10 +36,11 @@ class PostsDAO:
   def getPostById(self, post_id):
     cursor = self.conn.cursor()
     posts_list = self.getAllPosts()
-    if len(posts_list) < post_id or post_id < 1:
-        return jsonify(Error="Post not found."), 404
-    cursor.execute("select post_id, post_caption, post_date, p_created_by, image_file, hash_name  from instachat.post left outer join instachat.image on post_id = p_with_image left outer "
-                   "join instachat.has_hashtag as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
+    # if len(posts_list) < post_id or post_id < 1:
+    #     return jsonify(Error="Post not found."), 404
+    cursor.execute("select post_id, post_caption, post_date, p_created_by, image_file, hash_name  from instachat.post "
+                   "left outer join instachat.image on post_id = p_with_image left outer join instachat.has_hashtag "
+                   "as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
                    "on hh.hashtag_id=h.hashtag_id where post_id = %s;", [post_id])
     result = []
     for row in cursor:

@@ -13,6 +13,15 @@ class ReplyDAO:
 
     self.conn = psycopg2._connect(connection_url)
 
+  def insertReply(self, reply_date, reply_text, p_replied, user_that_replied):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.reply(reply_date, reply_text, p_replied, user_that_replied) "
+                   "values(%s, %s, %s, %s) returning reply_id;",
+                   [reply_date, reply_text, p_replied, user_that_replied])
+    reply_id = cursor.fetchone()[0]
+    self.conn.commit()
+    return reply_id
+
   def getAllReplies(self):
     cursor = self.conn.cursor()
     query = "select * from instachat.reply;"

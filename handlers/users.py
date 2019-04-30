@@ -32,12 +32,25 @@ class UserHandler:
 
         return result
 
-    def build_user_attributes(self, user_id, first_name, last_name, u_email_address, u_password):
+    def build_user_attributes(self, first_name, last_name, u_email_address, u_password, username):
 
-        result = {'user_id': user_id, 'first_name': first_name, 'last_name': last_name,
-                  'u_email_address': u_email_address, 'u_password': u_password}
+        result = {'first_name': first_name, 'last_name': last_name,
+                  'u_email_address': u_email_address, 'u_password': u_password, 'username': username}
 
         return result
+
+    def createUser(self, json):
+        first_name = json['first_name']
+        last_name = json['last_name']
+        u_email_address = json['u_email_address']
+        u_password = json['u_password']
+        username = json['username']
+        if first_name and last_name and u_email_address and u_password and username:
+            UsersDAO().createUser(first_name, last_name, u_email_address, u_password, username)
+            result = self.build_user_attributes(first_name, last_name, u_email_address, u_password, username)
+            return jsonify(User=result), 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def getAllUsers(self):
         dao = UsersDAO()
@@ -130,27 +143,6 @@ class UserHandler:
         else:
             dao.removeUserFromContacts(user_id, contact_id)
             return jsonify(DeleteStatus="OK"), 200
-
-    def createUser(self, json):
-        print("TODO")
-        # global uid
-        # user_name = json['user_name']
-        # user_lastName = json['user_lastName']
-        # user_phone = json['user_phone']
-        # user_contacts_list = json['user_contact_list']
-        # user_email = json['user_email']
-        # user_password = json['user_password']
-        # if user_name and user_lastName and user_phone and user_contacts_list and user_email and user_password:
-        #     print("added")
-        #     user_list.append([{"user_id": uid, "user_name": user_name, "user_lastName": user_lastName,
-        #                        "user_phone": user_phone, "user_contacts_list": user_contacts_list,
-        #                        "user_email": user_email, "user_password": user_password}])
-        #     result = self.build_user_attributes(uid, user_name, user_lastName, user_phone, user_contacts_list, user_email,
-        #                                         user_password)
-        #     uid = (uid + 1)
-        #     return jsonify(User=result), 201
-        # else:
-        #     return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updateUser(self, user_id, json):
         print("TODO")
