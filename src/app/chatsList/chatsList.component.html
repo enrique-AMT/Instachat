@@ -13,6 +13,7 @@
     <mat-list-item (click)="goToChat(chat.chat_id)" style= "background-color:#ffffff" *ngFor="let chat of chatlist">
 
       <h4 mat-line><h4>Name: {{chat.chat_name}}</h4></h4>
+      <button>Delete Chat</button>
       <p matLine> Id: {{chat.chat_id}} </p>
       <p matLine> Owner Id: {{chat.owner_id}} </p>
 
