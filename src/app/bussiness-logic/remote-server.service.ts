@@ -151,15 +151,15 @@ export class RemoteServerService {
     lastName: string
   ) {
     const body = {
-      email: email,
-      password: password,
+      u_email_address: email,
+      u_password: password,
       username: username,
-      firstName: firstName,
-      lastName: lastName
+      first_name: firstName,
+      last_name: lastName
     };
     return this.http
       .post(
-        'http:/localhost:5000/InstaChat/users',
+        'http://localhost:5000/InstaChat/users',
         body
       )
       .pipe(

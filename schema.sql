@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
--- Dumped by pg_dump version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
+-- Dumped from database version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -320,7 +320,7 @@ CREATE TABLE instachat."user" (
     user_id integer NOT NULL,
     first_name character varying(20),
     last_name character varying(20),
-    u_email_address character varying(20) NOT NULL,
+    u_email_address character varying(128) NOT NULL,
     u_password character varying(72) NOT NULL,
     username character varying(20)
 );
@@ -588,6 +588,8 @@ COPY instachat."user" (user_id, first_name, last_name, u_email_address, u_passwo
 5	Manuel	Rodriguez	mrodriguez7@upr.edu	db2020	manuelr417
 6	tito	kayak	tito@prlibre.com	tito	tito
 7	Testing Delete	TEST	test@gmail.com	test	testest
+9	Enrique	Marrero	enrique.m9@upr.edu	testing	enrique.marrero9
+10	Such	And Such	email.largo.cc.lol.no.me.cuelgues.please@lol.com	passlargocctambien	suchandsuch2
 \.
 
 
@@ -662,7 +664,7 @@ SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 2, true);
 -- Name: serial_user_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.serial_user_id_seq', 8, true);
+SELECT pg_catalog.setval('instachat.serial_user_id_seq', 10, true);
 
 
 --
