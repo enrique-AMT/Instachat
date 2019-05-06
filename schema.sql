@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
--- Dumped by pg_dump version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
+-- Dumped from database version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
+-- Dumped by pg_dump version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -320,7 +320,7 @@ CREATE TABLE instachat."user" (
     user_id integer NOT NULL,
     first_name character varying(20),
     last_name character varying(20),
-    u_email_address character varying(128) NOT NULL,
+    u_email_address character varying(20) NOT NULL,
     u_password character varying(72) NOT NULL,
     username character varying(20)
 );
@@ -465,6 +465,7 @@ COPY instachat.belongs (u_belongs, c_user_belongs) FROM stdin;
 1	1
 6	1
 7	3
+9	3
 \.
 
 
@@ -532,6 +533,8 @@ Yulin 2020	04-12-2019	1	1	6
 test	01-01-0101	7	2	7
 testtesttest	01-01-9999	7	2	8
 Smile	99-99-9999	7	2	9
+Estamos bien	04-29-2019	9	3	10
+Hey bad bunny	04-29-2019	10	3	11
 \.
 
 
@@ -550,6 +553,13 @@ COPY instachat.react (react_id, react_type, react_date, user_that_react, p_react
 10	like	\N	6	6	\N
 11	like	01-01-2000	3	6	\N
 12	dislike	01-01-2000	1	6	\N
+13	like	04-29-2019	10	10	\N
+20	like	04-29-2019	9	\N	3
+21	like	04-29-2019	9	\N	3
+22	dislike	04-29-2019	10	3	\N
+23	dislike	04-29-2019	10	10	\N
+24	dislike	04-29-2019	9	\N	3
+25	like	04-29-2019	9	\N	3
 \.
 
 
@@ -560,6 +570,7 @@ COPY instachat.react (react_id, react_type, react_date, user_that_react, p_react
 COPY instachat.reply (reply_id, reply_date, reply_text, p_replied, user_that_replied) FROM stdin;
 1	04-01-2019	jajaja full mano	1	3
 2	04-01-2019	na mano no relajes asi jajaja	1	4
+3	04-29-2019	Good one in the MSG!!	10	10
 \.
 
 
@@ -588,8 +599,8 @@ COPY instachat."user" (user_id, first_name, last_name, u_email_address, u_passwo
 5	Manuel	Rodriguez	mrodriguez7@upr.edu	db2020	manuelr417
 6	tito	kayak	tito@prlibre.com	tito	tito
 7	Testing Delete	TEST	test@gmail.com	test	testest
-9	Enrique	Marrero	enrique.m9@upr.edu	testing	enrique.marrero9
-10	Such	And Such	email.largo.cc.lol.no.me.cuelgues.please@lol.com	passlargocctambien	suchandsuch2
+9	Bad	Bunny	badbunny@gmail.com	badbunny	conejomalo
+10	Marc	Anthony	marc@gmail.com	marc	marc_a
 \.
 
 
@@ -643,21 +654,21 @@ SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
 -- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.post_post_id_seq', 9, true);
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 13, true);
 
 
 --
 -- Name: react_react_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.react_react_id_seq', 12, true);
+SELECT pg_catalog.setval('instachat.react_react_id_seq', 25, true);
 
 
 --
 -- Name: reply_reply_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 2, true);
+SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 6, true);
 
 
 --
@@ -815,7 +826,7 @@ ALTER TABLE ONLY instachat.belongs
 --
 
 ALTER TABLE ONLY instachat.chat
-    ADD CONSTRAINT chat_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES instachat."user"(user_id);
+    ADD CONSTRAINT chat_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES instachat."user"(user_id) ON DELETE CASCADE;
 
 
 --
@@ -823,7 +834,7 @@ ALTER TABLE ONLY instachat.chat
 --
 
 ALTER TABLE ONLY instachat.has_hashtag
-    ADD CONSTRAINT has_hashtag_hashtag_id_fkey FOREIGN KEY (hashtag_id) REFERENCES instachat.hashtag(hashtag_id);
+    ADD CONSTRAINT has_hashtag_hashtag_id_fkey FOREIGN KEY (hashtag_id) REFERENCES instachat.hashtag(hashtag_id) ON DELETE CASCADE;
 
 
 --
@@ -831,7 +842,7 @@ ALTER TABLE ONLY instachat.has_hashtag
 --
 
 ALTER TABLE ONLY instachat.has_hashtag
-    ADD CONSTRAINT has_hashtag_p_with_hashtag_fkey FOREIGN KEY (p_with_hashtag) REFERENCES instachat.post(post_id);
+    ADD CONSTRAINT has_hashtag_p_with_hashtag_fkey FOREIGN KEY (p_with_hashtag) REFERENCES instachat.post(post_id) ON DELETE CASCADE;
 
 
 --
@@ -839,7 +850,7 @@ ALTER TABLE ONLY instachat.has_hashtag
 --
 
 ALTER TABLE ONLY instachat.image
-    ADD CONSTRAINT image_p_with_image_fkey FOREIGN KEY (p_with_image) REFERENCES instachat.post(post_id);
+    ADD CONSTRAINT image_p_with_image_fkey FOREIGN KEY (p_with_image) REFERENCES instachat.post(post_id) ON DELETE CASCADE;
 
 
 --
@@ -847,7 +858,7 @@ ALTER TABLE ONLY instachat.image
 --
 
 ALTER TABLE ONLY instachat.phone
-    ADD CONSTRAINT phone_u_phone_fkey FOREIGN KEY (u_phone) REFERENCES instachat."user"(user_id);
+    ADD CONSTRAINT phone_u_phone_fkey FOREIGN KEY (u_phone) REFERENCES instachat."user"(user_id) ON DELETE CASCADE;
 
 
 --
@@ -855,7 +866,7 @@ ALTER TABLE ONLY instachat.phone
 --
 
 ALTER TABLE ONLY instachat.post
-    ADD CONSTRAINT post_c_post_belongs_fkey FOREIGN KEY (c_post_belongs) REFERENCES instachat.chat(chat_id);
+    ADD CONSTRAINT post_c_post_belongs_fkey FOREIGN KEY (c_post_belongs) REFERENCES instachat.chat(chat_id) ON DELETE CASCADE;
 
 
 --
@@ -863,7 +874,7 @@ ALTER TABLE ONLY instachat.post
 --
 
 ALTER TABLE ONLY instachat.post
-    ADD CONSTRAINT post_p_created_by_fkey FOREIGN KEY (p_created_by) REFERENCES instachat."user"(user_id);
+    ADD CONSTRAINT post_p_created_by_fkey FOREIGN KEY (p_created_by) REFERENCES instachat."user"(user_id) ON DELETE CASCADE;
 
 
 --
@@ -871,7 +882,7 @@ ALTER TABLE ONLY instachat.post
 --
 
 ALTER TABLE ONLY instachat.react
-    ADD CONSTRAINT react_p_reacted_fkey FOREIGN KEY (p_reacted) REFERENCES instachat.post(post_id);
+    ADD CONSTRAINT react_p_reacted_fkey FOREIGN KEY (p_reacted) REFERENCES instachat.post(post_id) ON DELETE CASCADE;
 
 
 --
@@ -879,7 +890,7 @@ ALTER TABLE ONLY instachat.react
 --
 
 ALTER TABLE ONLY instachat.react
-    ADD CONSTRAINT react_r_reacted_fkey FOREIGN KEY (reply_reacted) REFERENCES instachat.reply(reply_id);
+    ADD CONSTRAINT react_r_reacted_fkey FOREIGN KEY (reply_reacted) REFERENCES instachat.reply(reply_id) ON DELETE CASCADE;
 
 
 --
@@ -887,7 +898,7 @@ ALTER TABLE ONLY instachat.react
 --
 
 ALTER TABLE ONLY instachat.react
-    ADD CONSTRAINT react_u_that_react_fkey FOREIGN KEY (user_that_react) REFERENCES instachat."user"(user_id);
+    ADD CONSTRAINT react_u_that_react_fkey FOREIGN KEY (user_that_react) REFERENCES instachat."user"(user_id) ON DELETE CASCADE;
 
 
 --
@@ -895,7 +906,7 @@ ALTER TABLE ONLY instachat.react
 --
 
 ALTER TABLE ONLY instachat.reply
-    ADD CONSTRAINT reply_p_replied_fkey FOREIGN KEY (p_replied) REFERENCES instachat.post(post_id);
+    ADD CONSTRAINT reply_p_replied_fkey FOREIGN KEY (p_replied) REFERENCES instachat.post(post_id) ON DELETE CASCADE;
 
 
 --
@@ -903,7 +914,7 @@ ALTER TABLE ONLY instachat.reply
 --
 
 ALTER TABLE ONLY instachat.reply
-    ADD CONSTRAINT reply_user_that_replied_fkey FOREIGN KEY (user_that_replied) REFERENCES instachat."user"(user_id);
+    ADD CONSTRAINT reply_user_that_replied_fkey FOREIGN KEY (user_that_replied) REFERENCES instachat."user"(user_id) ON DELETE CASCADE;
 
 
 --
@@ -911,7 +922,7 @@ ALTER TABLE ONLY instachat.reply
 --
 
 ALTER TABLE ONLY instachat.u_contacts
-    ADD CONSTRAINT u_contacts_contact_of_fkey FOREIGN KEY (contact_of) REFERENCES instachat."user"(user_id);
+    ADD CONSTRAINT u_contacts_contact_of_fkey FOREIGN KEY (contact_of) REFERENCES instachat."user"(user_id) ON DELETE CASCADE;
 
 
 --
@@ -919,7 +930,7 @@ ALTER TABLE ONLY instachat.u_contacts
 --
 
 ALTER TABLE ONLY instachat.u_contacts
-    ADD CONSTRAINT u_contacts_user_id_fkey FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id);
+    ADD CONSTRAINT u_contacts_user_id_fkey FOREIGN KEY (user_id) REFERENCES instachat."user"(user_id) ON DELETE CASCADE;
 
 
 --

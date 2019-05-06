@@ -54,6 +54,9 @@ export class ProfileComponent implements OnInit {
   goToChats() {
     this.router.navigate(['chatsList']);
   }
+  // goToChatsCreation(owner_id: string) {
+  //   this.router.navigate(['chatCreation/', owner_id]);
+  // }
 }
 export class UserContactsDataSource extends DataSource<any> {
   constructor(private contactsService: RemoteServerService) {

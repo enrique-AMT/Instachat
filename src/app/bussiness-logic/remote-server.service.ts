@@ -130,7 +130,7 @@ export class RemoteServerService {
       password: password
     };
     return this.http
-      .post('http:/localhost:5000/InstaChat/login/', body, { headers: this.head })
+      .post('http://localhost:5000/InstaChat/login/', body, { headers: this.head })
       .pipe(
         map(res => {
           this.loggedIn = true;
@@ -168,6 +168,22 @@ export class RemoteServerService {
         })
       );
   }
+
+  public removeChat(chat_id: string, owner_id: string) {
+    return this.http.delete('http://localhost:5000/InstaChat/chats/'+ chat_id + '/owner/' + owner_id);
+  }
+
+  // public createChat(name: string, owner: string) {
+  //   const body = {
+  //     chat_name: name,
+  //     owner_id: owner
+  //   };
+  //   return this.http
+  //     .post(
+  //       'http://localhost:5000/InstaChat/chats',
+  //       body
+  //     );
+  // }
 
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);

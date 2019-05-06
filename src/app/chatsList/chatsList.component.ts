@@ -5,6 +5,7 @@ import { NotificationService } from './../bussiness-logic/notifications.service'
 import { User } from './../bussiness-logic/User';
 import {Chats} from '../bussiness-logic/Chats';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
+import {printLine} from "tslint/lib/verify/lines";
 
 @Component({
   selector: 'app-chats',
@@ -46,5 +47,18 @@ export class ChatsListComponent implements OnInit {
   }
   goToDashboard() {
     this.router.navigate(['dashboard']);
+  }
+
+  removeChat(chat_id: string, owner_id: string) {
+    this.server.removeChat(chat_id, owner_id).subscribe(
+      refresh => {
+        console.log('Chat deleted')
+        this.router.navigate(['chatsList']);
+      },
+      error => {
+        console.log(error)
+        this.notifications.httpError(error);
+      }
+    );
   }
 }
