@@ -5,16 +5,25 @@ import { NotificationService } from './../bussiness-logic/notifications.service'
 import { User } from './../bussiness-logic/User';
 import {Chats} from '../bussiness-logic/Chats';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
-import {printLine} from "tslint/lib/verify/lines";
+import {printLine} from 'tslint/lib/verify/lines';
 
+
+
+export interface DialogData {
+  chat_name: string;
+  owner_id: string;
+}
 @Component({
   selector: 'app-chats',
   templateUrl: './chatsList.component.html',
   styleUrls: ['./chatsList.component.scss']
 })
+
 export class ChatsListComponent implements OnInit {
 
   chatlist: Chats[];
+  chat_name: string;
+  owner_id: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -61,4 +70,38 @@ export class ChatsListComponent implements OnInit {
       }
     );
   }
+
+  createChat(){
+    const dialogRef = this.dialog.open(CreateChatDialog, {
+      data: {chat_name: this.chat_name, owner_id: this.owner_id}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.chat_name = result;
+      this.owner_id = '1';
+    });
+
+    this.server.createChat(this.chat_name, this.owner_id).subscribe(
+      refresh => {
+        console.log('Chat created')
+        this.router.navigate(['chatslist']);
+      },
+      error => {
+        console.log(error)
+        this.notifications.httpError(error);
+      }
+    );
+  }
+}
+
+export class CreateChatDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<CreateChatDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
 }
