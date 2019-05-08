@@ -185,6 +185,19 @@ export class RemoteServerService {
        );
    }
 
+   public createPost(caption: string, creator: string, hashtag: string) {
+    const body = {
+      post_caption: caption,
+      p_created_by: creator,
+      hash_name: hashtag
+    };
+    return this.http
+      .post(
+        'http:localhost:5000/InstaChat/posts',
+        body
+      );
+   }
+
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);
     if (error.error instanceof Error) {
