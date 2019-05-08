@@ -10,8 +10,8 @@ class ChatHandler:
         chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id': row[2]}
         return chat_list
 
-    def build_chat_attributes(self, chat_name, owner_id):
-        result = {'chat_name': chat_name, 'owner_id': owner_id}
+    def build_chat_attributes(self, chat_id, chat_name, owner_id):
+        result = {'chat_id': chat_id, 'chat_name': chat_name, 'owner_id': owner_id}
         return result
 
     def build_chat_owner_attributes(self, chat_name, first_name, last_name):
@@ -66,7 +66,7 @@ class ChatHandler:
         if chat_name and owner_id:
             dao = ChatsDAO()
             chat_id = dao.createChat(chat_name, owner_id)
-            result = self.build_chat_attributes(chat_name, owner_id)
+            result = self.build_chat_attributes(chat_id, chat_name, owner_id)
             return jsonify(Chat=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
