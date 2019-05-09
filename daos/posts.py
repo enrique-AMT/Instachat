@@ -12,11 +12,11 @@ class PostsDAO:
 
     self.conn = psycopg2._connect(connection_url)
 
-  def insertPost(self, post_caption, post_date, p_created_by, c_post_belongs):
+  def insertPost(self, post_caption, p_created_by, c_post_belongs):
     cursor = self.conn.cursor()
-    cursor.execute("insert into instachat.post(post_caption, post_date, p_created_by, c_post_belongs) "
-                   "values(%s, %s, %s, %s) returning post_id;",
-                   [post_caption, post_date, p_created_by, c_post_belongs])
+    cursor.execute("insert into instachat.post(post_caption, p_created_by, c_post_belongs) "
+                   "values(%s, %s, %s) returning post_id;",
+                   [post_caption, p_created_by, c_post_belongs])
     post_id = cursor.fetchone()[0]
     self.conn.commit()
     return post_id

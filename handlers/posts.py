@@ -30,10 +30,10 @@ class PostHandler:
         result['post_count'] = row[1]
         return result
 
-    def build_post_attributes(self, post_caption, post_date, p_created_by, c_post_belongs):
+    def build_post_attributes(self, post_caption, p_created_by, c_post_belongs):
         result = {}
         result['post_caption'] = post_caption
-        result['post_date'] = post_date
+        #result['post_date'] = post_date
         result['p_created_by'] = p_created_by
         result['c_post_belongs'] = c_post_belongs
 
@@ -41,7 +41,7 @@ class PostHandler:
 
     def insertPost(self, json):
         post_caption = json['post_caption']
-        post_date = json['post_date']
+        #post_date = json['post_date']
         p_created_by = json['p_created_by']
         c_post_belongs = json['c_post_belongs']
         chat = ChatsDAO().getChatById(c_post_belongs)
@@ -50,9 +50,9 @@ class PostHandler:
             return jsonify(Error="Chat not found."), 404
         elif not user:
             return jsonify(Error="User not found."), 404
-        elif post_caption and post_date and p_created_by and c_post_belongs:
-            PostsDAO().insertPost(post_caption, post_date, p_created_by, c_post_belongs)
-            result = self.build_post_attributes(post_caption, post_date, p_created_by, c_post_belongs)
+        elif post_caption and p_created_by and c_post_belongs:
+            PostsDAO().insertPost(post_caption, p_created_by, c_post_belongs)
+            result = self.build_post_attributes(post_caption, p_created_by, c_post_belongs)
             return jsonify(Post=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
