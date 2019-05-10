@@ -2,6 +2,7 @@ from flask import jsonify
 from daos.hashtags import HashtagsDAO
 from daos.posts import PostsDAO
 
+
 class HashtagsHandler:
 
     def build_hashtag_dict(self, row):
@@ -66,7 +67,7 @@ class HashtagsHandler:
 
     def createHashtag(self, json):
         hash_name = json['hash_name']
-        if hash_name and "#" in hash_name:
+        if hash_name:
             HashtagsDAO().createHashtag(hash_name)
             result = self.build_hashtag_attributes(hash_name)
             return jsonify(Post=result), 201

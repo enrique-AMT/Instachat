@@ -56,6 +56,10 @@ export class RemoteServerService {
         'http://localhost:5000/InstaChat/users/' + id );
   }
 
+  public getUserProfile(username: string): Observable<User> {
+    return this.http.get<User>('http://localhost:5000/InstaChat/users/' + username);
+  }
+
 
   public getUserContacts(id: string): Observable<User[]> {
     return this.http
@@ -105,23 +109,13 @@ export class RemoteServerService {
   }
 
 
-  public login(email: string, password: string) {
+  public login(username: string, password: string) {
     const body = {
-      email: email,
+      username: username,
       password: password
     };
     return this.http
-      .post('http://localhost:5000/InstaChat/login/', body, { headers: this.head })
-      .pipe(
-        map(res => {
-          this.loggedIn = true;
-          localStorage.setItem('email', res['Result']['email']);
-          localStorage.setItem('firstName', res['Result']['firstName']);
-          localStorage.setItem('lastName', res['Result']['lastName']);
-          localStorage.setItem('userId', res['Result']['userId']);
-          localStorage.setItem('status', res['Result']['status']);
-        })
-      );
+      .post('http://localhost:5000/InstaChat/login', body);
   }
 
   public register(
