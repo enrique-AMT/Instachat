@@ -311,5 +311,25 @@ def removeChat(chat_id, owner_id):
         return jsonify(Error="Method not allowed."), 405
 
 
+@app.route('/InstaChat/hashtags', methods=['POST', 'GET'])
+def hashtag():
+    if request.method == 'POST':
+        return HashtagsHandler().createHashtag(request.json)
+    elif request.method == 'GET':
+        return HashtagsHandler().getAllHashtags()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaChat/posts/hashtags', methods=['POST', 'GET'])
+def hashtagToPost():
+    if request.method == 'POST':
+        return HashtagsHandler().insertHashtagToPost(request.json)
+    # elif request.method == 'GET':
+    #     return HashtagsHandler().getHashtagsPostX()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
 if __name__ == '__main__':
     app.run()
