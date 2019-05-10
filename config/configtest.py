@@ -1,8 +1,10 @@
-from config.dbconfig import pg_config
-import psycopg2
+import os
+from os import path
+import shutil
+if path.exists("../config/test.txt"):
+  src = path.realpath("../config/test.txt")
 
-connection_url = "dbname=%s user=%s password=%s host=%s" % (pg_config['dbname'],
-                                                            pg_config['user'],
-pg_config['passwd'], pg_config['host'])
+  dst = path.realpath("../src/assets/test.txt")
 
-conn = psycopg2._connect(connection_url)
+  shutil.copy(src,dst)
+

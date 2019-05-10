@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from handlers.chats import ChatHandler
 from handlers.posts import PostHandler
-# from handlers.sessions import SessionHandler
+from handlers.image import ImagesHandler
 from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
 from handlers.reacts import ReactHandler
@@ -329,6 +329,14 @@ def hashtagToPost(post_id):
       return HashtagsHandler().getHashtagsPostX(post_id)
     else:
       return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaChat/images', methods=['POST', 'GET'])
+def insertImage():
+    if request.method == 'POST':
+        return ImagesHandler().insertImage(request.json)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 if __name__ == '__main__':
