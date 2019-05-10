@@ -33,7 +33,7 @@ class PostHandler:
     def build_post_attributes(self, post_caption, p_created_by, c_post_belongs):
         result = {}
         result['post_caption'] = post_caption
-        #result['post_date'] = post_date
+        # result['post_date'] = post_date
         result['p_created_by'] = p_created_by
         result['c_post_belongs'] = c_post_belongs
 
