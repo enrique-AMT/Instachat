@@ -16,7 +16,15 @@
     <p matLine> {{post.post_date}} </p>
     <p matLine *ngIf="post.image_file != null" ><img class="chat-image" src="assets/{{post.image_file}}">
     </p>
-    <p matLine> Likes: {{post.likes}}  Dislikes: {{post.dislikes}} </p>
+    <!--<p matLine> Likes: {{post.likes}}  Dislikes: {{post.dislikes}} </p>-->
+    <p matLine>
+      {{post.likes + '  '}}
+      <input class="reaction-button" type="image" src="assets/likeButton.png">
+      {{post.dislikes  + '  '}}
+      <input class="reaction-button" type="image" src="assets/dislikeButton.png">
+    </p>
+    <!--<input type="submit" (click)="this.server.createPost()" value="Like">-->
+    <!--<input type="submit" (click)="this.server.createPost()" value="Dislike">-->
     <mat-divider></mat-divider>
   </mat-list-item>
 </mat-list>

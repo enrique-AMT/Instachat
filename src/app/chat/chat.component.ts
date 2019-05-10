@@ -118,7 +118,7 @@ export class ChatComponent implements OnInit {
 
     const uploadButton = document.querySelector('.browse-btn');
     const fileInfo = document.querySelector('.file-info');
-    const realInput = document.getElementById('real-input');
+    const realInput = <HTMLInputElement>document.getElementById('real-input');
 
     uploadButton.addEventListener('click', (e) => {
       realInput.click();

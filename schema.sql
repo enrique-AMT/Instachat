@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
--- Dumped by pg_dump version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
+-- Dumped from database version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -230,7 +230,7 @@ ALTER SEQUENCE instachat.post_post_id_seq OWNED BY instachat.phone.phone_id;
 
 CREATE TABLE instachat.post (
     post_caption character varying(280),
-    post_date character varying(10),
+    post_date timestamp without time zone DEFAULT CURRENT_DATE NOT NULL,
     p_created_by integer,
     c_post_belongs integer,
     post_id integer DEFAULT nextval('instachat.post_post_id_seq'::regclass) NOT NULL
@@ -464,8 +464,7 @@ COPY instachat.belongs (u_belongs, c_user_belongs) FROM stdin;
 4	1
 1	1
 6	1
-7	3
-9	3
+9	5
 \.
 
 
@@ -476,7 +475,7 @@ COPY instachat.belongs (u_belongs, c_user_belongs) FROM stdin;
 COPY instachat.chat (chat_id, chat_name, owner_id) FROM stdin;
 1	work	4
 2	macaracachimbas	1
-3	testing delete	4
+5	Vacilon	7
 \.
 
 
@@ -524,17 +523,20 @@ COPY instachat.phone (phone_id, u_phone, phone) FROM stdin;
 --
 
 COPY instachat.post (post_caption, post_date, p_created_by, c_post_belongs, post_id) FROM stdin;
-A colgar a unos cuantos!	04-01-2019	3	1	1
-Dale si!	04-01-2019	2	1	2
-testing jaja	04-01-2019	1	1	4
-testing chat 2	04-01-2019	1	2	5
-test	04-07-2019	1	1	3
-Yulin 2020	04-12-2019	1	1	6
-test	01-01-0101	7	2	7
-testtesttest	01-01-9999	7	2	8
-Smile	99-99-9999	7	2	9
-Estamos bien	04-29-2019	9	3	10
-Hey bad bunny	04-29-2019	10	3	11
+A colgar a unos cuantos!	2019-05-09 00:00:00	3	1	1
+Dale si!	2019-05-09 00:00:00	2	1	2
+testing jaja	2019-05-09 00:00:00	1	1	4
+testing chat 2	2019-05-09 00:00:00	1	2	5
+test	2019-05-09 00:00:00	1	1	3
+Yulin 2020	2019-05-09 00:00:00	1	1	6
+Smile	2019-05-09 00:00:00	7	2	9
+testtesttest	2019-05-09 00:00:00	7	2	8
+test	2019-05-09 00:00:00	7	2	7
+I'm Iron Man	2019-05-09 00:00:00	9	5	14
+I'm Iron Man	2019-05-09 00:00:00	9	5	15
+I'm Iron Man	2019-05-09 00:00:00	9	5	16
+hahahaha	2019-05-09 00:00:00	7	5	17
+Yo soy thanos entonces!	2019-05-09 00:00:00	7	5	18
 \.
 
 
@@ -553,13 +555,7 @@ COPY instachat.react (react_id, react_type, react_date, user_that_react, p_react
 10	like	\N	6	6	\N
 11	like	01-01-2000	3	6	\N
 12	dislike	01-01-2000	1	6	\N
-13	like	04-29-2019	10	10	\N
-20	like	04-29-2019	9	\N	3
-21	like	04-29-2019	9	\N	3
 22	dislike	04-29-2019	10	3	\N
-23	dislike	04-29-2019	10	10	\N
-24	dislike	04-29-2019	9	\N	3
-25	like	04-29-2019	9	\N	3
 \.
 
 
@@ -570,7 +566,6 @@ COPY instachat.react (react_id, react_type, react_date, user_that_react, p_react
 COPY instachat.reply (reply_id, reply_date, reply_text, p_replied, user_that_replied) FROM stdin;
 1	04-01-2019	jajaja full mano	1	3
 2	04-01-2019	na mano no relajes asi jajaja	1	4
-3	04-29-2019	Good one in the MSG!!	10	10
 \.
 
 
@@ -626,7 +621,7 @@ COPY public.post (post_id, post_caption, post_date) FROM stdin;
 -- Name: chat_chat_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 3, true);
+SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 5, true);
 
 
 --
@@ -654,7 +649,7 @@ SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
 -- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.post_post_id_seq', 13, true);
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 18, true);
 
 
 --

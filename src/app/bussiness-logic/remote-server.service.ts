@@ -169,7 +169,7 @@ export class RemoteServerService {
    public createPost(post_id: string, user_id: string, text: string) {
      const body = {
        chat_name: name,
-       owner_id: owner
+       owner_id: user_id
      };
      return this.http
        .post(
