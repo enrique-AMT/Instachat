@@ -109,3 +109,9 @@ class UsersDAO:
     cursor.execute("delete from instachat.u_contacts where contact_of = %s and user_id = %s", [user_id, contact_id])
     self.conn.commit()
     return user_id
+
+  def login(self, username, password):
+    cursor = self.conn.cursor()
+    cursor.execute("select user_id from instachat.user where username = %s and u_password = %s", [username, password])
+    result = cursor.fetchone()
+    return result

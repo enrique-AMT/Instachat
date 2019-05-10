@@ -12,7 +12,7 @@ class HashtagsDAO:
   def createHashtag(self, hash_name):
     cursor = self.conn.cursor()
     cursor.execute("insert into instachat.hashtag(hash_name) values (%s) returning hashtag_id;", [hash_name])
-    hashtag_id = cursor.fetchone()[1]
+    hashtag_id = cursor.fetchone()[0]
     self.conn.commit()
     return hashtag_id
 
@@ -54,5 +54,5 @@ class HashtagsDAO:
                    " where post_id = %s;", [post_id])
     result = []
     for row in cursor:
-      result.append(row)
+        result.append(row)
     return result;

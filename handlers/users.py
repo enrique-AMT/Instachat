@@ -144,6 +144,20 @@ class UserHandler:
             dao.removeUserFromContacts(user_id, contact_id)
             return jsonify(DeleteStatus="OK"), 200
 
+    def login(self, json):
+        username = json['username']
+        password = json['password']
+        user = UsersDAO().getUserByUsername(username)
+        if not user:
+            return jsonify(Error="User not found"), 404
+        elif username and password:
+            result = UsersDAO().login(username, password)
+            if not result:
+                return jsonify(Error="Bad combination of username and password."), 404
+            else:
+                return jsonify(Login=result)
+
+
     def updateUser(self, user_id, json):
         print("TODO")
         # if len(user_list) < user_id or user_id < 1:
