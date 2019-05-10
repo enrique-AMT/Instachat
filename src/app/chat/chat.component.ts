@@ -10,6 +10,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@ang
 import {Posts} from '../bussiness-logic/Posts';
 import {DashboardPost} from '../dashboard/dashboard.component';
 
+declare function require(name: string);
 
 @Component({
   selector: 'app-messages',
@@ -20,6 +21,7 @@ export class ChatComponent implements OnInit {
 
   id: string;
   public chat: Chats;
+  public post_caption;
   postList: Posts[];
 
   constructor(
@@ -31,6 +33,8 @@ export class ChatComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.post_caption = '';
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -111,6 +115,33 @@ export class ChatComponent implements OnInit {
 
       }
     );
+
+    const uploadButton = document.querySelector('.browse-btn');
+    const fileInfo = document.querySelector('.file-info');
+    const realInput = document.getElementById('real-input');
+
+    uploadButton.addEventListener('click', (e) => {
+      realInput.click();
+    });
+
+    realInput.addEventListener('change', () => {
+      const name = realInput.value.split(/\\|\//).pop();
+      const truncated = name.length > 20
+        ? name.substr(name.length - 20)
+        : name;
+
+      fileInfo.innerHTML = truncated;
+    });
+  }
+
+  createPost() {
+   let hashtags: string[] = [];
+   this.post_caption = (<HTMLInputElement>document.getElementById('post_caption')).value;
+   let findHashtags = require('find-hashtags');
+
+    console.log(findHashtags(this.post_caption));
+
+
 
   }
 

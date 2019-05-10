@@ -20,3 +20,22 @@
     <mat-divider></mat-divider>
   </mat-list-item>
 </mat-list>
+
+  <div class="input-container">
+    <form>
+      <input class="chat-box" id="post_caption" type="text" name="Message" placeholder="Enter your text here...">
+      <input class="send-button" type="image" src="assets/SendButton.png" (click)="createPost()">
+        <input type="file"  id="real-input" name="pic" accept="image/*">
+        <button class="browse-btn">
+          Upload
+        </button>
+        <span class="file-info">Upload a file</span>
+    </form>
+  </div>
+
+  <!--<mat-list-item>-->
+    <!--<form><input type="text" name="Message" placeholder="Enter your text here..." style="font-size:18pt;height:50px;width:1080px;" maxlength="280">-->
+      <!--<input type="submit" (click)="this.server.createPost()" value="Send">-->
+    <!--</form>-->
+  <!--</mat-list-item>-->
+

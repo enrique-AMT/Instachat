@@ -166,6 +166,17 @@ export class RemoteServerService {
        );
    }
 
+   public createPost(post_id: string, user_id: string, text: string) {
+     const body = {
+       chat_name: name,
+       owner_id: owner
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/chats',
+         body
+       );
+   }
    public addParticipantToChat(chat_id: string, user_id: string) {
      const body = {
        chat_id: chat_id,
