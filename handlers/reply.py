@@ -11,13 +11,12 @@ from daos.users import UsersDAO
 class ReplyHandler:
 
     def build_reply_dict(self, row):
-        result = {'reply_id': row[0], 'reply_date': row[1], 'reply_text': row[2], 'p_replied': row[3],
-                  'user_that_replied': row[4]}
+        result = {'reply_id': row[0],  'reply_text': row[1], 'p_replied': row[2],
+                  'user_that_replied': row[3], 'reply_date': row[4]}
         return result
 
     def build_reply_attributes(self, reply_date, reply_text, p_replied, user_that_replied):
         result = {}
-        result['reply_date'] = reply_date
         result['reply_text'] = reply_text
         result['p_replied'] = p_replied
         return result

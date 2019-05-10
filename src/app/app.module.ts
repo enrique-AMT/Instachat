@@ -39,11 +39,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 import { AppComponent } from './app.component';
-import { ChatsListComponent } from './chatsList/chatsList.component';
+import {ChatsListComponent, CreateChatDialogComponent} from './chatsList/chatsList.component';
 import { ChatComponent } from './chat/chat.component';
-import { ChatInfoComponent } from './chat-info/chat-info.component';
+import { ChatInfoComponent, AddParticipantDialogComponent } from './chat-info/chat-info.component';
 import { ReactionListComponent } from './reaction-list/reaction-list.component';
 import { RegisterComponent } from './register/register.component';
+import { CreateChatComponent } from './create-chat/create-chat.component';
 
 
 
@@ -53,6 +54,7 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent, data: { name: 'Register' } },
   { path: 'profile', component: ProfileComponent, data: { name: 'Profile' } },
   { path: 'dashboard', component: DashboardComponent, data: { name: 'Dashboard' } },
+  { path: 'createChat', component: CreateChatComponent, data: { name: 'Create Chat' } },
   { path: 'chatsList', component: ChatsListComponent, data: { name: 'Chats' } },
   { path: 'chatsList/chat/:id', component: ChatComponent, data: { name: 'Chat'} },
   { path: 'chatsList/chat/chatInfo/:id', component: ChatInfoComponent, data: { name: 'ChatInfo'} },
@@ -87,7 +89,11 @@ const appRoutes: Routes = [
     ChatInfoComponent,
     ReactionListComponent,
     RegisterComponent,
+    CreateChatDialogComponent,
+    AddParticipantDialogComponent,
+    CreateChatComponent
   ],
+  entryComponents: [CreateChatDialogComponent, AddParticipantDialogComponent],
   imports: [
     BrowserModule,
     // MDBBootstrapModule.forRoot(),

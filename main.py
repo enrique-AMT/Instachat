@@ -321,14 +321,14 @@ def hashtag():
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaChat/posts/hashtags', methods=['POST', 'GET'])
-def hashtagToPost():
+@app.route('/InstaChat/posts/<int:post_id>/hashtags', methods=['POST', 'GET'])
+def hashtagToPost(post_id):
     if request.method == 'POST':
-        return HashtagsHandler().insertHashtagToPost(request.json)
-    # elif request.method == 'GET':
-    #     return HashtagsHandler().getHashtagsPostX()
+      return HashtagsHandler().insertHashtagToPost(request.json)
+    elif request.method == 'GET':
+      return HashtagsHandler().getHashtagsPostX(post_id)
     else:
-        return jsonify(Error="Method not allowed."), 405
+      return jsonify(Error="Method not allowed."), 405
 
 
 if __name__ == '__main__':

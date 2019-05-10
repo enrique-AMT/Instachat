@@ -2,7 +2,8 @@
   <mat-toolbar-row>
     <span>
     {{chat.chat_name}}
-      <button mat-button (click)="showChatInfo()">Show Info</button>
+      <input class="whiteInfo-button" type="image" src="assets/whiteInfoButton.png" (click)="showChatInfo()" >
+      <!--<button mat-button (click)="showChatInfo()">Show Info</button>-->
     </span>
     <span class="example-spacer"></span>
     <button mat-button (click)="goToProfile()">Profile</button>
@@ -11,19 +12,40 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-list>
-  <mat-list-item (click)="showPostReactions(post.post_id)" *ngFor="let post of postList">
-    <p matLine> {{post.username + ': ' + post.post_caption}} </p>
-    <p matLine> {{post.post_date}} </p>
+  <mat-list-item  *ngFor="let post of postList">
+    <p matLine> <b>{{post.username + ': '}}</b>  {{post.post_caption}}
+    </p>
+    <span>
+      <input class="info-button" type="image" src="assets/infoButton.png" (click)="showPostReactions(post.post_id)" >
+    </span>
+    <p matLine> <i class="date-text">{{post.post_date}}</i> </p>
     <p matLine *ngIf="post.image_file != null" ><img class="chat-image" src="assets/{{post.image_file}}">
     </p>
-    <p matLine> Likes: {{post.likes}}  Dislikes: {{post.dislikes}} </p>
-   <input type="submit" (click)="this.server.createPost()" value="Like">
-   <input type="submit" (click)="this.server.createPost()" value="Dislike">
+    <p matLine>
+      {{post.likes + '  '}}
+      <input class="reaction-button" type="image" src="assets/likeButton.png" (click)="likePost(post)">
+      {{post.dislikes  + '  '}}
+      <input class="reaction-button" type="image" src="assets/dislikeButton.png" (click)="dislikePost(post)">
+    </p>
     <mat-divider></mat-divider>
   </mat-list-item>
-  <mat-list-item>
-    <form><input type="text" name="Message" placeholder="Enter your text here..." style="font-size:18pt;height:50px;width:1080px;" maxlength="280">
-      <input type="submit" (click)="this.server.createPost()" value="Send">
-    </form>
-  </mat-list-item>
 </mat-list>
+
+  <div class="input-container">
+    <form>
+      <input class="chat-box" id="post_caption" type="text" name="Message" placeholder="Enter your text here...">
+      <input class="send-button" type="image" src="assets/SendButton.png" (click)="createPost()">
+        <input type="file"  id="real-input" name="pic" accept="image/*">
+        <button class="browse-btn">
+          Upload
+        </button>
+        <span class="file-info">Upload a file</span>
+    </form>
+  </div>
+
+  <!--<mat-list-item>-->
+    <!--<form><input type="text" name="Message" placeholder="Enter your text here..." style="font-size:18pt;height:50px;width:1080px;" maxlength="280">-->
+      <!--<input type="submit" (click)="this.server.createPost()" value="Send">-->
+    <!--</form>-->
+  <!--</mat-list-item>-->
+

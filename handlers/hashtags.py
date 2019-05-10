@@ -34,6 +34,15 @@ class HashtagsHandler:
             result_list.append(result)
         return jsonify(Hashtag=result_list)
 
+    def getHashtagsPostX(self, post_id):
+      dao = HashtagsDAO()
+      hashtag_list = dao.getHashtahPostX(post_id)
+      result_list = []
+      for row in hashtag_list:
+        result = self.build_hashtag_dict(row)
+        result_list.append(result)
+      return jsonify(Hashtag=result_list)
+
     def getHashtagById(self, chat_id):
         dao = HashtagsDAO()
         row = dao.getHashtagById(chat_id)

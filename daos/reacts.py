@@ -10,27 +10,27 @@ class ReactsDAO:
                                                                 pg_config['passwd'], pg_config['host'])
     self.conn = psycopg2._connect(connection_url)
 
-  def insertReactP(self, react_type, react_date, user_that_react, p_reacted):
+  def insertReactP(self, react_type, user_that_react, p_reacted):
     cursor = self.conn.cursor()
-    cursor.execute("insert into instachat.react(react_type, react_date, user_that_react, p_reacted) "
-                   "values(%s, %s, %s, %s) returning react_id;",
-                   [react_type, react_date, user_that_react, p_reacted])
+    cursor.execute("insert into instachat.react(react_type, user_that_react, p_reacted) "
+                   "values(%s, %s, %s) returning react_id;",
+                   [react_type, user_that_react, p_reacted])
     react_id = cursor.fetchone()[0]
     self.conn.commit()
     return react_id
 
-  def insertReactR(self, react_type, react_date, user_that_react, reply_reacted):
+  def insertReactR(self, react_type, user_that_react, reply_reacted):
     cursor = self.conn.cursor()
-    cursor.execute("insert into instachat.react(react_type, react_date, user_that_react, reply_reacted) "
-                   "values(%s, %s, %s, %s) returning react_id;",
-                   [react_type, react_date, user_that_react, reply_reacted])
+    cursor.execute("insert into instachat.react(react_type, user_that_react, reply_reacted) "
+                   "values(%s, %s, %s) returning react_id;",
+                   [react_type, user_that_react, reply_reacted])
     react_id = cursor.fetchone()[0]
     self.conn.commit()
     return react_id
 
   def getAllReacts(self):
     cursor = self.conn.cursor()
-    query = "select * from instachat.react;"
+    query = "select react_id, react_type, user_that_react, p_reacted, reply_reacted, to_char(react_date, 'MM-DD-YYYY HH:MIPM') from instachat.react;"
     cursor.execute(query)
     result = []
     for row in cursor:
@@ -39,13 +39,15 @@ class ReactsDAO:
 
   def getReactById(self, react_id):
     cursor = self.conn.cursor()
-    cursor.execute("select * from instachat.react where react_id = %s;", [react_id])
+    cursor.execute("select react_id, react_type, user_that_react, p_reacted, reply_reacted, to_char(react_date, 'MM-DD-YYYY HH:MIPM') "
+                   "from instachat.react where react_id = %s;", [react_id])
     result = cursor.fetchone()
     return result
 
   def getReactByDate(self, react_date):
     cursor = self.conn.cursor()
-    cursor.execute("select * from instachat.react where react_date = %s;", [react_date])
+    cursor.execute("select react_id, react_type, user_that_react, p_reacted, reply_reacted, to_char(react_date, 'MM-DD-YYYY HH:MIPM')"
+                   " from instachat.react where to_char(react_date, 'MM-DD-YYYY') = %s;", [react_date])
     result = []
     for row in cursor:
         result.append(row)

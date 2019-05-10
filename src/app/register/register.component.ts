@@ -47,6 +47,14 @@ export class RegisterComponent implements OnInit {
       res => {
        // this.loading = false;
         console.log('Account Created');
+        console.log(res);
+        localStorage.setItem('first_name', this.firstName);
+        localStorage.setItem('last_name',this.lastName);
+        // localStorage.setItem('user_id',this.user_);
+        localStorage.setItem('u_email_address', this.email);
+       // localStorage.setItem('phone', this.phone);
+        localStorage.setItem('username', this.username);
+
         this.router.navigate(['profile']);
       },
       error => {

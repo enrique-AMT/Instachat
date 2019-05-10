@@ -10,6 +10,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@ang
 import {Posts} from '../bussiness-logic/Posts';
 import {DashboardPost} from '../dashboard/dashboard.component';
 
+declare function require(name: string);
 
 @Component({
   selector: 'app-messages',
@@ -20,6 +21,7 @@ export class ChatComponent implements OnInit {
 
   id: string;
   public chat: Chats;
+  public post_caption;
   postList: Posts[];
 
   constructor(
@@ -31,6 +33,8 @@ export class ChatComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.post_caption = '';
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -63,7 +67,10 @@ export class ChatComponent implements OnInit {
         this.postList.forEach(item => {
           this.server.getPostsReactions(item['post_id'], 'like').subscribe(
             data2 => {
-              const filteredData = data2['User'][0];
+              console.log('REACTIONS (Likes):');
+              console.log(data2);
+
+              const filteredData = data2['Reacts'][0];
               const likes = filteredData['Total_of_likes'];
               if ( likes == null) {
                 item['likes'] = 0;
@@ -72,6 +79,7 @@ export class ChatComponent implements OnInit {
               }
             },
             error => {
+              console.log('ERROR');
               item['likes'] = 0;
             });
         });
@@ -79,13 +87,15 @@ export class ChatComponent implements OnInit {
         this.postList.forEach(item => {
           this.server.getPostsReactions(item['post_id'], 'dislike').subscribe(
             data3 => {
+              console.log('REACTIONS (Dislikes):');
               console.log(data3);
-              const filteredData = data3['User'][0];
+              const filteredData = data3['Reacts'][0];
               const dislikes = filteredData['Total_of_dislikes'];
               item['dislikes'] = dislikes;
 
             },
             error => {
+              console.log('ERROR');
               item['dislikes'] = 0;
             });
         });
@@ -104,16 +114,80 @@ export class ChatComponent implements OnInit {
             }
           );
         });
-
         console.log(this.postList);
-
-
-
       }
     );
 
+    const uploadButton = document.querySelector('.browse-btn');
+    const fileInfo = document.querySelector('.file-info');
+    const realInput = <HTMLInputElement>document.getElementById('real-input');
+
+    uploadButton.addEventListener('click', (e) => {
+      realInput.click();
+    });
+
+    realInput.addEventListener('change', () => {
+      const name = realInput.value.split(/\\|\//).pop();
+      const truncated = name.length > 20
+        ? name.substr(name.length - 20)
+        : name;
+
+      fileInfo.innerHTML = truncated;
+    });
   }
 
+  createPost() {
+
+   this.post_caption = (<HTMLInputElement>document.getElementById('post_caption')).value;
+
+
+    console.log('Chat id: ' + this.chat.chat_id);
+    console.log('User id: ' + localStorage.getItem('user_id'));
+    console.log('Post Caption: ' + this.post_caption);
+
+    this.server.createPost(this.chat.chat_id, this.chat.owner_id, localStorage.getItem('user_id'), this.post_caption).subscribe(
+      data => {
+        console.log(data);
+        window.location.reload();
+
+      },
+      error => {
+        console.log(error);
+        this.notifications.httpError(error);
+      }
+    );
+
+
+  }
+
+  likePost(post: Posts) {
+    this.server.reactPost('like', localStorage.getItem('user_id'), post.post_id).subscribe(
+      data => {
+        console.log(data);
+        post.likes ++;
+        window.location.reload();
+
+      },
+      error => {
+        console.log(error);
+        this.notifications.httpError(error);
+      }
+    );
+  }
+  dislikePost(post: Posts) {
+    this.server.reactPost('dislike', localStorage.getItem('user_id'), post.post_id).subscribe(
+      data => {
+        console.log(data);
+        post.likes --;
+        window.location.reload();
+
+      },
+      error => {
+        console.log(error);
+        this.notifications.httpError(error);
+      }
+    );
+  }
   showPostReactions(post_id: string) {
     console.log('clicked: ' + post_id );
     this.router.navigate(['chatsList/chat/' + this.chat.chat_id + '/reactions/', post_id]);

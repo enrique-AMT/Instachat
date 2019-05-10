@@ -5,7 +5,7 @@
     </span>
     <button mat-button (click)="createChat()">Create Chat</button>
     <span class="example-spacer"></span>
-    <<button mat-button (click)="goToProfile()">Profile</button>
+    <button mat-button (click)="goToProfile()">Profile</button>
     <button mat-button (click)="goToDashboard()">Dashboard</button>
     <button mat-button (click)="goToChats()">Chats</button>
   </mat-toolbar-row>
@@ -14,7 +14,9 @@
     <mat-list-item (click)="goToChat(chat.chat_id)" style= "background-color:#ffffff" *ngFor="let chat of chatlist">
 
       <h4 mat-line><h4>Name: {{chat.chat_name}}</h4></h4>
-      <button (click)="removeChat(chat.chat_id, chat.owner_id)">Delete Chat</button>
+      <span>
+        <input class="trash-button" type="image" src="assets/trashButton.png" (click)="removeChat(chat.chat_id, chat.owner_id)" >
+      </span>
       <p matLine> Id: {{chat.chat_id}} </p>
       <p matLine> Owner Id: {{chat.owner_id}} </p>
 

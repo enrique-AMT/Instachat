@@ -15,16 +15,16 @@ class ReplyDAO:
 
   def insertReply(self, reply_date, reply_text, p_replied, user_that_replied):
     cursor = self.conn.cursor()
-    cursor.execute("insert into instachat.reply(reply_date, reply_text, p_replied, user_that_replied) "
-                   "values(%s, %s, %s, %s) returning reply_id;",
-                   [reply_date, reply_text, p_replied, user_that_replied])
+    cursor.execute("insert into instachat.reply( reply_text, p_replied, user_that_replied) "
+                   "values(%s, %s, %s) returning reply_id;",
+                   [reply_text, p_replied, user_that_replied])
     reply_id = cursor.fetchone()[0]
     self.conn.commit()
     return reply_id
 
   def getAllReplies(self):
     cursor = self.conn.cursor()
-    query = "select * from instachat.reply;"
+    query = "select reply_id, reply_text, p_replied, user_that_replied, to_char(reply_date, 'MM-DD-YYYY HH:MIPM') from instachat.reply;"
     cursor.execute(query)
     result = []
     for row in cursor:
@@ -33,7 +33,8 @@ class ReplyDAO:
 
   def getPostReplies(self, post_id):
     cursor = self.conn.cursor()
-    cursor.execute("select * from instachat.reply where p_replied = %s;", [post_id])
+    cursor.execute("select reply_id, reply_text, p_replied, user_that_replied, to_char(reply_date, 'MM-DD-YYYY HH:MIPM')"
+                   " from instachat.reply where p_replied = %s;", [post_id])
     result = []
     for row in cursor:
         result.append(row)
@@ -41,13 +42,15 @@ class ReplyDAO:
 
   def getReplyById(self, reply_id):
     cursor = self.conn.cursor()
-    cursor.execute("select * from instachat.reply where reply_id = %s;", [reply_id])
+    cursor.execute("select reply_id, reply_text, p_replied, user_that_replied, to_char(reply_date, 'MM-DD-YYYY HH:MIPM')"
+                   " from instachat.reply where reply_id = %s;", [reply_id])
     result = cursor.fetchone()
     return result
 
   def getReplyByDate(self, reply_date):
     cursor = self.conn.cursor()
-    cursor.execute("select * from instachat.reply where reply_date = %s;", [reply_date])
+    cursor.execute("select reply_id, reply_text, p_replied, user_that_replied, to_char(reply_date, 'MM-DD-YYYY HH:MIPM')"
+                   " from instachat.reply where to_char(reply_date, 'MM-DD-YYYY') = %s;", [reply_date])
     result = []
     if len(cursor) == 0:
         return jsonify(Error='No replies found on this date.'), 404

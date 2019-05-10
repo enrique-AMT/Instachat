@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
--- Dumped by pg_dump version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
+-- Dumped from database version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -246,10 +246,10 @@ ALTER TABLE instachat.post OWNER TO instadev;
 CREATE TABLE instachat.react (
     react_id integer NOT NULL,
     react_type character varying(7),
-    react_date character(10),
     user_that_react integer,
     p_reacted integer,
-    reply_reacted integer
+    reply_reacted integer,
+    react_date timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -282,10 +282,10 @@ ALTER SEQUENCE instachat.react_react_id_seq OWNED BY instachat.react.react_id;
 
 CREATE TABLE instachat.reply (
     reply_id integer NOT NULL,
-    reply_date character(10),
     reply_text character varying(250),
     p_replied integer,
-    user_that_replied integer
+    user_that_replied integer,
+    reply_date timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -465,6 +465,7 @@ COPY instachat.belongs (u_belongs, c_user_belongs) FROM stdin;
 1	1
 6	1
 9	5
+2	6
 \.
 
 
@@ -476,6 +477,7 @@ COPY instachat.chat (chat_id, chat_name, owner_id) FROM stdin;
 1	work	4
 2	macaracachimbas	1
 5	Vacilon	7
+6	This is a testing chatroom	1
 \.
 
 
@@ -535,6 +537,8 @@ test	2019-05-09 00:00:00	7	2	7
 No se olviden de mi	2019-05-09 00:00:00	6	5	25
 No se olviden de mi	2019-05-09 00:00:00	6	5	26
 No se olviden de mi	2019-05-09 00:00:00	6	5	27
+this is a test for timestamps. Hope it works!	2019-05-10 09:33:10.829942	1	1	19
+Hola test	2019-05-10 09:42:14.889448	1	6	20
 \.
 
 
@@ -542,18 +546,19 @@ No se olviden de mi	2019-05-09 00:00:00	6	5	27
 -- Data for Name: react; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat.react (react_id, react_type, react_date, user_that_react, p_reacted, reply_reacted) FROM stdin;
-1	like	04-04-2019	1	2	\N
-2	dislike	05-05-2020	3	2	\N
-3	like	03-03-2019	4	1	\N
-4	like	03-10-2018	3	1	\N
-5	like	03-10-2018	1	1	\N
-6	dislike	12-15-2017	2	1	\N
-7	dislike	12-15-2015	4	2	\N
-10	like	\N	6	6	\N
-11	like	01-01-2000	3	6	\N
-12	dislike	01-01-2000	1	6	\N
-22	dislike	04-29-2019	10	3	\N
+COPY instachat.react (react_id, react_type, user_that_react, p_reacted, reply_reacted, react_date) FROM stdin;
+1	like	1	2	\N	2019-05-10 09:46:29.617549
+2	dislike	3	2	\N	2019-05-10 09:46:29.617549
+3	like	4	1	\N	2019-05-10 09:46:29.617549
+4	like	3	1	\N	2019-05-10 09:46:29.617549
+6	dislike	2	1	\N	2019-05-10 09:46:29.617549
+7	dislike	4	2	\N	2019-05-10 09:46:29.617549
+10	like	6	6	\N	2019-05-10 09:46:29.617549
+11	like	3	6	\N	2019-05-10 09:46:29.617549
+12	dislike	1	6	\N	2019-05-10 09:46:29.617549
+22	dislike	10	3	\N	2019-05-10 09:46:29.617549
+27	like	1	1	\N	2019-05-10 10:10:54.086974
+30	dislike	1	4	\N	2019-05-10 10:11:39.143847
 \.
 
 
@@ -561,9 +566,9 @@ COPY instachat.react (react_id, react_type, react_date, user_that_react, p_react
 -- Data for Name: reply; Type: TABLE DATA; Schema: instachat; Owner: instadev
 --
 
-COPY instachat.reply (reply_id, reply_date, reply_text, p_replied, user_that_replied) FROM stdin;
-1	04-01-2019	jajaja full mano	1	3
-2	04-01-2019	na mano no relajes asi jajaja	1	4
+COPY instachat.reply (reply_id, reply_text, p_replied, user_that_replied, reply_date) FROM stdin;
+1	jajaja full mano	1	3	2019-05-10 10:35:26.878777
+2	na mano no relajes asi jajaja	1	4	2019-05-10 10:35:26.878777
 \.
 
 
@@ -619,7 +624,7 @@ COPY public.post (post_id, post_caption, post_date) FROM stdin;
 -- Name: chat_chat_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 5, true);
+SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 6, true);
 
 
 --
@@ -647,14 +652,14 @@ SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
 -- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.post_post_id_seq', 18, true);
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 20, true);
 
 
 --
 -- Name: react_react_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.react_react_id_seq', 25, true);
+SELECT pg_catalog.setval('instachat.react_react_id_seq', 30, true);
 
 
 --
@@ -748,6 +753,14 @@ ALTER TABLE ONLY instachat.react
 
 ALTER TABLE ONLY instachat.reply
     ADD CONSTRAINT reply_pkey PRIMARY KEY (reply_id);
+
+
+--
+-- Name: react something; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.react
+    ADD CONSTRAINT something UNIQUE (user_that_react, p_reacted);
 
 
 --

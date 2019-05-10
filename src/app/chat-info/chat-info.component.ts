@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RemoteServerService} from '../bussiness-logic/remote-server.service';
 import {NotificationService} from '../bussiness-logic/notifications.service';
-import {MatDialog} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {Chats} from '../bussiness-logic/Chats';
 import {DashboardPost, DashboardPostDataSource} from '../dashboard/dashboard.component';
 import {DataSource} from '@angular/cdk/table';
 import {Observable} from 'rxjs/Observable';
 import {User} from '../bussiness-logic/User';
+import {DialogData} from '../chatsList/chatsList.component';
+import {UserContactsDataSource} from '../profile/profile.component';
 
 
 
@@ -18,12 +20,18 @@ import {User} from '../bussiness-logic/User';
 })
 export class ChatInfoComponent implements OnInit {
 
+
   id: string;
   chat: Chats;
   owner: User;
 
+ //  participantsDataSource: UserContactsDataSource;
   dataSource: MembersDataSource;
   displayedColumns = ['name', 'user_id'];
+  selectedUsers: number[] = [];
+  isEnabled = false;
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -34,7 +42,6 @@ export class ChatInfoComponent implements OnInit {
   }
 
   ngOnInit() {
-
 
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -69,8 +76,41 @@ export class ChatInfoComponent implements OnInit {
           }
         );
       });
+  }
 
+  onSelection(e, v) {
 
+    let isSelected = false;
+    console.log(this.selectedUsers);
+
+    for (let i = 0; i < this.selectedUsers.length; i++) {
+      if ( this.selectedUsers[i] === e['option'].value.user_id) {
+        this.selectedUsers.splice(i, 1);
+        console.log('After Removing');
+        console.log(this.selectedUsers);
+        isSelected = true;
+
+        if (this.selectedUsers.length === 0) {
+          this.isEnabled = false;
+        }
+      }
+    }
+    if (!isSelected) {
+      console.log('After Adding');
+      this.selectedUsers.push(e['option'].value.user_id);
+      this.isEnabled = true;
+      console.log(this.selectedUsers);
+    }
+  }
+
+  addParticipant() {
+      const dialogRef = this.dialog.open(AddParticipantDialogComponent, {
+        width: '400px'
+        // data: {chat_name: this.chat_name, owner_id: this.owner_id}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
 
   }
 
@@ -96,3 +136,39 @@ export class MembersDataSource extends DataSource<any> {
   }
   disconnect() {}
 }
+
+
+@Component({
+  selector: 'app-add-participant-dialog',
+  templateUrl: 'addParticipant-dialog.component.html',
+})
+export class AddParticipantDialogComponent implements OnInit {
+
+  participantsDataSource: UserContactsDataSource;
+
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private server: RemoteServerService,
+    private notifications: NotificationService,
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<AddParticipantDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
+
+  ngOnInit() {
+    this.server.getUserContacts(localStorage.getItem('user_id')).subscribe(
+      data => {
+        console.log(data);
+        this.participantsDataSource = new UserContactsDataSource(this.server);
+        this.participantsDataSource = data['Contact'];
+      }
+    );
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+

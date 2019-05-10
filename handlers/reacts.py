@@ -22,19 +22,18 @@ class ReactHandler:
         result = {'post_id': row[0], 'Total_of_dislikes': row[1]}
         return result
 
-    def build_react_attributes_P(self, react_type, react_date, user_that_react, p_reacted):
-        result = {'react_type': react_type, 'react_date': react_date, 'user_that_react': user_that_react,
+    def build_react_attributes_P(self, react_type, user_that_react, p_reacted):
+        result = {'react_type': react_type, 'user_that_react': user_that_react,
                   'p_reacted': p_reacted}
         return result
 
-    def build_react_attributes_R(self, react_type, react_date, user_that_react, reply_reacted):
-        result = {'react_type': react_type, 'react_date': react_date, 'user_that_react': user_that_react,
+    def build_react_attributes_R(self, react_type, user_that_react, reply_reacted):
+        result = {'react_type': react_type, 'user_that_react': user_that_react,
                   'reply_reacted': reply_reacted}
         return result
 
     def insertReact(self, json):
         react_type = json['react_type']
-        react_date = json['react_date']
         user_that_react = json['user_that_react']
         p_reacted = -1
         reply_reacted = -1
@@ -52,13 +51,13 @@ class ReactHandler:
 
         if not user:
             return jsonify(Error="User not found."), 404
-        elif react_type and react_date and user_that_react and json.get('p_reacted'):
-            ReactsDAO().insertReactP(react_type, react_date, user_that_react, p_reacted)
-            result = self.build_react_attributes_P(react_type, react_date, user_that_react, p_reacted)
+        elif react_type and user_that_react and json.get('p_reacted'):
+            ReactsDAO().insertReactP(react_type, user_that_react, p_reacted)
+            result = self.build_react_attributes_P(react_type, user_that_react, p_reacted)
             return jsonify(React=result), 201
-        elif react_type and react_date and user_that_react and json.get('reply_reacted'):
-            ReactsDAO().insertReactR(react_type, react_date, user_that_react, reply_reacted)
-            result = self.build_react_attributes_R(react_type, react_date, user_that_react, reply_reacted)
+        elif react_type and user_that_react and json.get('reply_reacted'):
+            ReactsDAO().insertReactR(react_type, user_that_react, reply_reacted)
+            result = self.build_react_attributes_R(react_type, user_that_react, reply_reacted)
             return jsonify(React=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400

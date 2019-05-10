@@ -23,10 +23,10 @@ class PostsDAO:
 
   def getAllPosts(self):
     cursor = self.conn.cursor()
-    cursor.execute("select post_id, post_caption, to_char(post_date, 'MM-DD-YYYY HH:MMPM'), p_created_by, image_file, hash_name from instachat.post "
+    cursor.execute("select post_id, post_caption, to_char(post_date, 'MM-DD-YYYY HH:MIPM'), p_created_by, image_file, hash_name from instachat.post "
                    "left outer join instachat.image on post_id = p_with_image left outer join instachat.has_hashtag "
                    "as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
-                   "on hh.hashtag_id=h.hashtag_id ;")
+                   "on hh.hashtag_id=h.hashtag_id order by post_date asc;")
 
     result = []
     for row in cursor:
@@ -38,10 +38,10 @@ class PostsDAO:
     posts_list = self.getAllPosts()
     # if len(posts_list) < post_id or post_id < 1:
     #     return jsonify(Error="Post not found."), 404
-    cursor.execute("select post_id, post_caption, to_char(post_date, 'MM-DD-YYYY HH:MMPM'), p_created_by, image_file, hash_name  from instachat.post "
+    cursor.execute("select post_id, post_caption, to_char(post_date, 'MM-DD-YYYY HH:MIPM'), p_created_by, image_file, hash_name  from instachat.post "
                    "left outer join instachat.image on post_id = p_with_image left outer join instachat.has_hashtag "
                    "as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
-                   "on hh.hashtag_id=h.hashtag_id where post_id = %s;", [post_id])
+                   "on hh.hashtag_id=h.hashtag_id where post_id = %s order by post_date asc;", [post_id])
     result = []
     for row in cursor:
       result.append(row)
@@ -49,10 +49,10 @@ class PostsDAO:
 
   def getChatPosts(self, chat_id):
     cursor = self.conn.cursor()
-    cursor.execute("select post_id, post_caption, to_char(post_date, 'MM-DD-YYYY HH:MMPM'), p_created_by, image_file, "
+    cursor.execute("select post_id, post_caption, to_char(post_date, 'MM-DD-YYYY HH:MIPM'), p_created_by, image_file, "
                    "hash_name  from instachat.post left outer join instachat.image on post_id = p_with_image left outer "
                    "join instachat.has_hashtag as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
-                   "on hh.hashtag_id=h.hashtag_id where c_post_belongs = %s;", [chat_id])
+                   "on hh.hashtag_id=h.hashtag_id where c_post_belongs = %s order by post_date asc;", [chat_id])
     result = []
     for row in cursor:
       result.append(row)
@@ -61,10 +61,11 @@ class PostsDAO:
 
   def getPostsInChatX(self, chat_id, post_id):
     cursor = self.conn.cursor()
-    cursor.execute("select post_id, post_caption, to_char(post_date, 'MM-DD-YYYY HH:MMPM'), p_created_by, image_file, "
+    cursor.execute("select post_id, post_caption, to_char(post_date, 'MM-DD-YYYY HH:MIPM'), p_created_by, image_file, "
                    "hash_name  from instachat.post left outer join instachat.image on post_id = p_with_image left outer "
                    "join instachat.has_hashtag as hh on post_id = p_with_hashtag left outer join instachat.hashtag as h "
-                   "on hh.hashtag_id=h.hashtag_id where c_post_belongs = %s and post_id = %s;", [chat_id, post_id])
+                   "on hh.hashtag_id=h.hashtag_id where c_post_belongs = %s and post_id = %s order by post_date asc "
+                   ";", [chat_id, post_id])
     result = cursor.fetchone()
     return result
 

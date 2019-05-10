@@ -71,34 +71,46 @@ export class ChatsListComponent implements OnInit {
     );
   }
 
-  createChat(){
-    const dialogRef = this.dialog.open(CreateChatDialog, {
-      data: {chat_name: this.chat_name, owner_id: this.owner_id}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.chat_name = result;
-      this.owner_id = '1';
-    });
-
-    this.server.createChat(this.chat_name, this.owner_id).subscribe(
-      refresh => {
-        console.log('Chat created')
-        this.router.navigate(['chatslist']);
-      },
-      error => {
-        console.log(error)
-        this.notifications.httpError(error);
-      }
-    );
+  createChat() {
+    this.router.navigate(['createChat']);
   }
+  //   const dialogRef = this.dialog.open(CreateChatDialogComponent, {
+  //     width: '400px',
+  //     data: {chat_name: this.chat_name, owner_id: this.owner_id}
+  //   });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log('The dialog was closed');
+  //     this.chat_name = result;
+  //     this.owner_id = '1';
+  //   });
+  //
+  //   this.server.createChat(this.chat_name, this.owner_id).subscribe(
+  //     refresh => {
+  //       console.log('Chat created')
+  //       this.router.navigate(['chatslist']);
+  //     },
+  //     error => {
+  //       console.log(error)
+  //       this.notifications.httpError(error);
+  //     }
+  //   );
+  // }
 }
 
-export class CreateChatDialog {
+
+@Component({
+  selector: 'app-create-chat-dialog',
+  templateUrl: 'createChat-dialog.component.html',
+})
+export class CreateChatDialogComponent implements OnInit {
 
   constructor(
-    public dialogRef: MatDialogRef<CreateChatDialog>,
+    public dialogRef: MatDialogRef<CreateChatDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  ngOnInit() {
+
+}
 
   onNoClick(): void {
     this.dialogRef.close();

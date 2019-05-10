@@ -50,25 +50,6 @@ export class RemoteServerService {
       );
   }
 
-  // public register(email: string, password: string, username: string, firstName: string, lastName: string
-  // ) {
-  //   const body = {
-  //     email: email,
-  //     password: password,
-  //     username: username,
-  //     firstName: firstName,
-  //     lastName: lastName
-  //   };
-  //   return this.http
-  //     .post(
-  //       'http://localhost:5000/InstaChat/users',
-  //       body,
-  //       this.getModifiedHeader()
-  //     )
-  // }
-
-
-
   public getSingleUser(id: string): Observable<User> {
     return this.http
       .get<User>(
@@ -185,17 +166,43 @@ export class RemoteServerService {
        );
    }
 
-   public createPost(caption: string, creator: string, hashtag: string) {
-    const body = {
-      post_caption: caption,
-      p_created_by: creator,
-      hash_name: hashtag
-    };
-    return this.http
-      .post(
-        'http:localhost:5000/InstaChat/posts',
-        body
-      );
+   public createPost(chat_id: string, owner_id: string, user_id: string, text: string) {
+     const body = {
+       post_caption: text,
+       p_created_by: user_id,
+       c_post_belongs: chat_id
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/posts',
+         body
+       );
+   }
+
+   public reactPost(type: string , user_id, post_id) {
+     const body = {
+       react_type: type,
+       user_that_react: user_id,
+       p_reacted: post_id
+
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/reacts',
+         body
+       );
+   }
+
+   public addParticipantToChat(chat_id: string, user_id: string) {
+     const body = {
+       chat_id: chat_id,
+       user_id: user_id
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/chats/' + chat_id + '/users/' + user_id,
+         body
+       );
    }
 
   private handleError(error: HttpErrorResponse) {

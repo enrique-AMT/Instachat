@@ -49,6 +49,13 @@ export class LoginComponent implements OnInit {
         this.username = '';
         this.password = '';
 
+      localStorage.setItem('first_name','');
+      localStorage.setItem('last_name', '');
+      localStorage.setItem('user_id', '');
+      localStorage.setItem('u_email_address', '');
+      localStorage.setItem('phone', '');
+      localStorage.setItem('username', '');
+
       this.server.getSingleUser('1').subscribe(
         data => {
           console.log(data);
