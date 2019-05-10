@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
--- Dumped by pg_dump version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
+-- Dumped from database version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -230,7 +230,7 @@ ALTER SEQUENCE instachat.post_post_id_seq OWNED BY instachat.phone.phone_id;
 
 CREATE TABLE instachat.post (
     post_caption character varying(280),
-    post_date date DEFAULT CURRENT_DATE NOT NULL,
+    post_date timestamp without time zone DEFAULT CURRENT_DATE NOT NULL,
     p_created_by integer,
     c_post_belongs integer,
     post_id integer DEFAULT nextval('instachat.post_post_id_seq'::regclass) NOT NULL
@@ -523,20 +523,20 @@ COPY instachat.phone (phone_id, u_phone, phone) FROM stdin;
 --
 
 COPY instachat.post (post_caption, post_date, p_created_by, c_post_belongs, post_id) FROM stdin;
-A colgar a unos cuantos!	2019-05-09	3	1	1
-Dale si!	2019-05-09	2	1	2
-testing jaja	2019-05-09	1	1	4
-testing chat 2	2019-05-09	1	2	5
-test	2019-05-09	1	1	3
-Yulin 2020	2019-05-09	1	1	6
-Smile	2019-05-09	7	2	9
-testtesttest	2019-05-09	7	2	8
-test	2019-05-09	7	2	7
-I'm Iron Man	2019-05-09	9	5	14
-I'm Iron Man	2019-05-09	9	5	15
-I'm Iron Man	2019-05-09	9	5	16
-hahahaha	2019-05-09	7	5	17
-Yo soy thanos entonces!	2019-05-09	7	5	18
+A colgar a unos cuantos!	2019-05-09 00:00:00	3	1	1
+Dale si!	2019-05-09 00:00:00	2	1	2
+testing jaja	2019-05-09 00:00:00	1	1	4
+testing chat 2	2019-05-09 00:00:00	1	2	5
+test	2019-05-09 00:00:00	1	1	3
+Yulin 2020	2019-05-09 00:00:00	1	1	6
+Smile	2019-05-09 00:00:00	7	2	9
+testtesttest	2019-05-09 00:00:00	7	2	8
+test	2019-05-09 00:00:00	7	2	7
+I'm Iron Man	2019-05-09 00:00:00	9	5	14
+I'm Iron Man	2019-05-09 00:00:00	9	5	15
+I'm Iron Man	2019-05-09 00:00:00	9	5	16
+hahahaha	2019-05-09 00:00:00	7	5	17
+Yo soy thanos entonces!	2019-05-09 00:00:00	7	5	18
 \.
 
 

@@ -170,20 +170,33 @@ export class RemoteServerService {
   }
 
   public removeChat(chat_id: string, owner_id: string) {
-    return this.http.delete('http://localhost:5000/InstaChat/chats/'+ chat_id + '/owner/' + owner_id);
+    return this.http.delete('http://localhost:5000/InstaChat/chats/' + chat_id + '/owner/' + owner_id);
   }
 
-  // public createChat(name: string, owner: string) {
-  //   const body = {
-  //     chat_name: name,
-  //     owner_id: owner
-  //   };
-  //   return this.http
-  //     .post(
-  //       'http://localhost:5000/InstaChat/chats',
-  //       body
-  //     );
-  // }
+   public createChat(name: string, owner: string) {
+     const body = {
+       chat_name: name,
+       owner_id: owner
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/chats',
+         body
+       );
+   }
+
+   public createPost(caption: string, creator: string, hashtag: string) {
+    const body = {
+      post_caption: caption,
+      p_created_by: creator,
+      hash_name: hashtag
+    };
+    return this.http
+      .post(
+        'http:localhost:5000/InstaChat/posts',
+        body
+      );
+   }
 
   private handleError(error: HttpErrorResponse) {
     console.error('server error:', error);
