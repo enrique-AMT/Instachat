@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from handlers.chats import ChatHandler
 from handlers.posts import PostHandler
-from handlers.image import ImagesHandler
+# from handlers.sessions import SessionHandler
 from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
 from handlers.reacts import ReactHandler
@@ -295,10 +295,12 @@ def removeInsertUserFromToChat(chat_id, user_id):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaChat/users/<int:user_id>/contacts/<int:contact_id>', methods=['DELETE'])
-def removeUserFromContactList(user_id, contact_id):
+@app.route('/InstaChat/users/<int:user_id>/contacts/<int:contact_id>', methods=['DELETE', 'POST'])
+def removeInsertUserFromContactList(user_id, contact_id):
     if request.method == 'DELETE':
         return UserHandler().removeUserFromContacts(user_id, contact_id)
+    elif request.method == 'POST':
+        return UserHandler().insertUserToContacts(user_id, contact_id)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -335,14 +337,6 @@ def hashtagToPost(post_id):
 def login():
     if request.method == 'POST':
         return UserHandler().login(request.json)
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-
-@app.route('/InstaChat/images', methods=['POST', 'GET'])
-def insertImage():
-    if request.method == 'POST':
-        return ImagesHandler().insertImage(request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
 

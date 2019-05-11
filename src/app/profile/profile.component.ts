@@ -18,6 +18,7 @@ export class ProfileComponent implements OnInit {
   public user = new User(localStorage.getItem('first_name'), localStorage.getItem('last_name'), localStorage.getItem('user_id')
   , localStorage.getItem('u_email_address'), localStorage.getItem('phone'), localStorage.getItem('username'));
 
+  public username: string;
   dataSource: UserContactsDataSource;
   contactList: User[];
   // dataSource = new UserContactsDataSource(this.server);
@@ -32,6 +33,8 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.user);
+
+    this.username = '';
 
     if (localStorage.getItem('user_id') === '' || localStorage.getItem('user_id') === null) {
       this.router.navigate(['login']);
@@ -48,6 +51,25 @@ export class ProfileComponent implements OnInit {
       }
     );
     // this.contactsSource = this.user;
+  }
+
+  addContact() {
+
+    this.server.getUserProfile(this.username).subscribe(
+      data => {
+        console.log(data);
+
+        const contact_id = data['User']['user_id'];
+
+        this.server.addContact(localStorage.getItem('user_id'), contact_id).subscribe(
+          data2 => {
+            console.log(data2);
+
+            window.location.reload();
+
+          }
+        );
+  });
   }
 
   goToProfile() {

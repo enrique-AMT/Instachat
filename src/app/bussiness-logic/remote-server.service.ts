@@ -82,6 +82,10 @@ export class RemoteServerService {
     return this.http.get<Chats[]>('http://localhost:5000/InstaChat/chats');
   }
 
+  public getUserChatList(id: string): Observable<Chats> {
+    return this.http.get<Chats>('http"//localhost:5000/InstaChat/users/' + id + '/chats');
+  }
+
   public getChatById(id: string): Observable<Chats> {
     return this.http.get<Chats>('http://localhost:5000/InstaChat/chats/' + id );
   }
@@ -166,6 +170,16 @@ export class RemoteServerService {
      return this.http
        .post(
          'http://localhost:5000/InstaChat/chats',
+         body
+       );
+   }
+
+   public addContact(user_id: string, contact_id: string) {
+     const body = {
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/users/' + contact_id + '/contacts/' + user_id,
          body
        );
    }

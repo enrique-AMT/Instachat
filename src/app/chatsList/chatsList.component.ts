@@ -41,7 +41,7 @@ export class ChatsListComponent implements OnInit {
 
     this.server.getUserChatList(localStorage.getItem('user_id')).subscribe(
       data => {
-      //  console.log(data);
+        console.log(data);
         this.chatlist = data['Chat'];
         console.log(this.chatlist);
   });
