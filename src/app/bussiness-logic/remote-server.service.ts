@@ -56,10 +56,6 @@ export class RemoteServerService {
         'http://localhost:5000/InstaChat/users/' + id );
   }
 
-  public getUserProfile(username: string): Observable<User> {
-    return this.http.get<User>('http://localhost:5000/InstaChat/users/' + username);
-  }
-
 
   public getUserContacts(id: string): Observable<User[]> {
     return this.http
@@ -101,6 +97,14 @@ export class RemoteServerService {
   }
 
 
+  public getPostInChat(chat_id: string, post_id: string): Observable<Posts> {
+    return this.http.get<Posts>('http://localhost:5000/InstaChat/chats/' + chat_id + '/posts/' + post_id);
+  }
+
+  public getRepliesInPost(post_id: string): Observable<Posts> {
+    return this.http.get<Posts>('http://localhost:5000/InstaChat/posts/' + post_id + '/replies');
+  }
+
   public getTrendingHashtags(date: string): Observable<DashboardHashtag[]> {
     return this.http
       .get<DashboardHashtag[]>(
@@ -109,13 +113,23 @@ export class RemoteServerService {
   }
 
 
-  public login(username: string, password: string) {
+  public login(email: string, password: string) {
     const body = {
-      username: username,
+      email: email,
       password: password
     };
     return this.http
-      .post('http://localhost:5000/InstaChat/login', body);
+      .post('http://localhost:5000/InstaChat/login/', body, )
+      .pipe(
+        map(res => {
+          this.loggedIn = true;
+          localStorage.setItem('email', res['Result']['email']);
+          localStorage.setItem('firstName', res['Result']['firstName']);
+          localStorage.setItem('lastName', res['Result']['lastName']);
+          localStorage.setItem('userId', res['Result']['userId']);
+          localStorage.setItem('status', res['Result']['status']);
+        })
+      );
   }
 
   public register(
@@ -160,6 +174,19 @@ export class RemoteServerService {
        );
    }
 
+   public createReply(reply_text: string, p_replied: string, user_that_replied: string) {
+     const body = {
+       reply_text: reply_text,
+       p_replied: p_replied,
+       user_that_replied: user_that_replied
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/replies',
+         body
+       );
+   }
+
    public createPost(chat_id: string, owner_id: string, user_id: string, text: string) {
      const body = {
        post_caption: text,
@@ -169,6 +196,29 @@ export class RemoteServerService {
      return this.http
        .post(
          'http://localhost:5000/InstaChat/posts',
+         body
+       );
+   }
+
+   public createHashtag(hashtag: string) {
+     const body = {
+       hash_name: hashtag,
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/hashtags',
+         body
+       );
+   }
+
+   public linkHashtagToPost(hash_id: string, post_id: string) {
+     const body = {
+       p_with_hashtag: post_id,
+       hashtag_id: hash_id
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/posts/' + post_id + '/hashtags',
          body
        );
    }

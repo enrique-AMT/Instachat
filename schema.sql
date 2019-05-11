@@ -465,7 +465,6 @@ COPY instachat.belongs (u_belongs, c_user_belongs) FROM stdin;
 1	1
 6	1
 9	5
-2	6
 \.
 
 
@@ -477,7 +476,6 @@ COPY instachat.chat (chat_id, chat_name, owner_id) FROM stdin;
 1	work	4
 2	macaracachimbas	1
 5	Vacilon	7
-6	This is a testing chatroom	1
 \.
 
 
@@ -496,6 +494,8 @@ COPY instachat.has_hashtag (p_with_hashtag, hashtag_id) FROM stdin;
 
 COPY instachat.hashtag (hash_name, hashtag_id) FROM stdin;
 mecolgue	1
+testing	11
+hashtags	13
 \.
 
 
@@ -507,6 +507,8 @@ COPY instachat.image (image_id, image_file, p_with_image) FROM stdin;
 1	hola.png	1
 2	hola2.png	3
 3	hola.png	6
+5	1554984714323.jpg	2
+6	helloworld.png	3
 \.
 
 
@@ -538,7 +540,21 @@ No se olviden de mi	2019-05-09 00:00:00	6	5	25
 No se olviden de mi	2019-05-09 00:00:00	6	5	26
 No se olviden de mi	2019-05-09 00:00:00	6	5	27
 this is a test for timestamps. Hope it works!	2019-05-10 09:33:10.829942	1	1	19
-Hola test	2019-05-10 09:42:14.889448	1	6	20
+hola	2019-05-10 11:31:18.258233	1	1	22
+This is a test for #hashtags .	2019-05-10 20:32:59.930567	1	1	23
+This is a test for #hashtags .	2019-05-10 20:33:02.385602	1	1	24
+hello	2019-05-10 20:34:16.254364	1	1	28
+This is a test for #hashtags .	2019-05-10 20:34:24.105766	1	1	29
+This is a test for #hashtags .	2019-05-10 20:34:35.943589	1	1	30
+This is a test for #hashtags .	2019-05-10 20:34:37.228719	1	1	31
+This is a test for #hashtags .	2019-05-10 20:34:37.384051	1	1	32
+This is a test for #hashtags .	2019-05-10 20:34:37.633294	1	1	33
+This is a test for #hashtags .	2019-05-10 20:34:37.70295	1	1	34
+This is a test for #hashtags .	2019-05-10 20:34:38.520696	1	1	35
+This is a test #testing	2019-05-10 20:50:04.391254	1	1	36
+This is a test #testing	2019-05-10 20:50:14.94928	1	1	37
+This is a test for #hashtags .	2019-05-10 20:56:39.10039	1	1	38
+This is a test for #hashtags .	2019-05-10 20:56:51.668483	1	1	39
 \.
 
 
@@ -569,6 +585,7 @@ COPY instachat.react (react_id, react_type, user_that_react, p_reacted, reply_re
 COPY instachat.reply (reply_id, reply_text, p_replied, user_that_replied, reply_date) FROM stdin;
 1	jajaja full mano	1	3	2019-05-10 10:35:26.878777
 2	na mano no relajes asi jajaja	1	4	2019-05-10 10:35:26.878777
+7	hello!	1	1	2019-05-10 20:29:44.364773
 \.
 
 
@@ -631,14 +648,14 @@ SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 6, true);
 -- Name: hashtag_hashtag_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.hashtag_hashtag_id_seq', 1, true);
+SELECT pg_catalog.setval('instachat.hashtag_hashtag_id_seq', 14, true);
 
 
 --
 -- Name: image_image_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.image_image_id_seq', 3, true);
+SELECT pg_catalog.setval('instachat.image_image_id_seq', 6, true);
 
 
 --
@@ -652,21 +669,21 @@ SELECT pg_catalog.setval('instachat.phone_phone_id_seq', 1, false);
 -- Name: post_post_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.post_post_id_seq', 20, true);
+SELECT pg_catalog.setval('instachat.post_post_id_seq', 39, true);
 
 
 --
 -- Name: react_react_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.react_react_id_seq', 30, true);
+SELECT pg_catalog.setval('instachat.react_react_id_seq', 33, true);
 
 
 --
 -- Name: reply_reply_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 6, true);
+SELECT pg_catalog.setval('instachat.reply_reply_id_seq', 7, true);
 
 
 --
@@ -769,6 +786,14 @@ ALTER TABLE ONLY instachat.react
 
 ALTER TABLE ONLY instachat.u_contacts
     ADD CONSTRAINT u_contacts_pkey PRIMARY KEY (user_id, contact_of);
+
+
+--
+-- Name: hashtag unique_hashtag; Type: CONSTRAINT; Schema: instachat; Owner: instadev
+--
+
+ALTER TABLE ONLY instachat.hashtag
+    ADD CONSTRAINT unique_hashtag UNIQUE (hash_name);
 
 
 --

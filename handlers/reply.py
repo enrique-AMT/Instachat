@@ -15,10 +15,11 @@ class ReplyHandler:
                   'user_that_replied': row[3], 'reply_date': row[4]}
         return result
 
-    def build_reply_attributes(self, reply_date, reply_text, p_replied, user_that_replied):
+    def build_reply_attributes(self, reply_text, p_replied, user_that_replied):
         result = {}
         result['reply_text'] = reply_text
         result['p_replied'] = p_replied
+        result['user_that_replied'] = user_that_replied
         return result
 
     def getAllReplies(self):
@@ -57,7 +58,6 @@ class ReplyHandler:
         return jsonify(Reply=reply_list)
 
     def insertReply(self, json):
-        reply_date = json['reply_date']
         reply_text = json['reply_text']
         p_replied = json['p_replied']
         user_that_replied = json['user_that_replied']
@@ -67,9 +67,9 @@ class ReplyHandler:
             return jsonify(Error="Post not found."), 404
         elif not user:
             return jsonify(Error="User not found."), 404
-        elif reply_date and reply_text and p_replied and user_that_replied:
-            ReplyDAO().insertReply(reply_date, reply_text, p_replied, user_that_replied)
-            result = self.build_reply_attributes(reply_date, reply_text, p_replied, user_that_replied)
+        elif reply_text and p_replied and user_that_replied:
+            ReplyDAO().insertReply(reply_text, p_replied, user_that_replied)
+            result = self.build_reply_attributes(reply_text, p_replied, user_that_replied)
             return jsonify(Reply=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400

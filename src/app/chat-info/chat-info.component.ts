@@ -18,6 +18,10 @@ import {UserContactsDataSource} from '../profile/profile.component';
   templateUrl: './chat-info.component.html',
   styleUrls: ['./chat-info.component.scss']
 })
+
+
+
+
 export class ChatInfoComponent implements OnInit {
 
 
@@ -105,8 +109,8 @@ export class ChatInfoComponent implements OnInit {
 
   addParticipant() {
       const dialogRef = this.dialog.open(AddParticipantDialogComponent, {
-        width: '400px'
-        // data: {chat_name: this.chat_name, owner_id: this.owner_id}
+        width: '400px',
+        data: {chat: this.chat}
       });
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
@@ -141,11 +145,14 @@ export class MembersDataSource extends DataSource<any> {
 @Component({
   selector: 'app-add-participant-dialog',
   templateUrl: 'addParticipant-dialog.component.html',
+  styleUrls: ['./addParticipant-dialog.component.scss']
 })
 export class AddParticipantDialogComponent implements OnInit {
 
   participantsDataSource: UserContactsDataSource;
-
+  selectedUsers: number[] = [];
+  isEnabled = false;
+  chat: Chats;
 
   constructor(
     private route: ActivatedRoute,
@@ -155,6 +162,9 @@ export class AddParticipantDialogComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<AddParticipantDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+
+    console.log(data);
+    this.chat = data['chat'];
   }
 
   ngOnInit() {
@@ -165,6 +175,60 @@ export class AddParticipantDialogComponent implements OnInit {
         this.participantsDataSource = data['Contact'];
       }
     );
+  }
+
+  onSelection(e, v) {
+
+    let isSelected = false;
+    console.log(this.selectedUsers);
+
+    for (let i = 0; i < this.selectedUsers.length; i++) {
+      if ( this.selectedUsers[i] === e['option'].value.user_id) {
+        this.selectedUsers.splice(i, 1);
+        console.log('After Removing');
+        console.log(this.selectedUsers);
+        isSelected = true;
+
+        if (this.selectedUsers.length === 0) {
+          this.isEnabled = false;
+        }
+      }
+    }
+    if (!isSelected) {
+      console.log('After Adding');
+      this.selectedUsers.push(e['option'].value.user_id);
+      this.isEnabled = true;
+      console.log(this.selectedUsers);
+    }
+  }
+
+  addParticipants() {
+
+    for (let i = 0; i < this.selectedUsers.length; i++) {
+      if (this.selectedUsers[i] !== null) {
+        console.log(this.selectedUsers[i]);
+
+        let added = 0;
+
+        this.server.addParticipantToChat(this.chat.chat_id, this.selectedUsers[i].toLocaleString()).subscribe(
+          data => {
+            added ++;
+            console.log(data);
+            console.log('Adding Participant');
+
+            if (added === this.selectedUsers.length) {
+              // go to chat screen
+              console.log('Added All Participants');
+              this.dialogRef.close();
+              window.location.reload();
+            }
+          },
+          error => {
+            console.log(error);
+            this.notifications.error('Participant already in chat');
+          });
+      }
+    }
   }
 
   onNoClick(): void {

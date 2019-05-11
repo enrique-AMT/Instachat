@@ -13,7 +13,7 @@ class ReplyDAO:
 
     self.conn = psycopg2._connect(connection_url)
 
-  def insertReply(self, reply_date, reply_text, p_replied, user_that_replied):
+  def insertReply(self, reply_text, p_replied, user_that_replied):
     cursor = self.conn.cursor()
     cursor.execute("insert into instachat.reply( reply_text, p_replied, user_that_replied) "
                    "values(%s, %s, %s) returning reply_id;",

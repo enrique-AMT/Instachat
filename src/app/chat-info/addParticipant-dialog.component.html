@@ -11,4 +11,5 @@
       </mat-selection-list>
     </mat-card-content>
   </mat-card>
+  <button class="button disabled-class" [disabled]="! isEnabled"  [ngClass]="{'black-button' : isEnabled}" (click)="addParticipants()">Add</button>
 </div>

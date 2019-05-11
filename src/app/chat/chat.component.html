@@ -12,7 +12,7 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-list>
-  <mat-list-item  *ngFor="let post of postList">
+  <mat-list-item (click)="seeReplies(post)" *ngFor="let post of postList">
     <p matLine> <b>{{post.username + ': '}}</b>  {{post.post_caption}}
     </p>
     <span>

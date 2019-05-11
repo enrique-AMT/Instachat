@@ -2,7 +2,6 @@ from flask import jsonify
 from daos.hashtags import HashtagsDAO
 from daos.posts import PostsDAO
 
-
 class HashtagsHandler:
 
     def build_hashtag_dict(self, row):
