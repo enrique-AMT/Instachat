@@ -113,11 +113,11 @@ class UserHandler:
                 result_list.append(result)
             return jsonify(Contact=result_list)
 
-    def getUserChatList(self,user_id):
+    def getUserChatList(self, user_id):
         dao = UsersDAO()
-        row = dao.getUserChats(user_id)
-        if not row:
-            return jsonify(Chat=row), 404
+        user = dao.getUserById(user_id)
+        if not user:
+            return jsonify(Error="User not found."), 404
         else:
             chat_list = dao.getUserChats(user_id)
             result_list = []
