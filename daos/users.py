@@ -114,6 +114,12 @@ class UsersDAO:
     self.conn.commit()
     return user_id
 
+  def insertUserToContacts(self, u_id, contact_id):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.u_contacts (user_id, contact_of) values (%s, %s);", [u_id, contact_id])
+    self.conn.commit()
+    return u_id
+
   def login(self, username, password):
     cursor = self.conn.cursor()
     cursor.execute("select user_id from instachat.user where username = %s and u_password = %s", [username, password])

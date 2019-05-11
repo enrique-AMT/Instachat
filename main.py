@@ -295,10 +295,12 @@ def removeInsertUserFromToChat(chat_id, user_id):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaChat/users/<int:user_id>/contacts/<int:contact_id>', methods=['DELETE'])
-def removeUserFromContactList(user_id, contact_id):
+@app.route('/InstaChat/users/<int:user_id>/contacts/<int:contact_id>', methods=['DELETE', 'POST'])
+def removeInsertUserFromContactList(user_id, contact_id):
     if request.method == 'DELETE':
         return UserHandler().removeUserFromContacts(user_id, contact_id)
+    elif request.method == 'POST':
+        return UserHandler().insertUserToContacts(user_id, contact_id)
     else:
         return jsonify(Error="Method not allowed."), 405
 
