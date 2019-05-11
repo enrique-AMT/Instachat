@@ -68,9 +68,32 @@ export class ReplyComponent implements OnInit {
         );
       });
 
-    this.server.getRepliesInPost(this.post.post_id).subscribe(
+    this.server.getRepliesInPost(this.post_id).subscribe(
       data => {
         console.log(data);
+        this.replyList = data['Reply'];
+
+        for ( let i = 0; i < this.replyList.length; i ++) {
+
+
+          this.server.getSingleUser(this.replyList[i].user_that_replied).subscribe(
+            data2 => {
+              // console.log(data2['User']);
+              const user = data2['User'];
+              this.replyList[i].username = user['first_name'] + ' ' + user['last_name'];
+
+            },
+            error => {
+              console.log(error);
+              this.notifications.httpError(error);
+            }
+          );
+
+
+        }
+
+
+
 
       },
       error => {

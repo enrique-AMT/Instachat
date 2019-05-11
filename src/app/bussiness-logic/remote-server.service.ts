@@ -13,6 +13,7 @@ import {Posts} from './Posts';
 import {DashboardPost} from '../dashboard/dashboard.component';
 import {DashboardHashtag} from '../dashboard/dashboard.component';
 import {Chats} from './Chats';
+import {Reply} from './Reply';
 
 @Injectable()
 export class RemoteServerService {
@@ -101,8 +102,8 @@ export class RemoteServerService {
     return this.http.get<Posts>('http://localhost:5000/InstaChat/chats/' + chat_id + '/posts/' + post_id);
   }
 
-  public getRepliesInPost(post_id: string): Observable<Posts> {
-    return this.http.get<Posts>('http://localhost:5000/InstaChat/posts/' + post_id + '/replies');
+  public getRepliesInPost(post_id: string): Observable<Reply> {
+    return this.http.get<Reply>('http://localhost:5000/InstaChat/posts/' + post_id + '/replies');
   }
 
   public getTrendingHashtags(date: string): Observable<DashboardHashtag[]> {
