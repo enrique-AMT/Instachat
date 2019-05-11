@@ -117,6 +117,7 @@ class UserHandler:
         dao = UsersDAO()
         user = dao.getUserById(user_id)
         if not user:
+            print("UNFH")
             return jsonify(Error="User not found."), 404
         else:
             chat_list = dao.getUserChats(user_id)

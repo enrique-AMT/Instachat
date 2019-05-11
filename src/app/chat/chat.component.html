@@ -12,7 +12,7 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-list>
-  <mat-list-item  *ngFor="let post of postList">
+  <mat-list-item *ngFor="let post of postList">
     <p matLine> <b>{{post.username + ': '}}</b>  {{post.post_caption}}
     </p>
     <span>
@@ -26,6 +26,8 @@
       <input class="reaction-button" type="image" src="assets/likeButton.png" (click)="likePost(post)">
       {{post.dislikes  + '  '}}
       <input class="reaction-button" type="image" src="assets/dislikeButton.png" (click)="dislikePost(post)">
+      <input class="reply-button" type="image" src="assets/replyButton.png" (click)="seeReplies(post)">
+
     </p>
     <mat-divider></mat-divider>
   </mat-list-item>

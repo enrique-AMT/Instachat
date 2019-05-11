@@ -39,6 +39,8 @@ class PostHandler:
 
         return result
 
+    
+
     def insertPost(self, json):
         post_caption = json['post_caption']
         #post_date = json['post_date']

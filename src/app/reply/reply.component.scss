@@ -1,7 +1,6 @@
 .example-spacer {
   flex: 1 1 auto;
 }
-
 .info-button{
   align-self: flex-end;
   max-width: 25px;
@@ -15,10 +14,6 @@
   max-height: 25px;
 }
 
-.date-text {
-  font-size: 8pt;
-}
-
 .chat-image {
   width: 300px;
   height: 200px;
@@ -30,24 +25,6 @@
   flex-wrap: wrap;
 }
 
-.reaction-button {
-   max-width: 25px;
-   max-height: 25px;
- }
-
-reactionRight-button {
-  max-width: 25px;
-  max-height: 25px;
-  margin-left: 20px;
-}
-
-.reply-button {
-  max-width: 25px;
-  max-height: 25px;
-  margin-left: 20px;
-
-}
-
 .chat-box {
   align-items: center;
   vertical-align:middle;
@@ -55,11 +32,11 @@ reactionRight-button {
   border-color: #673fb4;
   font-size:12pt;
   height:25px;
-  width:80%;
+  width:90%;
 }
 
 .input-container {
- // margin: 3em auto;
+  // margin: 3em auto;
   max-width: 100%;
   background-color: #fbfbfb;
   border: 1px solid #fbfbfb;
@@ -90,3 +67,4 @@ input[type='file'] {
 .upload-button {
 
 }
+

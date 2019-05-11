@@ -45,6 +45,7 @@ import { ChatInfoComponent, AddParticipantDialogComponent } from './chat-info/ch
 import { ReactionListComponent } from './reaction-list/reaction-list.component';
 import { RegisterComponent } from './register/register.component';
 import { CreateChatComponent } from './create-chat/create-chat.component';
+import { ReplyComponent } from './reply/reply.component';
 
 
 
@@ -59,6 +60,8 @@ const appRoutes: Routes = [
   { path: 'chatsList/chat/:id', component: ChatComponent, data: { name: 'Chat'} },
   { path: 'chatsList/chat/chatInfo/:id', component: ChatInfoComponent, data: { name: 'ChatInfo'} },
   { path: 'chatsList/chat/:id/reactions/:post_id', component: ReactionListComponent, data: { name: 'ReactionsList'} },
+  { path: 'chatsList/chat/:id/replies/:post_id', component: ReplyComponent, data: { name: 'Replies'} },
+
 
   // { path: 'register', component: RegisterComponent },
   // { path: 'admin', redirectTo: '/admin/home', pathMatch: 'full' },
@@ -91,7 +94,8 @@ const appRoutes: Routes = [
     RegisterComponent,
     CreateChatDialogComponent,
     AddParticipantDialogComponent,
-    CreateChatComponent
+    CreateChatComponent,
+    ReplyComponent
   ],
   entryComponents: [CreateChatDialogComponent, AddParticipantDialogComponent],
   imports: [

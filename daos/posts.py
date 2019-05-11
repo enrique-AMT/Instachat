@@ -71,7 +71,8 @@ class PostsDAO:
 
   def getDailyPosts(self):
     cursor = self.conn.cursor()
-    cursor.execute("select to_char(post_date, 'MM-DD-YYYY'), count(post_id) from instachat.post group by post_date")
+    cursor.execute("select to_char(post_date, 'MM-DD-YYYY'), count(post_id) from instachat.post group by "
+                   "to_char(post_date, 'MM-DD-YYYY')")
     result = []
     for row in cursor:
       result.append(row)

@@ -2,12 +2,12 @@
 
   <div class="login-box">
     <div class="login-content">
-        <h1 style="color: #673fb4; text-align: center">Welcome to InstaChat</h1>
-        <input type="text" class="text-field" placeholder="Username" [(ngModel)]="username" required />
-        <input type="password" class="text-field" placeholder="Password" [(ngModel)]="password" required />
-        <button class="button black-button" (click)="login(username, password)">Login</button>
-        <button class="button" (click)="showRegister()">Create Account</button>
-        <!--<button class="emptyButton" (click)="openDialog()">Reset Password</button>-->
+      <h1 style="color: #673fb4; text-align: center">Welcome to InstaChat</h1>
+      <input type="text" class="text-field" placeholder="Username" [(ngModel)]="username" required />
+      <input type="password" class="text-field" placeholder="Password" [(ngModel)]="password" required />
+      <button class="button black-button" (click)="login(username, password)">Login</button>
+      <button class="button" (click)="showRegister()">Create Account</button>
+      <!--<button class="emptyButton" (click)="openDialog()">Reset Password</button>-->
     </div>
     <div *ngIf="loading">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>

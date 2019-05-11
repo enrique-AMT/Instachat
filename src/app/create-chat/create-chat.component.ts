@@ -32,6 +32,10 @@ export class CreateChatComponent implements OnInit {
 
   ngOnInit() {
 
+    if (localStorage.getItem('user_id') === '' || localStorage.getItem('user_id') === null) {
+      this.router.navigate(['login']);
+    }
+
     this.server.getUserContacts(localStorage.getItem('user_id')).subscribe(
       data => {
         console.log(data);

@@ -72,22 +72,23 @@ export class LoginComponent implements OnInit {
       //   }
       // );
 
-      this.server.getUsers().subscribe(
-        data => {
-            this.users = data;
-          this.contactList = data['User'];
-          console.log(this.contactList);
-        },
-        error => {
-          console.log(error);
-          if (error.status === 403) {
-            this.router.navigate(['login']);
-          }
-          this.notifications.httpError(error);
-        }
-      );
+      // this.server.getUsers().subscribe(
+      //   data => {
+      //       this.users = data;
+      //
+      //     this.contactList = data['User'];
+      //     console.log(this.contactList);
+      //   },
+      //   error => {
+      //     console.log(error);
+      //     if (error.status === 403) {
+      //       this.router.navigate(['login']);
+      //     }
+      //     this.notifications.httpError(error);
+      //   }
+      // );
 
-    // this.server.getUserContacts(localStorage.getItem('user_id')).subscribe(
+    // this.server.getUserContacts('1').subscribe(
     //   data => {
     //     console.log(data);
     //     this.contactList = data['User'];
@@ -95,75 +96,58 @@ export class LoginComponent implements OnInit {
     // );
 }
 
-  // getUserLoggedIn(){
-  //   this.server.getUserProfile('username').subscribe(
-  //     data => {
-  //       console.log(data);
-  //       localStorage.setItem('first_name', data['User']['first_name']);
-  //       localStorage.setItem('last_name', data['User']['last_name']);
-  //       localStorage.setItem('user_id', data['User']['user_id']);
-  //       localStorage.setItem('u_email_address', data['User']['u_email_address']);
-  //       localStorage.setItem('phone', data['User']['phone']);
-  //       localStorage.setItem('username', data['User']['username']);
-  //     },
-  //     error => {
-  //       console.log(error);
-  //       this.notifications.httpError(error);
-  //     }
-  //   );
-  // }
+  getUserProfile(username) {
+    this.server.getUserProfile(this.username).subscribe(
+      data => {
+        console.log(data);
+        localStorage.setItem('first_name', data['User']['first_name']);
+        localStorage.setItem('last_name', data['User']['last_name']);
+        localStorage.setItem('user_id', data['User']['user_id']);
+        localStorage.setItem('u_email_address', data['User']['u_email_address']);
+        localStorage.setItem('phone', data['User']['phone']);
+        localStorage.setItem('username', data['User']['username']);
 
-  getUserProfile(username){
-      this.server.getUserProfile(this.username).subscribe(
-        data => {
-          console.log(data);
-          localStorage.setItem('first_name', data['User']['first_name']);
-          localStorage.setItem('last_name', data['User']['last_name']);
-          localStorage.setItem('user_id', data['User']['user_id']);
-          localStorage.setItem('u_email_address', data['User']['u_email_address']);
-          localStorage.setItem('phone', data['User']['phone']);
-          localStorage.setItem('username', data['User']['username']);
-        },
-        error => {
-          console.log(error);
-          this.notifications.httpError(error);
-        }
-      );
+        this.server.getUserContacts(localStorage.getItem('user_id')).subscribe(
+          data2 => {
+            console.log(data2);
+            this.contactList = data2['User'];
+            this.router.navigate(['profile']);
+          }
+        );
+      },
+      error => {
+        console.log(error);
+        this.notifications.httpError(error);
+      }
+    );
 
   }
 
   login(username, password) {
     // this.router.navigate(['profile']);
-      this.loading = true;
+    this.loading = true;
 
-      this.server.login(username, password).subscribe(
-          res => {
-              this.loading = false;
-              console.log("login")
-              this.getUserProfile(this.username)
-              this.server.getUserContacts(localStorage.getItem('user_id')).subscribe(
-                data => {
-                  console.log(data);
-                  this.contactList = data['User'];
-                }
-              );
-              this.router.navigate(['profile']);
-          },
-          error => {
-              console.log(error);
-              this.loading = false;
-              this.password = '';
-              this.notifications.httpError(error);
-          }
-      );
+    this.server.login(username, password).subscribe(
+      res => {
+        this.loading = false;
+        console.log('login');
+        this.getUserProfile(this.username)
+      },
+      error => {
+        console.log(error);
+        this.loading = false;
+        this.password = '';
+        this.notifications.httpError(error);
+      }
+    );
   }
   goToChats() {
     this.router.navigate(['chats']);
   }
 
-  showRegister() {
-      this.router.navigate(['/register']);
-  }
+    showRegister() {
+        this.router.navigate(['/register']);
+    }
 }
 export interface DialogData {
     oldPassword: string;

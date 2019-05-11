@@ -34,6 +34,10 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
 
+    if (localStorage.getItem('user_id') === '' || localStorage.getItem('user_id') === null) {
+      this.router.navigate(['login']);
+    }
+
     this.post_caption = '';
 
     this.route.params.subscribe(params => {
@@ -127,6 +131,8 @@ export class ChatComponent implements OnInit {
     });
 
     realInput.addEventListener('change', () => {
+     // const filePath = realInput.value;
+      // console.log(filePath);
       const name = realInput.value.split(/\\|\//).pop();
       const truncated = name.length > 20
         ? name.substr(name.length - 20)
@@ -137,8 +143,12 @@ export class ChatComponent implements OnInit {
   }
 
   createPost() {
+    let hashtags: string[] = [];
 
    this.post_caption = (<HTMLInputElement>document.getElementById('post_caption')).value;
+   const findHashtags = require('find-hashtags');
+   console.log(findHashtags(this.post_caption));
+   hashtags = findHashtags(this.post_caption);
 
 
     console.log('Chat id: ' + this.chat.chat_id);
@@ -148,16 +158,34 @@ export class ChatComponent implements OnInit {
     this.server.createPost(this.chat.chat_id, this.chat.owner_id, localStorage.getItem('user_id'), this.post_caption).subscribe(
       data => {
         console.log(data);
-        window.location.reload();
 
+        const post_id = data['Post'].p_created_by;
+        for (let i = 0; i < hashtags.length; i++) {
+
+          const hash: string = hashtags[i];
+          console.log(hash);
+
+          this.server.createHashtag(hash).subscribe(
+            data2 => {
+              console.log('Hashtag Created');
+              console.log(data2['Hashtag']);
+              this.server.linkHashtagToPost(data2['Hashtag'].hashtag_id, post_id).subscribe(
+                data3 => {
+                  console.log('Hashtag Associated');
+
+                   window.location.reload();
+
+                }
+              );
+            }
+          );
+        }
       },
       error => {
         console.log(error);
         this.notifications.httpError(error);
       }
     );
-
-
   }
 
   likePost(post: Posts) {
@@ -174,13 +202,13 @@ export class ChatComponent implements OnInit {
       }
     );
   }
+
   dislikePost(post: Posts) {
     this.server.reactPost('dislike', localStorage.getItem('user_id'), post.post_id).subscribe(
       data => {
         console.log(data);
         post.likes --;
         window.location.reload();
-
       },
       error => {
         console.log(error);
@@ -192,6 +220,10 @@ export class ChatComponent implements OnInit {
     console.log('clicked: ' + post_id );
     this.router.navigate(['chatsList/chat/' + this.chat.chat_id + '/reactions/', post_id]);
 
+  }
+
+  seeReplies(post: Posts) {
+    this.router.navigate(['chatsList/chat/' + this.chat.chat_id + '/replies/', post.post_id]);
   }
 
   showChatInfo(id: string) {

@@ -49,6 +49,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
 
+    if (localStorage.getItem('user_id') === '' || localStorage.getItem('user_id') === null) {
+      this.router.navigate(['login']);
+    }
+
     this.server.getDashboardPosts().subscribe(
       data => {
 

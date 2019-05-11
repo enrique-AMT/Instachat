@@ -63,6 +63,7 @@ class UsersDAO:
     return result
 
   def getUserChats(self, user_id):
+    print("DAO")
     cursor = self.conn.cursor()
     # cursor.execute("select chat_id, chat_name, owner_id from instachat.chat where chat_id in (select c_user_belongs from "
     #                "instachat.belongs where u_belongs = %s);", [user_id])
