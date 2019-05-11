@@ -31,8 +31,20 @@
 }
 
 .reaction-button {
+   max-width: 25px;
+   max-height: 25px;
+ }
+
+reactionRight-button {
   max-width: 25px;
   max-height: 25px;
+  margin-left: 20px;
+}
+
+.reply-button {
+  max-width: 25px;
+  max-height: 25px;
+  margin-left: 20px;
 
 }
 

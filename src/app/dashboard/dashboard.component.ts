@@ -28,6 +28,10 @@ export class DashboardHashtag {
 })
 export class DashboardComponent implements OnInit {
 
+  if (localStorage.getItem('user_id') === '' || localStorage.getItem('user_id') === null) {
+  this.router.navigate(['login']);
+}
+
   dataSource = new DashboardPostDataSource(this.server);
   hashtagSource: DashboardHashtagDataSource;
 

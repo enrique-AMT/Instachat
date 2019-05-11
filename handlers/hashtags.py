@@ -12,8 +12,8 @@ class HashtagsHandler:
         hashtag_list = {'hash_name': row[0], 'hashtag_count': row[1], 'position': index}
         return hashtag_list
 
-    def build_hashtag_attributes(self, hash_name):
-        hashtag_list = {'hash_name': hash_name}
+    def build_hashtag_attributes(self, hashtag_id, hash_name):
+        hashtag_list = {'hashtag_id': hashtag_id, 'hash_name': hash_name}
         return hashtag_list
 
     def build_hashtag_Post(self, post_id, hashtag_id):
@@ -67,9 +67,9 @@ class HashtagsHandler:
     def createHashtag(self, json):
         hash_name = json['hash_name']
         if hash_name:
-            HashtagsDAO().createHashtag(hash_name)
-            result = self.build_hashtag_attributes(hash_name)
-            return jsonify(Post=result), 201
+            hashtag = HashtagsDAO().createHashtag(hash_name)
+            result = self.build_hashtag_attributes(hashtag, hash_name)
+            return jsonify(Hashtag=result), 201
         else:
             return jsonify(Error="Unexpected attributes in hashtag request"), 400
 

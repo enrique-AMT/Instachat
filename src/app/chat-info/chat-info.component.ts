@@ -47,6 +47,10 @@ export class ChatInfoComponent implements OnInit {
 
   ngOnInit() {
 
+    if (localStorage.getItem('user_id') === '' || localStorage.getItem('user_id') === null) {
+      this.router.navigate(['login']);
+    }
+
     this.route.params.subscribe(params => {
       this.id = params['id'];
     });

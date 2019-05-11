@@ -34,6 +34,10 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
 
+    if (localStorage.getItem('user_id') === '' || localStorage.getItem('user_id') === null) {
+      this.router.navigate(['login']);
+    }
+
     this.post_caption = '';
 
     this.route.params.subscribe(params => {
@@ -155,6 +159,7 @@ export class ChatComponent implements OnInit {
       data => {
         console.log(data);
 
+        const post_id = data['Post'].p_created_by;
         for (let i = 0; i < hashtags.length; i++) {
 
           const hash: string = hashtags[i];
@@ -163,19 +168,18 @@ export class ChatComponent implements OnInit {
           this.server.createHashtag(hash).subscribe(
             data2 => {
               console.log('Hashtag Created');
-              console.log(data2);
-              // this.server.linkHashtagToPost(data2).subscribe(
-              //   data3 => {
-              //     console.log('Hashtag Associated');
-              //
-              //
-              //
-              //   }
-              // );
+              console.log(data2['Hashtag']);
+              this.server.linkHashtagToPost(data2['Hashtag'].hashtag_id, post_id).subscribe(
+                data3 => {
+                  console.log('Hashtag Associated');
+
+                   window.location.reload();
+
+                }
+              );
             }
           );
         }
-       // window.location.reload();
       },
       error => {
         console.log(error);

@@ -48,14 +48,25 @@ export class RegisterComponent implements OnInit {
        // this.loading = false;
         console.log('Account Created');
         console.log(res);
-        localStorage.setItem('first_name', this.firstName);
-        localStorage.setItem('last_name',this.lastName);
-        // localStorage.setItem('user_id',this.user_);
-        localStorage.setItem('u_email_address', this.email);
-       // localStorage.setItem('phone', this.phone);
-        localStorage.setItem('username', this.username);
 
-        this.router.navigate(['profile']);
+        this.server.getUserProfile(this.username).subscribe(
+          data => {
+            console.log(data);
+            localStorage.setItem('first_name', data['User']['first_name']);
+            localStorage.setItem('last_name', data['User']['last_name']);
+            localStorage.setItem('user_id', data['User']['user_id']);
+            localStorage.setItem('u_email_address', data['User']['u_email_address']);
+            localStorage.setItem('phone', data['User']['phone']);
+            localStorage.setItem('username', data['User']['username']);
+
+            this.router.navigate(['profile']);
+
+          },
+          error => {
+            console.log(error);
+            this.notifications.httpError(error);
+          }
+        );
       },
       error => {
         console.log('Error');

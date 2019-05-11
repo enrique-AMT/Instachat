@@ -35,7 +35,11 @@ export class ChatsListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.server.getAllChats().subscribe(
+    if (localStorage.getItem('user_id') === '' || localStorage.getItem('user_id') === null) {
+      this.router.navigate(['login']);
+    }
+
+    this.server.getUserChatList(localStorage.getItem('user_id')).subscribe(
       data => {
       //  console.log(data);
         this.chatlist = data['Chat'];
