@@ -35,12 +35,19 @@ export class ChatsListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.server.getAllChats().subscribe(
+  //   this.server.getAllChats().subscribe(
+  //     data => {
+  //     //  console.log(data);
+  //       this.chatlist = data['Chat'];
+  //       console.log(this.chatlist);
+  // });
+    
+    this.server.getUserChatList(localStorage.getItem('user_id')).subscribe(
       data => {
-      //  console.log(data);
         this.chatlist = data['Chat'];
-        console.log(this.chatlist);
-  });
+        console.log(this.chatlist)
+      }
+    );
   }
 
   goToChats(id: string) {

@@ -950,4 +950,3 @@ ALTER TABLE ONLY instachat.u_contacts
 --
 -- PostgreSQL database dump complete
 --
-

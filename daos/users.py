@@ -64,8 +64,12 @@ class UsersDAO:
 
   def getUserChats(self, user_id):
     cursor = self.conn.cursor()
-    cursor.execute("select chat_id, chat_name, owner_id from instachat.chat where chat_id in (select c_user_belongs from "
-                   "instachat.belongs where u_belongs = %s);", [user_id])
+    # cursor.execute("select chat_id, chat_name, owner_id from instachat.chat where chat_id in (select c_user_belongs from "
+    #                "instachat.belongs where u_belongs = %s);", [user_id])
+    cursor.execute("select distinct chat_id, chat_name, owner_id from instachat.belongs "
+                   "natural inner join instachat.user natural inner join instachat.chat where user_id = %s "
+                   "and chat_id in (select c_user_belongs from instachat.belongs where u_belongs = %s) "
+                   "or chat_id in (select chat_id from instachat.chat where owner_id = %s);", [user_id, user_id, user_id])
     result = []
     for row in cursor:
         result.append(row)

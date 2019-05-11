@@ -67,7 +67,9 @@ export class RemoteServerService {
         'http://localhost:5000/InstaChat/users/' + id + '/contacts');
   }
 
-
+  public getUserChatList(id: string): Observable<Chats>{
+    return this.http.get<Chats>('http"//localhost:5000/InstaChat/users/' + id + '/chats');
+  }
 
   public getDashboardPosts(): Observable<DashboardPost[]> {
     return this.http

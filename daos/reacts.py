@@ -30,8 +30,10 @@ class ReactsDAO:
 
   def getAllReacts(self):
     cursor = self.conn.cursor()
-    query = "select react_id, react_type, user_that_react, p_reacted, reply_reacted, to_char(react_date, 'MM-DD-YYYY HH:MIPM') from instachat.react;"
-    cursor.execute(query)
+    # query = "select react_id, react_type, to_char(react_date, 'MM-DD-YYYY HH:MIPM'), user_that_react, p_reacted, " \
+    #         "reply_reacted from instachat.react;"
+    cursor.execute("select react_id, react_type, to_char(react_date, 'MM-DD-YYYY HH:MIPM'), user_that_react, p_reacted, " \
+            "reply_reacted from instachat.react;")
     result = []
     for row in cursor:
         result.append(row)
