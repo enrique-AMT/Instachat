@@ -56,3 +56,9 @@ class HashtagsDAO:
     for row in cursor:
         result.append(row)
     return result;
+
+  def getCreatedHashtag(self, h_name):
+    cursor = self.conn.cursor()
+    cursor.execute("select hashtag_id from instachat.hashtag where hash_name = %s;", [h_name])
+    result = cursor.fetchone()
+    return result

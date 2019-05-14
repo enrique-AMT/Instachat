@@ -231,7 +231,7 @@ export class RemoteServerService {
        );
    }
 
-   public reactPost(type: string , user_id, post_id) {
+   public reactPost(type: string , user_id: string, post_id: string) {
      const body = {
        react_type: type,
        user_that_react: user_id,

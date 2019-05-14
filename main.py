@@ -333,6 +333,13 @@ def hashtagToPost(post_id):
         return jsonify(Error="Method not allowed."), 405
 
 
+@app.route('/InstaChat/hashtags/<string:hash_name>', methods=['GET'])
+def getCreatedHashtag(hash_name):
+    if request.method == 'GET':
+        return HashtagsHandler().getCreatedHashtag(hash_name)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 @app.route('/InstaChat/login', methods=['POST'])
 def login():
     if request.method == 'POST':

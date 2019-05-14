@@ -9,6 +9,10 @@ class HashtagsHandler:
         hashtag_list = {'hashtag_id': row[1], 'hash_name': row[0]}
         return hashtag_list
 
+    def build_hashtag_createdId(self, row):
+        hashtag_list = {'hashtag_id': row[0]}
+        return hashtag_list
+
     def build_daily_hashtag_dict(self, row, index):
         hashtag_list = {'hash_name': row[0], 'hashtag_count': row[1], 'position': index}
         return hashtag_list
@@ -90,6 +94,11 @@ class HashtagsHandler:
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
+
+    def getCreatedHashtag(self, hash_name):
+        HT = HashtagsDAO().getCreatedHashtag(hash_name)
+        result = self.build_hashtag_createdId(HT)
+        return jsonify(Hashtag=result)
 
     def updateChat(self, chat_id, json):
       print("todo")

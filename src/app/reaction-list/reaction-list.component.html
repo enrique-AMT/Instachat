@@ -15,7 +15,7 @@
     <mat-card-title>Reactions</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <mat-table *ngIf="endedFetchLikes && endedFetchDislikes" [dataSource]='reactsList'>
+    <mat-table *ngIf="endedFetchLikes || endedFetchDislikes" [dataSource]='reactsList'>
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>

@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
--- Dumped by pg_dump version 10.7 (Ubuntu 10.7-0ubuntu0.18.04.1)
+-- Dumped from database version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
+-- Dumped by pg_dump version 10.7 (Ubuntu 10.7-1.pgdg16.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -465,6 +465,11 @@ COPY instachat.belongs (u_belongs, c_user_belongs) FROM stdin;
 1	1
 6	1
 9	5
+2	6
+9	1
+9	2
+6	5
+10	5
 \.
 
 
@@ -476,6 +481,8 @@ COPY instachat.chat (chat_id, chat_name, owner_id) FROM stdin;
 1	work	4
 2	macaracachimbas	1
 5	Vacilon	7
+6	This is a testing chatroom	1
+7	No Limits	9
 \.
 
 
@@ -494,8 +501,7 @@ COPY instachat.has_hashtag (p_with_hashtag, hashtag_id) FROM stdin;
 
 COPY instachat.hashtag (hash_name, hashtag_id) FROM stdin;
 mecolgue	1
-testing	11
-hashtags	13
+limit	5
 \.
 
 
@@ -507,8 +513,6 @@ COPY instachat.image (image_id, image_file, p_with_image) FROM stdin;
 1	hola.png	1
 2	hola2.png	3
 3	hola.png	6
-5	1554984714323.jpg	2
-6	helloworld.png	3
 \.
 
 
@@ -536,25 +540,10 @@ Yulin 2020	2019-05-09 00:00:00	1	1	6
 Smile	2019-05-09 00:00:00	7	2	9
 testtesttest	2019-05-09 00:00:00	7	2	8
 test	2019-05-09 00:00:00	7	2	7
-No se olviden de mi	2019-05-09 00:00:00	6	5	25
-No se olviden de mi	2019-05-09 00:00:00	6	5	26
-No se olviden de mi	2019-05-09 00:00:00	6	5	27
 this is a test for timestamps. Hope it works!	2019-05-10 09:33:10.829942	1	1	19
-hola	2019-05-10 11:31:18.258233	1	1	22
-This is a test for #hashtags .	2019-05-10 20:32:59.930567	1	1	23
-This is a test for #hashtags .	2019-05-10 20:33:02.385602	1	1	24
-hello	2019-05-10 20:34:16.254364	1	1	28
-This is a test for #hashtags .	2019-05-10 20:34:24.105766	1	1	29
-This is a test for #hashtags .	2019-05-10 20:34:35.943589	1	1	30
-This is a test for #hashtags .	2019-05-10 20:34:37.228719	1	1	31
-This is a test for #hashtags .	2019-05-10 20:34:37.384051	1	1	32
-This is a test for #hashtags .	2019-05-10 20:34:37.633294	1	1	33
-This is a test for #hashtags .	2019-05-10 20:34:37.70295	1	1	34
-This is a test for #hashtags .	2019-05-10 20:34:38.520696	1	1	35
-This is a test #testing	2019-05-10 20:50:04.391254	1	1	36
-This is a test #testing	2019-05-10 20:50:14.94928	1	1	37
-This is a test for #hashtags .	2019-05-10 20:56:39.10039	1	1	38
-This is a test for #hashtags .	2019-05-10 20:56:51.668483	1	1	39
+Hola test	2019-05-10 09:42:14.889448	1	6	20
+I'm bad bunny	2019-05-10 20:50:28.566585	9	5	21
+I'm Marc	2019-05-11 02:38:18.820824	10	5	22
 \.
 
 
@@ -575,6 +564,11 @@ COPY instachat.react (react_id, react_type, user_that_react, p_reacted, reply_re
 22	dislike	10	3	\N	2019-05-10 09:46:29.617549
 27	like	1	1	\N	2019-05-10 10:10:54.086974
 30	dislike	1	4	\N	2019-05-10 10:11:39.143847
+33	dislike	2	4	\N	2019-05-11 00:24:07.137375
+34	like	10	21	\N	2019-05-11 02:38:38.140972
+35	like	1	9	\N	2019-05-11 03:00:00.080759
+36	dislike	9	9	\N	2019-05-11 03:14:30.118016
+37	dislike	9	5	\N	2019-05-11 03:18:36.039839
 \.
 
 
@@ -585,7 +579,7 @@ COPY instachat.react (react_id, react_type, user_that_react, p_reacted, reply_re
 COPY instachat.reply (reply_id, reply_text, p_replied, user_that_replied, reply_date) FROM stdin;
 1	jajaja full mano	1	3	2019-05-10 10:35:26.878777
 2	na mano no relajes asi jajaja	1	4	2019-05-10 10:35:26.878777
-7	hello!	1	1	2019-05-10 20:29:44.364773
+7	NO me importa	21	6	2019-05-10 20:52:58.908156
 \.
 
 
@@ -599,6 +593,10 @@ COPY instachat.u_contacts (user_id, contact_of) FROM stdin;
 4	1
 1	2
 6	1
+9	10
+1	9
+10	9
+6	9
 \.
 
 
@@ -648,7 +646,7 @@ SELECT pg_catalog.setval('instachat.chat_chat_id_seq', 6, true);
 -- Name: hashtag_hashtag_id_seq; Type: SEQUENCE SET; Schema: instachat; Owner: instadev
 --
 
-SELECT pg_catalog.setval('instachat.hashtag_hashtag_id_seq', 14, true);
+SELECT pg_catalog.setval('instachat.hashtag_hashtag_id_seq', 16, true);
 
 
 --
@@ -975,3 +973,4 @@ ALTER TABLE ONLY instachat.u_contacts
 --
 -- PostgreSQL database dump complete
 --
+

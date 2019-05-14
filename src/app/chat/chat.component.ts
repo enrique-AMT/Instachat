@@ -95,7 +95,12 @@ export class ChatComponent implements OnInit {
               console.log(data3);
               const filteredData = data3['Reacts'][0];
               const dislikes = filteredData['Total_of_dislikes'];
-              item['dislikes'] = dislikes;
+              // item['dislikes'] = dislikes;
+              if ( dislikes == null) {
+                item['dislikes'] = 0;
+              } else {
+                item['dislikes'] = dislikes;
+              }
 
             },
             error => {
