@@ -10,7 +10,7 @@ import 'rxjs/add/observable/of';
 import { map, catchError } from 'rxjs/operators';
 import { User } from './User';
 import {Posts} from './Posts';
-import {DashboardPost} from '../dashboard/dashboard.component';
+import {DashboardDislike, DashboardLike, DashboardPost, DashboardUser, DashboardUserPost} from '../dashboard/dashboard.component';
 import {DashboardHashtag} from '../dashboard/dashboard.component';
 import {Chats} from './Chats';
 import {Reply} from './Reply';
@@ -77,6 +77,35 @@ export class RemoteServerService {
         'http://localhost:5000/InstaChat/dashboard/posts'
       );
   }
+
+  public getDashboardLikes(): Observable<DashboardLike[]> {
+    return this.http
+      .get<DashboardLike[]>(
+        'http://localhost:5000/InstaChat/dashboard/likes'
+      );
+  }
+
+  public getDashboardDislikes(): Observable<DashboardDislike[]> {
+    return this.http
+      .get<DashboardDislike[]>(
+        'http://localhost:5000/InstaChat/dashboard/dislikes'
+      );
+  }
+
+  public getDashboardUsers(): Observable<DashboardUser[]> {
+    return this.http
+      .get<DashboardUser[]>(
+        'http://localhost:5000/InstaChat/dashboard/users'
+      );
+  }
+
+  public getDashboardUserPosts(user_id: string): Observable<DashboardUserPost[]> {
+    return this.http
+      .get<DashboardUserPost[]>(
+        'http://localhost:5000/InstaChat/dashboard/users/' + user_id
+      );
+  }
+
 
   public getAllChats(): Observable<Chats[]> {
     return this.http.get<Chats[]>('http://localhost:5000/InstaChat/chats');
