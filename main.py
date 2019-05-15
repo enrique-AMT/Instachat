@@ -6,6 +6,7 @@ from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
 from handlers.reacts import ReactHandler
 from handlers.hashtags import HashtagsHandler
+from handlers.phones import PhonesHandler
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
@@ -313,6 +314,9 @@ def removeChat(chat_id, owner_id):
         return jsonify(Error="Method not allowed."), 405
 
 
+# ======================================== HASHTAG OPERATIONS ============================================ #
+
+
 @app.route('/InstaChat/hashtags', methods=['POST', 'GET'])
 def hashtag():
     if request.method == 'POST':
@@ -339,6 +343,22 @@ def getCreatedHashtag(hash_name):
         return HashtagsHandler().getCreatedHashtag(hash_name)
     else:
         return jsonify(Error="Method not allowed."), 405
+
+
+# ======================================== PHONE OPERATIONS ============================================ #
+
+@app.route('/InstaChat/phones', methods=['POST', 'GET'])
+def insertGetPhoneOps():
+    if request.method == 'POST':
+        return PhonesHandler().createPhone(request.json)
+    elif request.method == 'GET':
+        return PhonesHandler().getAllPhone()
+    else:
+        return  jsonify(Error="Method not allowed."), 405
+
+
+# =============================================== LOGIN ================================================ #
+
 
 @app.route('/InstaChat/login', methods=['POST'])
 def login():
