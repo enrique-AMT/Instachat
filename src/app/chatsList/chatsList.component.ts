@@ -39,21 +39,21 @@ export class ChatsListComponent implements OnInit {
       this.router.navigate(['login']);
     }
 
-    this.server.getAllChats().subscribe(
-      data => {
-        console.log(data);
-        this.chatlist = data['Chat'];
-        console.log(this.chatlist);
-      });
-  }
-  //
-  //   this.server.getUserChatList(localStorage.getItem('user_id')).subscribe(
+  //   this.server.getAllChats().subscribe(
   //     data => {
   //       console.log(data);
   //       this.chatlist = data['Chat'];
   //       console.log(this.chatlist);
-  // });
+  //     });
   // }
+  //
+    this.server.getUserChatList(localStorage.getItem('user_id')).subscribe(
+      data => {
+        console.log(data);
+        this.chatlist = data['Chat'];
+        console.log(this.chatlist);
+  });
+  }
 
   goToChats(id: string) {
     console.log(id);

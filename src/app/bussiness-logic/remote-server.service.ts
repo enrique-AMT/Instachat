@@ -83,7 +83,7 @@ export class RemoteServerService {
   }
 
   public getUserChatList(id: string): Observable<Chats> {
-    return this.http.get<Chats>('http"//localhost:5000/InstaChat/users/' + id + '/chats');
+    return this.http.get<Chats>('http://localhost:5000/InstaChat/users/' + id + '/chats');
   }
 
   public getChatById(id: string): Observable<Chats> {
@@ -120,6 +120,12 @@ export class RemoteServerService {
       .get<DashboardHashtag[]>(
         'http://localhost:5000/InstaChat/dashboard/' + date + '/hashtags'
       );
+  }
+
+  public getHashtagId(hash_name: string) {
+    return this.http
+      .get<DashboardHashtag[]>(
+        'http://localhost:5000/InstaChat/hashtags/' + hash_name);
   }
 
 
@@ -184,6 +190,18 @@ export class RemoteServerService {
        );
    }
 
+   public addPhone(user_id: string, phone: string) {
+     const body = {
+       u_phone: user_id,
+       phone: phone
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/phones',
+         body
+       );
+   }
+
    public createReply(reply_text: string, p_replied: string, user_that_replied: string) {
      const body = {
        reply_text: reply_text,
@@ -233,7 +251,7 @@ export class RemoteServerService {
        );
    }
 
-   public reactPost(type: string , user_id, post_id) {
+   public reactPost(type: string , user_id: string, post_id: string) {
      const body = {
        react_type: type,
        user_that_react: user_id,

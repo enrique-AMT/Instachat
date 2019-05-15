@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
   public firstName: string;
   public lastName: string;
   public username: string;
+  public phone: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,6 +34,23 @@ export class RegisterComponent implements OnInit {
     this.username = '';
     this.firstName = '';
     this.lastName = '';
+    this.phone = '';
+
+  //   this.server.addPhone('16', '7877777777').subscribe(
+  //     data2 => {
+  //       console.log('added phone');
+  //       console.log(data2);
+  //
+  //
+  //       // localStorage.setItem('phone', data['User']['phone']);
+  //       // this.router.navigate(['profile']);
+  //     },
+  //   error => {
+  //     console.log(error);
+  //     this.notifications.httpError(error);
+  //   }
+  // );
+
   }
 
   createAccount() {
@@ -42,6 +60,7 @@ export class RegisterComponent implements OnInit {
     console.log(this.username);
     console.log(this.firstName);
     console.log(this.lastName);
+    console.log(this.phone);
 
     this.server.register(this.email, this.password, this.username, this.firstName, this.lastName).subscribe(
       res => {
@@ -51,15 +70,26 @@ export class RegisterComponent implements OnInit {
 
         this.server.getUserProfile(this.username).subscribe(
           data => {
+            console.log('Profile');
             console.log(data);
+            this.server.addPhone(data['User']['user_id'], this.phone).subscribe(
+              data2 => {
+                console.log('added phone');
+                console.log(data2);
+
+
+                localStorage.setItem('phone', this.phone);
+                this.router.navigate(['profile']);
+              })
+
+           // console.log(data);
             localStorage.setItem('first_name', data['User']['first_name']);
             localStorage.setItem('last_name', data['User']['last_name']);
             localStorage.setItem('user_id', data['User']['user_id']);
             localStorage.setItem('u_email_address', data['User']['u_email_address']);
-            localStorage.setItem('phone', data['User']['phone']);
             localStorage.setItem('username', data['User']['username']);
 
-            this.router.navigate(['profile']);
+            // this.router.navigate(['profile']);
 
           },
           error => {

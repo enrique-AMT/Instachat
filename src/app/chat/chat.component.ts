@@ -23,6 +23,7 @@ export class ChatComponent implements OnInit {
   public chat: Chats;
   public post_caption;
   postList: Posts[];
+  likesResults: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -131,8 +132,8 @@ export class ChatComponent implements OnInit {
     });
 
     realInput.addEventListener('change', () => {
-     // const filePath = realInput.value;
-      // console.log(filePath);
+        const filePath = realInput.value;
+
       const name = realInput.value.split(/\\|\//).pop();
       const truncated = name.length > 20
         ? name.substr(name.length - 20)
@@ -177,6 +178,22 @@ export class ChatComponent implements OnInit {
 
                 }
               );
+            },
+            error => {
+
+              this.server.getHashtagId(hash).subscribe(
+                data4 => {
+                  console.log('Hashtag Created');
+                  console.log(data4['Hashtag']);
+
+
+                  this.server.linkHashtagToPost(data4['Hashtag'].hashtag_id, post_id).subscribe(
+                    data5 => {
+                      console.log('Hashtag Associated');
+                      window.location.reload();
+
+                    });
+                });
             }
           );
         }
@@ -189,18 +206,34 @@ export class ChatComponent implements OnInit {
   }
 
   likePost(post: Posts) {
-    this.server.reactPost('like', localStorage.getItem('user_id'), post.post_id).subscribe(
-      data => {
-        console.log(data);
-        post.likes ++;
-        window.location.reload();
 
+    this.server.getPostUserReactions(post.post_id, 'like').subscribe(
+      data => {
+        const liked = false;
+        this.likesResults = data['User'];
+        this.likesResults.forEach(item => {
+          console.log(item);
+        });
       },
       error => {
         console.log(error);
         this.notifications.httpError(error);
       }
     );
+
+
+    // this.server.reactPost('like', localStorage.getItem('user_id'), post.post_id).subscribe(
+    //   data => {
+    //     console.log(data);
+    //     post.likes ++;
+    //     window.location.reload();
+    //
+    //   },
+    //   error => {
+    //     console.log(error);
+    //     this.notifications.httpError(error);
+    //   }
+    // );
   }
 
   dislikePost(post: Posts) {
