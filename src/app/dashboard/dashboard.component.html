@@ -47,25 +47,6 @@
     </mat-table>
   </mat-card-content>
 </mat-card>
-<!--<mat-card class="example-card">-->
-  <!--<mat-card-header>-->
-    <!--<mat-card-title>Dislikes Per Day</mat-card-title>-->
-  <!--</mat-card-header>-->
-  <!--<mat-card-content>-->
-    <!--<mat-table *ngIf="endedFetch" [dataSource]="dislikesList">-->
-      <!--<ng-container matColumnDef="react_date">-->
-        <!--<mat-header-cell *matHeaderCellDef> Date </mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let element"> {{element.react_date}} </mat-cell>-->
-      <!--</ng-container>-->
-      <!--<ng-container matColumnDef="likes">-->
-        <!--<mat-header-cell *matHeaderCellDef> Likes </mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let element"> {{element.dislike_count}} </mat-cell>-->
-      <!--</ng-container>-->
-      <!--<mat-header-row *matHeaderRowDef="dislikesColumns"></mat-header-row>-->
-      <!--<mat-row *matRowDef="let row; columns: dislikesColumns;"></mat-row>-->
-    <!--</mat-table>-->
-  <!--</mat-card-content>-->
-<!--</mat-card>-->
 <mat-card class="example-card">
   <mat-card-header>
     <mat-card-title>Active Users</mat-card-title>
@@ -118,12 +99,31 @@
         <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.react_date}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="likes">
+      <ng-container matColumnDef="react_count">
         <mat-header-cell *matHeaderCellDef> Likes </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.react_count}} </mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="likesColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: likesColumns;"></mat-row>
+    </mat-table>
+  </mat-card-content>
+</mat-card>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>Dislikes Per Day</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-table *ngIf="endedFetch" [dataSource]="dislikesList">
+      <ng-container matColumnDef="react_date">
+        <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.react_date}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="react_count">
+        <mat-header-cell *matHeaderCellDef> Dislikes </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.react_count}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="dislikesColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: dislikesColumns;"></mat-row>
     </mat-table>
   </mat-card-content>
 </mat-card>
