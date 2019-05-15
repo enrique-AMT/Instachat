@@ -37,7 +37,10 @@ class PhonesHandler:
     def createPhone(self, json):
         u_phone = json['u_phone']
         phone = json['phone']
-        if u_phone and phone:
+        user = UsersDAO().getUserById(u_phone)
+        if not user:
+            return jsonify(Error="User not found."), 404
+        elif u_phone and phone:
             dao = PhonesDAO()
             phone_id = dao.createPhone(u_phone, phone)
             result = self.build_phone_attributes(u_phone, phone)
