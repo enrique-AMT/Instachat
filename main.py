@@ -1,12 +1,11 @@
 from flask import Flask, jsonify, request
 from handlers.chats import ChatHandler
 from handlers.posts import PostHandler
-# from handlers.sessions import SessionHandler
+from handlers.image import ImagesHandler
 from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
 from handlers.reacts import ReactHandler
 from handlers.hashtags import HashtagsHandler
-from handlers.phones import PhonesHandler
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
@@ -148,14 +147,14 @@ def getUsersThatReactToPostX(post_id, react_type):
 # ========================================= DASHBOARD OPERATIONS ============================================== #
 
 
-@app.route('/InstaChat/dashboard/<string:post_date>/hashtags', methods=['GET', 'POST'])
-def getDailyHashtags(post_date):
+@app.route('/InstaChat/dashboard/hashtags', methods=['GET', 'POST'])
+def getDailyHashtags():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
         return ChatHandler().createChat(request.json)
     else:
         if not request.args:
-            return HashtagsHandler().getDailyHashtags(post_date)
+            return HashtagsHandler().getDailyHashtags()
         else:
             return
 
@@ -168,6 +167,60 @@ def getDailyPosts():
     else:
         if not request.args:
             return PostHandler().getDailyPosts()
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/likes', methods=['GET', 'POST'])
+def getDailyLikes():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return ReactHandler().getDailyLikes()
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/dislikes', methods=['GET', 'POST'])
+def getDailyDislikes():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return ReactHandler().getDailyDislikes()
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/users', methods=['GET', 'POST'])
+def getActiveUsers():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return UserHandler().getActiveUsers()
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/users/<int:user_id>', methods=['GET', 'POST'])
+def getDailyPostsForUser(user_id):
+    if request.method == 'GET':
+        print("REQUEST: ", request.json)
+        return PostHandler().getDailyPostsForUser(user_id)
+    else:
+        if not request.args:
+            print("not implemented.")
+        else:
+            return
+@app.route('/InstaChat/dashboard/replies', methods=['GET', 'POST'])
+def getDailyReplies():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return ReplyHandler().getDailyReplies()
         else:
             return
 
@@ -326,6 +379,13 @@ def hashtag():
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaChat/hashtags/<string:hash_name>', methods=['GET'])
+def hashtagId(hash_name):
+    if request.method == 'GET':
+        return HashtagsHandler().getHashtagId(hash_name)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/posts/<int:post_id>/hashtags', methods=['POST', 'GET'])
 def hashtagToPost(post_id):
@@ -337,36 +397,21 @@ def hashtagToPost(post_id):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaChat/hashtags/<string:hash_name>', methods=['GET'])
-def getCreatedHashtag(hash_name):
-    if request.method == 'GET':
-        return HashtagsHandler().getCreatedHashtag(hash_name)
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-
-# ======================================== PHONE OPERATIONS ============================================ #
-
-@app.route('/InstaChat/phones', methods=['POST', 'GET'])
-def insertGetPhoneOps():
-    if request.method == 'POST':
-        return PhonesHandler().createPhone(request.json)
-    elif request.method == 'GET':
-        return PhonesHandler().getAllPhone()
-    else:
-        return  jsonify(Error="Method not allowed."), 405
-
-
-# =============================================== LOGIN ================================================ #
-
-
 @app.route('/InstaChat/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         return UserHandler().login(request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
+@app.route('/InstaChat/images', methods=['POST'])
+def postImage():
+  if request.method == 'POST':
+    return ImagesHandler().insertImage(request.json)
 
+@app.route('/InstaChat/phone', methods=['POST'])
+def insertPhoneNumber():
+  if request.method == 'POST':
+    return UserHandler().insertPhone(request.json)
 
 if __name__ == '__main__':
     app.run()

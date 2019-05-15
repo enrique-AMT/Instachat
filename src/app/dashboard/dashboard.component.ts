@@ -21,6 +21,40 @@ export class DashboardHashtag {
   ) { }
 }
 
+export class DashboardLike {
+  constructor(
+    public react_date: string,
+    public react_type: string,
+    public react_count: number
+
+  ) { }
+}
+
+export class DashboardDislike {
+  constructor(
+    public react_date: string,
+    public react_type: string,
+    public react_count: number
+
+  ) { }
+}
+
+export class DashboardUser {
+  constructor(
+    public post_date: string,
+    public username: string,
+    public post_count: number
+
+  ) { }
+}
+
+export class DashboardUserPost {
+  constructor(
+    public post_date: string,
+    public post_count: number
+  ) { }
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -30,14 +64,33 @@ export class DashboardComponent implements OnInit {
 
   dataSource = new DashboardPostDataSource(this.server);
   hashtagSource: DashboardHashtagDataSource;
+  likesSource: DashboardLikeDataSource;
+  dislikeSource: DashboardDislikeDataSource;
+  userSource: DashboardUserDataSource;
+  userPost: DashboardUserPostDataSource;
 
   endedFetch = false;
   hashtagsResults: any[];
- // public hashtagList =  Array<DashboardHashtag>();
+  likesResults: any[];
+  dislikesResults: any[];
+  userResults: any[];
+  userPostResults: any[];
+
+
   public hashtagList =  Array<DashboardHashtagDataSource>();
+  public likesList =  Array<DashboardLikeDataSource>();
+  public dislikesList =  Array<DashboardDislikeDataSource>();
+  public userList =  Array<DashboardUserDataSource>();
+  public userPostList =  Array<DashboardUserPostDataSource>();
+
 
   hashtagsColumns = ['hash_name', 'position'];
   displayedColumns = ['date', 'posts'];
+  likesColumns = ['react_date', 'react_count'];
+  dislikesColumns = ['react_date', 'react_count'];
+  userColumns = ['post_date', 'username', 'post_count'];
+  userPostColumns = ['post_date', 'post_count'];
+
   results: any[];
   constructor(
     private route: ActivatedRoute,
@@ -62,22 +115,89 @@ export class DashboardComponent implements OnInit {
 
         this.results = data['Post'];
          console.log(this.results);
-        this.results.forEach(item => {
+        // this.results.forEach(item => {
 
-          this.server.getTrendingHashtags(item['post_date']).subscribe(
+
+          /////////////////// Hashtags ///////////////////////////
+          this.server.getTrendingHashtags().subscribe(
             data2 => {
-              // console.log(data2);
+               console.log(data2);
               this.hashtagsResults = data2['Hashtag'];
               this.hashtagsResults.forEach(item2 => {
                 console.log(item2);
                 this.hashtagList.push(item2);
               });
 
-              this.endedFetch = true;
+             // this.endedFetch = true;
               console.log(this.hashtagList);
             });
           // until here
-        });
+        // });
+        /////////////////// Hashtags ///////////////////////////
+
+        /////////////////// Likes ///////////////////////////
+        this.server.getDashboardLikes().subscribe(
+          data3 => {
+            console.log('Likes');
+             console.log(data3);
+            this.likesResults = data3['Reacts'];
+            this.likesResults.forEach(item3 => {
+              console.log(item3);
+              this.likesList.push(item3);
+            });
+
+           //  this.endedFetch = true;
+            console.log(this.likesList);
+          });
+        /////////////////// Likes ///////////////////////////
+
+        /////////////////// Dislikes ///////////////////////////
+        this.server.getDashboardDislikes().subscribe(
+          data4 => {
+            console.log('Dislikes');
+            console.log(data4);
+            this.likesResults = data4['Reacts'];
+            this.likesResults.forEach(item4 => {
+              console.log(item4);
+              this.dislikesList.push(item4);
+            });
+
+         //   this.endedFetch = true;
+            console.log(this.dislikesList);
+          });
+        /////////////////// Dislikes ///////////////////////////
+
+        /////////////////// Users ///////////////////////////
+        this.server.getDashboardUsers().subscribe(
+          data5 => {
+            console.log('Users');
+            console.log(data5);
+            this.userResults = data5['User'];
+            this.userResults.forEach(item5 => {
+              console.log(item5);
+              this.userList.push(item5);
+            });
+
+            // this.endedFetch = true;
+            console.log(this.userList);
+          });
+        /////////////////// Users ///////////////////////////
+
+        /////////////////// User Posts ///////////////////////////
+        this.server.getDashboardUserPosts(localStorage.getItem('user_id')).subscribe(
+          data6 => {
+            console.log('User Posts');
+            console.log(data6);
+            this.userPostResults = data6['Post'];
+            this.userPostResults.forEach(item6 => {
+              console.log(item6);
+              this.userPostList.push(item6);
+            });
+
+            this.endedFetch = true;
+            console.log(this.userPostList);
+          });
+        /////////////////// User Posts ///////////////////////////
 
       },
       error => {
@@ -112,8 +232,50 @@ export class DashboardHashtagDataSource extends DataSource<any> {
     super();
   }
   connect(): Observable<DashboardHashtag[]> {
-    const data = this.dashboardService.getTrendingHashtags('');
+    const data = this.dashboardService.getTrendingHashtags();
     return data;
   }
   disconnect() {}
 }
+
+export class DashboardLikeDataSource extends DataSource<any> {
+  constructor(private dashboardService: RemoteServerService) {
+    super();
+  }
+  connect(): Observable<DashboardLike[]> {
+    return this.dashboardService.getDashboardLikes();
+  }
+  disconnect() {}
+}
+
+export class DashboardDislikeDataSource extends DataSource<any> {
+  constructor(private dashboardService: RemoteServerService) {
+    super();
+  }
+  connect(): Observable<DashboardDislike[]> {
+    return this.dashboardService.getDashboardDislikes();
+  }
+  disconnect() {}
+}
+
+export class DashboardUserDataSource extends DataSource<any> {
+  constructor(private dashboardService: RemoteServerService) {
+    super();
+  }
+  connect(): Observable<DashboardUser[]> {
+    return this.dashboardService.getDashboardUsers();
+  }
+  disconnect() {}
+}
+
+export class DashboardUserPostDataSource extends DataSource<any> {
+  constructor(private dashboardService: RemoteServerService) {
+    super();
+  }
+  connect(): Observable<DashboardUserPost[]> {
+    return this.dashboardService.getDashboardUserPosts(localStorage.getItem('user_id'));
+  }
+  disconnect() {}
+}
+
+

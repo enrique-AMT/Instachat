@@ -10,7 +10,7 @@ import 'rxjs/add/observable/of';
 import { map, catchError } from 'rxjs/operators';
 import { User } from './User';
 import {Posts} from './Posts';
-import {DashboardPost} from '../dashboard/dashboard.component';
+import {DashboardDislike, DashboardLike, DashboardPost, DashboardUser, DashboardUserPost} from '../dashboard/dashboard.component';
 import {DashboardHashtag} from '../dashboard/dashboard.component';
 import {Chats} from './Chats';
 import {Reply} from './Reply';
@@ -35,6 +35,10 @@ export class RemoteServerService {
 
   public isLoggedIn(): boolean {
     return this.loggedIn;
+  }
+
+  public setLoggedIn(state: boolean) {
+    this.loggedIn = state;
   }
 
   public getHome(): Observable<Object> {
@@ -69,9 +73,7 @@ export class RemoteServerService {
         'http://localhost:5000/InstaChat/users/' + id + '/contacts');
   }
 
-  public getUserChatList(id: string): Observable<Chats>{
-    return this.http.get<Chats>('http://localhost:5000/InstaChat/users/' + id + '/chats');
-  }
+
 
   public getDashboardPosts(): Observable<DashboardPost[]> {
     return this.http
@@ -80,8 +82,41 @@ export class RemoteServerService {
       );
   }
 
+  public getDashboardLikes(): Observable<DashboardLike[]> {
+    return this.http
+      .get<DashboardLike[]>(
+        'http://localhost:5000/InstaChat/dashboard/likes'
+      );
+  }
+
+  public getDashboardDislikes(): Observable<DashboardDislike[]> {
+    return this.http
+      .get<DashboardDislike[]>(
+        'http://localhost:5000/InstaChat/dashboard/dislikes'
+      );
+  }
+
+  public getDashboardUsers(): Observable<DashboardUser[]> {
+    return this.http
+      .get<DashboardUser[]>(
+        'http://localhost:5000/InstaChat/dashboard/users'
+      );
+  }
+
+  public getDashboardUserPosts(user_id: string): Observable<DashboardUserPost[]> {
+    return this.http
+      .get<DashboardUserPost[]>(
+        'http://localhost:5000/InstaChat/dashboard/users/' + user_id
+      );
+  }
+
+
   public getAllChats(): Observable<Chats[]> {
     return this.http.get<Chats[]>('http://localhost:5000/InstaChat/chats');
+  }
+
+  public getUserChatList(id: string): Observable<Chats> {
+    return this.http.get<Chats>('http://localhost:5000/InstaChat/users/' + id + '/chats');
   }
 
   public getChatById(id: string): Observable<Chats> {
@@ -113,11 +148,17 @@ export class RemoteServerService {
     return this.http.get<Reply>('http://localhost:5000/InstaChat/posts/' + post_id + '/replies');
   }
 
-  public getTrendingHashtags(date: string): Observable<DashboardHashtag[]> {
+  public getTrendingHashtags(): Observable<DashboardHashtag[]> {
     return this.http
       .get<DashboardHashtag[]>(
-        'http://localhost:5000/InstaChat/dashboard/' + date + '/hashtags'
+        'http://localhost:5000/InstaChat/dashboard/hashtags'
       );
+  }
+
+  public getHashtagId(hash_name: string) {
+    return this.http
+      .get<DashboardHashtag[]>(
+        'http://localhost:5000/InstaChat/hashtags/' + hash_name);
   }
 
 
@@ -178,6 +219,18 @@ export class RemoteServerService {
      return this.http
        .post(
          'http://localhost:5000/InstaChat/users/' + contact_id + '/contacts/' + user_id,
+         body
+       );
+   }
+
+   public addPhone(user_id: string, phone: string) {
+     const body = {
+       user_id: user_id,
+       phone: phone
+     };
+     return this.http
+       .post(
+         'http://localhost:5000/InstaChat/phone',
          body
        );
    }

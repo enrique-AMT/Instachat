@@ -39,28 +39,21 @@ export class ChatsListComponent implements OnInit {
       this.router.navigate(['login']);
     }
 
-    this.server.getUserChatList(localStorage.getItem('user_id')).subscribe(
-      data => {
-        console.log("CHATLIST: " + data);
-        this.chatlist = data['Chat'];
-        console.log(this.chatlist);
-  });
-
-    // this.server.getAllChats().subscribe(
-    //   data => {
-    //     console.log(data);
-    //     this.chatlist = data['Chat'];
-    //     console.log(this.chatlist);
-    //   });
-  }
-  //
-  //   this.server.getUserChatList(localStorage.getItem('user_id')).subscribe(
+  //   this.server.getAllChats().subscribe(
   //     data => {
   //       console.log(data);
   //       this.chatlist = data['Chat'];
   //       console.log(this.chatlist);
-  // });
+  //     });
   // }
+  //
+    this.server.getUserChatList(localStorage.getItem('user_id')).subscribe(
+      data => {
+        console.log(data);
+        this.chatlist = data['Chat'];
+        console.log(this.chatlist);
+  });
+  }
 
   goToChats(id: string) {
     console.log(id);
@@ -77,8 +70,8 @@ export class ChatsListComponent implements OnInit {
     this.router.navigate(['dashboard']);
   }
 
-  removeChat(chat_id: string, owner_id: string) {
-    this.server.removeChat(chat_id, owner_id).subscribe(
+  removeChat(chat_id: string) {
+    this.server.removeChat(chat_id, localStorage.getItem('user_id')).subscribe(
       refresh => {
         console.log('Chat deleted')
         this.router.navigate(['chatsList']);

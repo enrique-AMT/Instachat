@@ -76,7 +76,11 @@ export class ReactionListComponent implements OnInit {
           this.reactsList.push(like);
         });
        this.endedFetchLikes = true;
-      });
+      },
+      error => {
+        this.endedFetchLikes = true;
+      }
+    );
     this.server.getPostUserReactions(this.id, 'dislike').subscribe(
       data => {
         this.endedFetchDislikes = false;
@@ -88,7 +92,11 @@ export class ReactionListComponent implements OnInit {
           this.reactsList.push(dislike);
         });
        this.endedFetchDislikes = true;
-      });
+      },
+      error => {
+        this.endedFetchDislikes = true;
+      }
+    );
     // this.endedFetch = true;
 
   }

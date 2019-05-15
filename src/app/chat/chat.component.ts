@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
 import {Posts} from '../bussiness-logic/Posts';
 import {DashboardPost} from '../dashboard/dashboard.component';
+import {post} from 'selenium-webdriver/http';
 
 declare function require(name: string);
 
@@ -23,6 +24,7 @@ export class ChatComponent implements OnInit {
   public chat: Chats;
   public post_caption;
   postList: Posts[];
+  likesResults: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -136,8 +138,8 @@ export class ChatComponent implements OnInit {
     });
 
     realInput.addEventListener('change', () => {
-     // const filePath = realInput.value;
-      // console.log(filePath);
+        const filePath = realInput.value;
+
       const name = realInput.value.split(/\\|\//).pop();
       const truncated = name.length > 20
         ? name.substr(name.length - 20)
@@ -164,7 +166,7 @@ export class ChatComponent implements OnInit {
       data => {
         console.log(data);
 
-        const post_id = data['Post'].p_created_by;
+        const post_id = data['Post'].post_id;
         for (let i = 0; i < hashtags.length; i++) {
 
           const hash: string = hashtags[i];
@@ -174,6 +176,7 @@ export class ChatComponent implements OnInit {
             data2 => {
               console.log('Hashtag Created');
               console.log(data2['Hashtag']);
+              console.log(post_id);
               this.server.linkHashtagToPost(data2['Hashtag'].hashtag_id, post_id).subscribe(
                 data3 => {
                   console.log('Hashtag Associated');
@@ -182,9 +185,25 @@ export class ChatComponent implements OnInit {
 
                 }
               );
+            },
+            error => {
+              console.log(post_id);
+              this.server.getHashtagId(hash).subscribe(
+                data4 => {
+                  console.log('Hashtag Created');
+                  console.log(data4['Hashtag']);
+
+
+                  this.server.linkHashtagToPost(data4['Hashtag'].hashtag_id, post_id).subscribe(
+                    data5 => {
+                      console.log('Hashtag Associated');
+                      window.location.reload();
+                    });
+                });
             }
           );
         }
+        window.location.reload();
       },
       error => {
         console.log(error);
@@ -199,7 +218,6 @@ export class ChatComponent implements OnInit {
         console.log(data);
         post.likes ++;
         window.location.reload();
-
       },
       error => {
         console.log(error);
@@ -208,6 +226,19 @@ export class ChatComponent implements OnInit {
     );
   }
 
+
+    // this.server.reactPost('like', localStorage.getItem('user_id'), post.post_id).subscribe(
+    //   data => {
+    //     console.log(data);
+    //     post.likes ++;
+    //     window.location.reload();
+    //
+    //   },
+    //   error => {
+    //     console.log(error);
+    //     this.notifications.httpError(error);
+    //   }
+    // );
   dislikePost(post: Posts) {
     this.server.reactPost('dislike', localStorage.getItem('user_id'), post.post_id).subscribe(
       data => {

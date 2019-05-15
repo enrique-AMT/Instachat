@@ -15,7 +15,7 @@
 
       <h4 mat-line><h4>Name: {{chat.chat_name}}</h4></h4>
       <span>
-        <input class="trash-button" type="image" src="assets/trashButton.png" (click)="removeChat(chat.chat_id, chat.owner_id)" >
+        <input class="trash-button" type="image" src="assets/trashButton.png" (click)="removeChat(chat.chat_id)">
       </span>
       <p matLine> Id: {{chat.chat_id}} </p>
       <p matLine> Owner Id: {{chat.owner_id}} </p>

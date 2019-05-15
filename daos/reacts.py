@@ -72,3 +72,23 @@ class ReactsDAO:
     for row in cursor:
         result.append(row)
     return result
+
+  def getDailyLikes(self):
+    cursor = self.conn.cursor()
+    cursor.execute("select to_char(react_date, 'MM-DD-YYYY'), react_type, count(react_id) from instachat.react where "
+                   "react_type='like' group by react_type, to_char(react_date, 'MM-DD-YYYY') order by "
+                   "to_char(react_date, 'MM-DD-YYYY') asc;")
+    result = []
+    for row in cursor:
+      result.append(row)
+    return result
+
+  def getDailyDislikes(self):
+    cursor = self.conn.cursor()
+    cursor.execute("select to_char(react_date, 'MM-DD-YYYY'), react_type, count(react_id) from instachat.react where "
+                   "react_type='dislike' group by react_type, to_char(react_date, 'MM-DD-YYYY') order by "
+                   "to_char(react_date, 'MM-DD-YYYY') asc;")
+    result = []
+    for row in cursor:
+      result.append(row)
+    return result

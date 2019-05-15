@@ -9,7 +9,7 @@ class HashtagsHandler:
         hashtag_list = {'hashtag_id': row[1], 'hash_name': row[0]}
         return hashtag_list
 
-    def build_hashtag_createdId(self, row):
+    def build_hashtag_id_dict(self, row):
         hashtag_list = {'hashtag_id': row[0]}
         return hashtag_list
 
@@ -57,10 +57,10 @@ class HashtagsHandler:
             chat = self.build_hashtag_dict(row)
             return jsonify(Hashtag=chat)
 
-    def getDailyHashtags(self, post_date):
+    def getDailyHashtags(self):
       dao = HashtagsDAO()
-      hashtag_list = dao.getDailyHashtags(post_date)
-      if not post_date:
+      hashtag_list = dao.getDailyHashtags()
+      if not hashtag_list:
         return jsonify(Error="Session Not Found"), 404
       else:
         result_list = []
@@ -74,11 +74,12 @@ class HashtagsHandler:
         if hash_name:
             hashtag = HashtagsDAO().createHashtag(hash_name)
             result = self.build_hashtag_attributes(hashtag, hash_name)
-            return jsonify(Post=result), 201
+            return jsonify(Hashtag=result), 201
         else:
             return jsonify(Error="Unexpected attributes in hashtag request"), 400
 
     def insertHashtagToPost(self, json):
+        print(json)
         p_with_hashtag = json['p_with_hashtag']
         hashtag_id = json['hashtag_id']
         post = PostsDAO().getPostById(p_with_hashtag)
@@ -95,10 +96,15 @@ class HashtagsHandler:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
 
-    def getCreatedHashtag(self, hash_name):
-        HT = HashtagsDAO().getCreatedHashtag(hash_name)
-        result = self.build_hashtag_createdId(HT)
-        return jsonify(Hashtag=result)
+    def getHashtagId(self, hash_name):
+        dao = HashtagsDAO()
+        row = dao.getHashtagId(hash_name)
+        if not row:
+            return jsonify(Error="Hashtag Not Found"), 404
+        else:
+            chat = self.build_hashtag_id_dict(row)
+            return jsonify(Hashtag=chat)
+
 
     def updateChat(self, chat_id, json):
       print("todo")

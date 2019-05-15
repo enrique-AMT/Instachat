@@ -16,6 +16,10 @@ class UserHandler:
         chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id': row[2]}
         return chat_list
 
+    def build_active_user_dict(self,row):
+        chat_list = {'post_date':row[0], 'username': row[1], 'post_count': row[2]}
+        return chat_list
+
     def build_removed_user_dict(self, row):
         result = {'username': row[0], 'chat_name': row[1]}
 
@@ -31,6 +35,9 @@ class UserHandler:
             result['phone'] = row[6]
 
         return result
+
+    def build_phone_attributes(self, user_id, phone):
+        result = {'user_id':user_id, 'phone':phone}
 
     def build_user_attributes(self, first_name, last_name, u_email_address, u_password, username):
 
@@ -169,6 +176,28 @@ class UserHandler:
                 return jsonify(Error="Bad combination of username and password."), 404
             else:
                 return jsonify(Login=result)
+    def getActiveUsers(self):
+        dao = UsersDAO()
+        user = dao.getActiveUsers()
+        if not user:
+          return jsonify(Error="No active users.")
+        else:
+          result_list = []
+          for row in user:
+            result = self.build_active_user_dict(row)
+            result_list.append(result)
+          return jsonify(User=result_list)
+
+    def insertPhone(self, json):
+      user_id=json['user_id']
+      phone=json['phone']
+      dao = UsersDAO()
+      if user_id and phone:
+        phone_id = dao.insertPhone(user_id, phone)
+        result = self.build_phone_attributes(user_id, phone)
+        return jsonify(Phone=result), 201
+      else:
+        return jsonify(Error="Unexpected attributes in post request"), 400
 
 
     def updateUser(self, user_id, json):

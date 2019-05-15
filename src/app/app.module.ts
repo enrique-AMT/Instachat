@@ -73,7 +73,7 @@ const appRoutes: Routes = [
       { path: '', component: HomeComponent }
     ]
   },
-  { path: '', redirectTo: '/profile', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 
