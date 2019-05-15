@@ -71,3 +71,12 @@ class ReplyDAO:
         result.append(row)
     return result
 
+  def getDailyReplies(self):
+    cursor = self.conn.cursor()
+    cursor.execute("select to_char(reply_date, 'MM-DD-YYYY'), count(reply_id) from instachat.reply group by "
+                   "to_char(reply_date, 'MM-DD-YYYY') order by to_char(reply_date, 'MM-DD-YYYY') desc;")
+    result = []
+    for row in cursor:
+      result.append(row)
+    return result
+

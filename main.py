@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from handlers.chats import ChatHandler
 from handlers.posts import PostHandler
-# from handlers.sessions import SessionHandler
+from handlers.image import ImagesHandler
 from handlers.users import UserHandler
 from handlers.reply import ReplyHandler
 from handlers.reacts import ReactHandler
@@ -167,6 +167,60 @@ def getDailyPosts():
     else:
         if not request.args:
             return PostHandler().getDailyPosts()
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/likes', methods=['GET', 'POST'])
+def getDailyLikes():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return ReactHandler().getDailyLikes()
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/dislikes', methods=['GET', 'POST'])
+def getDailyDislikes():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return ReactHandler().getDailyDislikes()
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/users', methods=['GET', 'POST'])
+def getActiveUsers():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return UserHandler().getActiveUsers()
+        else:
+            return
+
+@app.route('/InstaChat/dashboard/users/<int:user_id>', methods=['GET', 'POST'])
+def getDailyPostsForUser(user_id):
+    if request.method == 'GET':
+        print("REQUEST: ", request.json)
+        return PostHandler().getDailyPostsForUser(user_id)
+    else:
+        if not request.args:
+            print("not implemented.")
+        else:
+            return
+@app.route('/InstaChat/dashboard/replies', methods=['GET', 'POST'])
+def getDailyReplies():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ChatHandler().createChat(request.json)
+    else:
+        if not request.args:
+            return ReplyHandler().getDailyReplies()
         else:
             return
 
@@ -339,6 +393,10 @@ def login():
         return UserHandler().login(request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
+@app.route('/InstaChat/image', methods=['POST'])
+def postImage():
+  if request.method == 'POST':
+    return ImagesHandler().insertImage(request.json)
 
 
 if __name__ == '__main__':

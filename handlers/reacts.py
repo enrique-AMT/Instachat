@@ -21,6 +21,9 @@ class ReactHandler:
     def build_dislike_count_dict(self, row):
         result = {'post_id': row[0], 'Total_of_dislikes': row[1]}
         return result
+    def build_daily_reacts_dict(self, row):
+        result = {'react_date': row[0], 'react_type': row[1], 'react_count': row[2]}
+        return result
 
     def build_react_attributes_P(self, react_type, user_that_react, p_reacted):
         result = {'react_type': react_type, 'user_that_react': user_that_react,
@@ -122,3 +125,26 @@ class ReactHandler:
     def deleteReact(self):
       print("TODO")
 
+    def getDailyLikes(self):
+      dao = ReactsDAO()
+      likes = dao.getDailyLikes()
+      if not likes:
+        return jsonify(Reacts=likes), 404
+      else:
+        results_list = []
+        for row in likes:
+          result = self.build_daily_reacts_dict(row)
+          results_list.append(row)
+        return jsonify(Reacts=results_list)
+
+    def getDailyDislikes(self):
+      dao = ReactsDAO()
+      dislikes = dao.getDailyDislikes()
+      if not dislikes:
+        return jsonify(Reacts=dislikes), 404
+      else:
+        results_list = []
+        for row in dislikes:
+          result = self.build_daily_reacts_dict(row)
+          results_list.append(row)
+        return jsonify(Reacts=results_list)

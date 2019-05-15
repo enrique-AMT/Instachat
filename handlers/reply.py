@@ -15,6 +15,9 @@ class ReplyHandler:
                   'user_that_replied': row[3], 'reply_date': row[4]}
         return result
 
+    def build_daily_reply_dict(self, row):
+      result = {'reply_date': row[0], 'reply_count': row[1]}
+
     def build_reply_attributes(self, reply_text, p_replied, user_that_replied):
         result = {}
         result['reply_text'] = reply_text
@@ -73,6 +76,18 @@ class ReplyHandler:
             return jsonify(Reply=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def getDailyReplies(self):
+      dao = ReplyDAO()
+      replies = dao.getDailyReplies()
+      if not replies:
+        return jsonify(Error="Replies not found."), 404
+      else:
+        result_list = []
+        for row in replies:
+          result = self.build_daily_reply_dict(row)
+          result_list.append(row)
+        return jsonify(Reply=result_list), 201
 
     def updateReply(self, reply_id, json):
         print("TODO")

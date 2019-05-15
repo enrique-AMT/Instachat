@@ -77,3 +77,13 @@ class PostsDAO:
     for row in cursor:
       result.append(row)
     return result
+
+  def getDailyPostsForUser(self, user_id):
+    cursor = self.conn.cursor()
+    cursor.execute("select to_char(post_date, 'MM-DD-YYYY'), count(post_id) from instachat.user natural inner join "
+                   "instachat.post where user_id=p_created_by and user_id=%s group by to_char(post_date, 'MM-DD-YYYY') "
+                   "order by to_char(post_date, 'MM-DD-YYYY') desc;", [user_id])
+    result = []
+    for row in cursor:
+      result.append(row)
+    return result

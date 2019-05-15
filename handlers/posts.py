@@ -104,6 +104,15 @@ class PostHandler:
       print(result_list)
       return jsonify(Post=result_list)
 
+    def getDailyPostsForUser(self, user_id):
+      dao = PostsDAO()
+      post_list = dao.getDailyPostsForUser(user_id)
+      result_list = []
+      for row in post_list:
+        result_list.append(self.build_daily_post_dict(row))
+      print(result_list)
+      return jsonify(Post=result_list)
+
     def updatePost(self, post_id, json):
         print("TODO")
         # if len(posts_list) < post_id or post_id < 1:

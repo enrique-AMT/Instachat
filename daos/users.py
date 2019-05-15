@@ -125,3 +125,13 @@ class UsersDAO:
     cursor.execute("select user_id from instachat.user where username = %s and u_password = %s", [username, password])
     result = cursor.fetchone()
     return result
+
+  def getActiveUsers(self):
+    cursor = self.conn.cursor()
+    cursor.execute("select distinct on (to_char(post_date, 'MM-DD-YYYY')) to_char(post_date, 'MM-DD-YYYY'), username, count(post_id) from instachat.user "
+                   "natural inner join instachat.post where user_id=p_created_by group by username, "
+                   "to_char(post_date, 'MM-DD-YYYY') order by to_char(post_date, 'MM-DD-YYYY') desc;")
+    result_list = []
+    for row in cursor:
+      result_list.append(row)
+    return result_list

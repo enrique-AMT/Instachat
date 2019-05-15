@@ -16,6 +16,10 @@ class UserHandler:
         chat_list = {'chat_id': row[0], 'chat_name': row[1], 'owner_id': row[2]}
         return chat_list
 
+    def build_active_user_dict(self,row):
+        chat_list = {'post_date':row[0], 'username':row[1], 'post_count': row[2]}
+        return chat_list
+
     def build_removed_user_dict(self, row):
         result = {'username': row[0], 'chat_name': row[1]}
 
@@ -168,7 +172,17 @@ class UserHandler:
                 return jsonify(Error="Bad combination of username and password."), 404
             else:
                 return jsonify(Login=result)
-
+    def getActiveUsers(self):
+        dao = UsersDAO()
+        user = dao.getActiveUsers()
+        if not user:
+          return jsonify(Error="No active users.")
+        else:
+          result_list = []
+          for row in user:
+            result = self.build_active_user_dict(row)
+            result_list.append(result)
+          return jsonify(User=result_list)
 
     def updateUser(self, user_id, json):
         print("TODO")

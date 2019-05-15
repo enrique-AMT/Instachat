@@ -117,3 +117,45 @@ export class DashboardHashtagDataSource extends DataSource<any> {
   }
   disconnect() {}
 }
+
+export class DashboardLikeDataSource extends DataSource<any> {
+  constructor(private dashboardService: RemoteServerService) {
+    super();
+  }
+  connect(): Observable<DashboardLike[]> {
+    return this.dashboardService.getDashboardLikes();
+  }
+  disconnect() {}
+}
+
+export class DashboardDislikeDataSource extends DataSource<any> {
+  constructor(private dashboardService: RemoteServerService) {
+    super();
+  }
+  connect(): Observable<DashboardDislike[]> {
+    return this.dashboardService.getDashboardDislikes();
+  }
+  disconnect() {}
+}
+
+export class DashboardUserDataSource extends DataSource<any> {
+  constructor(private dashboardService: RemoteServerService) {
+    super();
+  }
+  connect(): Observable<DashboardUser[]> {
+    return this.dashboardService.getDashboardUsers();
+  }
+  disconnect() {}
+}
+
+export class DashboardUserPostDataSource extends DataSource<any> {
+  constructor(private dashboardService: RemoteServerService) {
+    super();
+  }
+  connect(): Observable<DashboardUserPost[]> {
+    return this.dashboardService.getDashboardUserPosts();
+  }
+  disconnect() {}
+}
+
+
