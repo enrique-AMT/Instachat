@@ -40,7 +40,7 @@ class HashtagsDAO:
 
   def getDailyHashtags(self):
     cursor = self.conn.cursor()
-    cursor.execute("select hash_name, count(hashtag_id) from instachat.hashtag natural inner join instachat.post natural inner join "
+    cursor.execute("select distinct hash_name, count(hashtag_id) from instachat.hashtag natural inner join instachat.post natural inner join "
                    "instachat.has_hashtag where to_char(post_date, 'MM-DD-YYYY') = to_char(now(), 'MM-DD-YYYY') group by hash_name order by count(hashtag_id) desc;")
     result = []
     for row in cursor:
@@ -56,3 +56,9 @@ class HashtagsDAO:
     for row in cursor:
         result.append(row)
     return result;
+
+  def getHashtagId(self, hash_name):
+    cursor = self.conn.cursor()
+    cursor.execute("select hashtag_id from instachat.hashtag where hash_name = %s",[hash_name])
+    result = cursor.fetchone()
+    return result

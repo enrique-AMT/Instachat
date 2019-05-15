@@ -115,13 +115,13 @@ export class DashboardComponent implements OnInit {
 
         this.results = data['Post'];
          console.log(this.results);
-        this.results.forEach(item => {
+        // this.results.forEach(item => {
 
 
           /////////////////// Hashtags ///////////////////////////
           this.server.getTrendingHashtags().subscribe(
             data2 => {
-              // console.log(data2);
+               console.log(data2);
               this.hashtagsResults = data2['Hashtag'];
               this.hashtagsResults.forEach(item2 => {
                 console.log(item2);
@@ -132,7 +132,7 @@ export class DashboardComponent implements OnInit {
               console.log(this.hashtagList);
             });
           // until here
-        });
+        // });
         /////////////////// Hashtags ///////////////////////////
 
         /////////////////// Likes ///////////////////////////

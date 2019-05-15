@@ -70,8 +70,8 @@ export class ChatsListComponent implements OnInit {
     this.router.navigate(['dashboard']);
   }
 
-  removeChat(chat_id: string, owner_id: string) {
-    this.server.removeChat(chat_id, owner_id).subscribe(
+  removeChat(chat_id: string) {
+    this.server.removeChat(chat_id, localStorage.getItem('user_id')).subscribe(
       refresh => {
         console.log('Chat deleted')
         this.router.navigate(['chatsList']);

@@ -8,6 +8,10 @@ class HashtagsHandler:
         hashtag_list = {'hashtag_id': row[1], 'hash_name': row[0]}
         return hashtag_list
 
+    def build_hashtag_id_dict(self, row):
+        hashtag_list = {'hashtag_id': row[0]}
+        return hashtag_list
+
     def build_daily_hashtag_dict(self, row, index):
         hashtag_list = {'hash_name': row[0], 'hashtag_count': row[1], 'position': index}
         return hashtag_list
@@ -74,6 +78,7 @@ class HashtagsHandler:
             return jsonify(Error="Unexpected attributes in hashtag request"), 400
 
     def insertHashtagToPost(self, json):
+        print(json)
         p_with_hashtag = json['p_with_hashtag']
         hashtag_id = json['hashtag_id']
         post = PostsDAO().getPostById(p_with_hashtag)
@@ -88,6 +93,16 @@ class HashtagsHandler:
             return jsonify(Has_Hashatg=result)
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
+
+
+    def getHashtagId(self, hash_name):
+        dao = HashtagsDAO()
+        row = dao.getHashtagId(hash_name)
+        if not row:
+            return jsonify(Error="Hashtag Not Found"), 404
+        else:
+            chat = self.build_hashtag_id_dict(row)
+            return jsonify(Hashtag=chat)
 
 
     def updateChat(self, chat_id, json):

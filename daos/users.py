@@ -135,3 +135,11 @@ class UsersDAO:
     for row in cursor:
       result_list.append(row)
     return result_list
+
+  def insertPhone(self, user_id, phone):
+    cursor = self.conn.cursor()
+    cursor.execute("insert into instachat.phone(u_phone, phone)"
+                   "values(%s, %s) returning phone_id", [user_id, phone])
+    self.conn.commit()
+    result = cursor.fetchone()
+    return result

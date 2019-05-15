@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource} from '@angular/material';
 import {Posts} from '../bussiness-logic/Posts';
 import {DashboardPost} from '../dashboard/dashboard.component';
+import {post} from 'selenium-webdriver/http';
 
 declare function require(name: string);
 
@@ -160,7 +161,7 @@ export class ChatComponent implements OnInit {
       data => {
         console.log(data);
 
-        const post_id = data['Post'].p_created_by;
+        const post_id = data['Post'].post_id;
         for (let i = 0; i < hashtags.length; i++) {
 
           const hash: string = hashtags[i];
@@ -170,6 +171,7 @@ export class ChatComponent implements OnInit {
             data2 => {
               console.log('Hashtag Created');
               console.log(data2['Hashtag']);
+              console.log(post_id);
               this.server.linkHashtagToPost(data2['Hashtag'].hashtag_id, post_id).subscribe(
                 data3 => {
                   console.log('Hashtag Associated');
@@ -180,7 +182,7 @@ export class ChatComponent implements OnInit {
               );
             },
             error => {
-
+              console.log(post_id);
               this.server.getHashtagId(hash).subscribe(
                 data4 => {
                   console.log('Hashtag Created');
@@ -191,12 +193,12 @@ export class ChatComponent implements OnInit {
                     data5 => {
                       console.log('Hashtag Associated');
                       window.location.reload();
-
                     });
                 });
             }
           );
         }
+        window.location.reload();
       },
       error => {
         console.log(error);
@@ -206,20 +208,18 @@ export class ChatComponent implements OnInit {
   }
 
   likePost(post: Posts) {
-
-    this.server.getPostUserReactions(post.post_id, 'like').subscribe(
+    this.server.reactPost('like', localStorage.getItem('user_id'), post.post_id).subscribe(
       data => {
-        const liked = false;
-        this.likesResults = data['User'];
-        this.likesResults.forEach(item => {
-          console.log(item);
-        });
+        console.log(data);
+        post.likes ++;
+        window.location.reload();
       },
       error => {
         console.log(error);
         this.notifications.httpError(error);
       }
     );
+  }
 
 
     // this.server.reactPost('like', localStorage.getItem('user_id'), post.post_id).subscribe(
@@ -234,8 +234,6 @@ export class ChatComponent implements OnInit {
     //     this.notifications.httpError(error);
     //   }
     // );
-  }
-
   dislikePost(post: Posts) {
     this.server.reactPost('dislike', localStorage.getItem('user_id'), post.post_id).subscribe(
       data => {

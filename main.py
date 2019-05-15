@@ -376,6 +376,13 @@ def hashtag():
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaChat/hashtags/<string:hash_name>', methods=['GET'])
+def hashtagId(hash_name):
+    if request.method == 'GET':
+        return HashtagsHandler().getHashtagId(hash_name)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaChat/posts/<int:post_id>/hashtags', methods=['POST', 'GET'])
 def hashtagToPost(post_id):
@@ -387,17 +394,23 @@ def hashtagToPost(post_id):
         return jsonify(Error="Method not allowed."), 405
 
 
+
+
 @app.route('/InstaChat/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         return UserHandler().login(request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
-@app.route('/InstaChat/image', methods=['POST'])
+@app.route('/InstaChat/images', methods=['POST'])
 def postImage():
   if request.method == 'POST':
     return ImagesHandler().insertImage(request.json)
 
+@app.route('/InstaChat/phone', methods=['POST'])
+def insertPhoneNumber():
+  if request.method == 'POST':
+    return UserHandler().insertPhone(request.json)
 
 if __name__ == '__main__':
     app.run()

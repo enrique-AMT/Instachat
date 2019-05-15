@@ -81,6 +81,10 @@ export class ProfileComponent implements OnInit {
   goToChats() {
     this.router.navigate(['chatsList']);
   }
+  logout() {
+    this.server.setLoggedIn(false);
+    this.router.navigate(['login']);
+  }
   // goToChatsCreation(owner_id: string) {
   //   this.router.navigate(['chatCreation/', owner_id]);
   // }

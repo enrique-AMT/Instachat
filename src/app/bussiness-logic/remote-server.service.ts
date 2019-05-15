@@ -37,6 +37,10 @@ export class RemoteServerService {
     return this.loggedIn;
   }
 
+  public setLoggedIn(state: boolean) {
+    this.loggedIn = state;
+  }
+
   public getHome(): Observable<Object> {
     return this.http.get(
       'http://localhost:5000/InstaChat/home/',
@@ -221,12 +225,12 @@ export class RemoteServerService {
 
    public addPhone(user_id: string, phone: string) {
      const body = {
-       u_phone: user_id,
+       user_id: user_id,
        phone: phone
      };
      return this.http
        .post(
-         'http://localhost:5000/InstaChat/phones',
+         'http://localhost:5000/InstaChat/phone',
          body
        );
    }

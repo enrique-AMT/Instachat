@@ -30,9 +30,10 @@ class PostHandler:
         result['post_count'] = row[1]
         return result
 
-    def build_post_attributes(self, post_caption, p_created_by, c_post_belongs):
+    def build_post_attributes(self, post_caption, p_created_by, c_post_belongs, post_id):
         result = {}
         result['post_caption'] = post_caption
+        result['post_id'] = post_id
         # result['post_date'] = post_date
         result['p_created_by'] = p_created_by
         result['c_post_belongs'] = c_post_belongs
@@ -53,8 +54,8 @@ class PostHandler:
         elif not user:
             return jsonify(Error="User not found."), 404
         elif post_caption and p_created_by and c_post_belongs:
-            PostsDAO().insertPost(post_caption, p_created_by, c_post_belongs)
-            result = self.build_post_attributes(post_caption, p_created_by, c_post_belongs)
+            post_id = PostsDAO().insertPost(post_caption, p_created_by, c_post_belongs)
+            result = self.build_post_attributes(post_caption, p_created_by, c_post_belongs, post_id)
             return jsonify(Post=result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400

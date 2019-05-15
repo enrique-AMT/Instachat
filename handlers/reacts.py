@@ -10,8 +10,8 @@ from daos.reply import ReplyDAO
 class ReactHandler:
 
     def build_react_dict(self, row):
-        react_list = {'react_id': row[0], 'react_type': row[1], 'react_date': row[2], 'user_that_react': row[3],
-                      'p_reacted': row[4], 'reply_reacted': row[5]}
+        react_list = {'react_id': row[0], 'react_type': row[1], 'user_that_react': row[2], 'p_reacted': row[3],
+                      'reply_reacted': row[4], 'react_date': row[5]}
         return react_list
 
     def build_like_count_dict(self, row):
@@ -68,6 +68,7 @@ class ReactHandler:
     def getAllReacts(self):
         dao = ReactsDAO()
         react_list = dao.getAllReacts()
+        print(react_list)
         result_list = []
         for row in react_list:
             result = self.build_react_dict(row)
@@ -134,7 +135,8 @@ class ReactHandler:
         results_list = []
         for row in likes:
           result = self.build_daily_reacts_dict(row)
-          results_list.append(row)
+          results_list.append(result)
+          print(results_list)
         return jsonify(Reacts=results_list)
 
     def getDailyDislikes(self):
@@ -146,5 +148,6 @@ class ReactHandler:
         results_list = []
         for row in dislikes:
           result = self.build_daily_reacts_dict(row)
-          results_list.append(row)
+          results_list.append(result)
+
         return jsonify(Reacts=results_list)

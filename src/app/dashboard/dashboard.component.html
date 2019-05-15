@@ -49,25 +49,6 @@
 </mat-card>
 <!--<mat-card class="example-card">-->
   <!--<mat-card-header>-->
-    <!--<mat-card-title>Likes Per Day</mat-card-title>-->
-  <!--</mat-card-header>-->
-  <!--<mat-card-content>-->
-    <!--<mat-table *ngIf="endedFetch" [dataSource]="likesList">-->
-      <!--<ng-container matColumnDef="react_date">-->
-        <!--<mat-header-cell *matHeaderCellDef> Date </mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let element"> {{element.react_date}} </mat-cell>-->
-      <!--</ng-container>-->
-      <!--<ng-container matColumnDef="likes">-->
-        <!--<mat-header-cell *matHeaderCellDef> Likes </mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let element"> {{element.react_count}} </mat-cell>-->
-      <!--</ng-container>-->
-      <!--<mat-header-row *matHeaderRowDef="likesColumns"></mat-header-row>-->
-      <!--<mat-row *matRowDef="let row; columns: likesColumns;"></mat-row>-->
-    <!--</mat-table>-->
-  <!--</mat-card-content>-->
-<!--</mat-card>-->
-<!--<mat-card class="example-card">-->
-  <!--<mat-card-header>-->
     <!--<mat-card-title>Dislikes Per Day</mat-card-title>-->
   <!--</mat-card-header>-->
   <!--<mat-card-content>-->
@@ -124,6 +105,25 @@
       </ng-container>
       <mat-header-row *matHeaderRowDef="userPostColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: userPostColumns;"></mat-row>
+    </mat-table>
+  </mat-card-content>
+</mat-card>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>Likes Per Day</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-table *ngIf="endedFetch" [dataSource]="likesList">
+      <ng-container matColumnDef="react_date">
+        <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.react_date}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="likes">
+        <mat-header-cell *matHeaderCellDef> Likes </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.react_count}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="likesColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: likesColumns;"></mat-row>
     </mat-table>
   </mat-card-content>
 </mat-card>
