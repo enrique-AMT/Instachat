@@ -64,7 +64,7 @@ export class DashboardComponent implements OnInit {
          console.log(this.results);
         this.results.forEach(item => {
 
-          this.server.getTrendingHashtags(item['post_date']).subscribe(
+          this.server.getTrendingHashtags().subscribe(
             data2 => {
               // console.log(data2);
               this.hashtagsResults = data2['Hashtag'];
@@ -112,7 +112,7 @@ export class DashboardHashtagDataSource extends DataSource<any> {
     super();
   }
   connect(): Observable<DashboardHashtag[]> {
-    const data = this.dashboardService.getTrendingHashtags('');
+    const data = this.dashboardService.getTrendingHashtags();
     return data;
   }
   disconnect() {}

@@ -115,10 +115,10 @@ export class RemoteServerService {
     return this.http.get<Reply>('http://localhost:5000/InstaChat/posts/' + post_id + '/replies');
   }
 
-  public getTrendingHashtags(date: string): Observable<DashboardHashtag[]> {
+  public getTrendingHashtags(): Observable<DashboardHashtag[]> {
     return this.http
       .get<DashboardHashtag[]>(
-        'http://localhost:5000/InstaChat/dashboard/' + date + '/hashtags'
+        'http://localhost:5000/InstaChat/dashboard/hashtags'
       );
   }
 

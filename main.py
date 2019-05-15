@@ -147,14 +147,14 @@ def getUsersThatReactToPostX(post_id, react_type):
 # ========================================= DASHBOARD OPERATIONS ============================================== #
 
 
-@app.route('/InstaChat/dashboard/<string:post_date>/hashtags', methods=['GET', 'POST'])
-def getDailyHashtags(post_date):
+@app.route('/InstaChat/dashboard/hashtags', methods=['GET', 'POST'])
+def getDailyHashtags():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
         return ChatHandler().createChat(request.json)
     else:
         if not request.args:
-            return HashtagsHandler().getDailyHashtags(post_date)
+            return HashtagsHandler().getDailyHashtags()
         else:
             return
 

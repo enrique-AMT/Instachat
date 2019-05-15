@@ -52,10 +52,10 @@ class HashtagsHandler:
             chat = self.build_hashtag_dict(row)
             return jsonify(Hashtag=chat)
 
-    def getDailyHashtags(self, post_date):
+    def getDailyHashtags(self):
       dao = HashtagsDAO()
-      hashtag_list = dao.getDailyHashtags(post_date)
-      if not post_date:
+      hashtag_list = dao.getDailyHashtags()
+      if not hashtag_list:
         return jsonify(Error="Session Not Found"), 404
       else:
         result_list = []
