@@ -1,27 +1,37 @@
 # Instachat
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.0.
+A lightweight, PostgreSQL/Python Flask/Angular5-based chat app. Has support for images, texts, hashtags and replies on texts.
 
-## Development server
+## How to run
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+* Make sure you have Node.JS, PostgreSQL and Python Flask installed.
 
-## Code scaffolding
+* Clone the project folder into your machine.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* Run npm install in the project's root folder. Let that process finish.
 
-## Build
+* Included in this release, there is a file called **schema.sql**. This schema will provide the appropriate database to the application. To install it, run the following commands in order:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+    * sudo -i -U postgres (in a UNIX-based CLI)
+    
+    * createdb instachat
+    
+    * createuser -e -P instadev, with password InstaC
+    
+    * cd /path/to/project/
 
-## Running unit tests
+    * psql -d instachat -f schema.sql
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+* Using a Python IDE or the Python CLI, run Main.py.
 
-## Running end-to-end tests
+* navigate your browser to the route http://localhost:4200/
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Who are the creators?
+
+* <a href='https://github.com/enrique-amt/'>Enrique A. Marrero</a>
+* <a href='https://github.com/brianmunoz/'>Brian Muñoz</a>
+* <a href='https://github.com/eduardonieves/'>Eduardo Nieves</a>
+
+
