@@ -2,7 +2,7 @@
   <mat-toolbar-row>
     <span>
     {{chat.chat_name}}
-      <input class="whiteInfo-button" type="image" src="assets/whiteInfoButton.png" (click)="showChatInfo()" >
+      <input class="whiteInfo-button" type="image" src="assets/whiteInfoButton.png" (click)="showChatInfo(chat.chat_id)" >
       <!--<button mat-button (click)="showChatInfo()">Show Info</button>-->
     </span>
     <span class="example-spacer"></span>

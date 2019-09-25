@@ -55,8 +55,8 @@ export class ChatsListComponent implements OnInit {
   });
   }
 
-  goToChats(id: string) {
-    console.log(id);
+  goToChats() {
+    //console.log(id);
     this.router.navigate(['chatsList']);
   }
   goToChat(id: string) {
