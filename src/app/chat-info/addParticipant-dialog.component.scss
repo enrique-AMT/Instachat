@@ -1,0 +1,28 @@
+.disabled-class {
+  background-color: #626460 !important;
+  color: #ffffff !important;
+  border: 1.3px solid rgb(255, 255, 255);
+}
+
+.black-button {
+  background-color: #673fb4 !important;
+  color: #ffffff !important;
+  border: 1.3px solid rgb(255, 255, 255);
+}
+
+.button {
+  background-color: rgb(255, 255, 255);
+  border: 1.3px solid rgba(46, 188, 255, 0);
+  //color: rgb(103, 63, 180);
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 18px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  height: 40px;
+}

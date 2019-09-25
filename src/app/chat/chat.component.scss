@@ -1,0 +1,92 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.info-button{
+  align-self: flex-end;
+  max-width: 25px;
+  max-height: 25px;
+}
+
+.whiteInfo-button{
+  vertical-align: middle;
+  margin-left: 10px;
+  max-width: 25px;
+  max-height: 25px;
+}
+
+.date-text {
+  font-size: 8pt;
+}
+
+.chat-image {
+  width: 300px;
+  height: 200px;
+}
+
+.send-button {
+  align-items: center;
+  vertical-align:middle;
+  flex-wrap: wrap;
+}
+
+.reaction-button {
+   max-width: 25px;
+   max-height: 25px;
+ }
+
+reactionRight-button {
+  max-width: 25px;
+  max-height: 25px;
+  margin-left: 20px;
+}
+
+.reply-button {
+  max-width: 25px;
+  max-height: 25px;
+  margin-left: 20px;
+
+}
+
+.chat-box {
+  align-items: center;
+  vertical-align:middle;
+  flex-wrap: wrap;
+  border-color: #673fb4;
+  font-size:12pt;
+  height:25px;
+  width:80%;
+}
+
+.input-container {
+ // margin: 3em auto;
+  max-width: 100%;
+  background-color: #fbfbfb;
+  border: 1px solid #fbfbfb;
+  border-radius: 5px;
+}
+input[type='file'] {
+  display: none;
+}
+.file-info {
+  font-size:12pt;
+}
+.browse-btn {
+  background: #673fb4;
+  color: #fff;
+  max-width: 70px;
+  font-size:  7pt;
+  max-height: 35px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  //border-top-left-radius: 5px;
+  //border-bottom-left-radius: 5px;
+}
+.browse-btn:hover {
+  background: #673fb4;
+}
+
+.upload-button {
+
+}

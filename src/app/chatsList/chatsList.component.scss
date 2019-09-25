@@ -1,0 +1,15 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.list {
+  max-width: 400px;
+  min-height: 600px;
+  max-height: 600px;
+}
+
+.trash-button{
+  align-self: flex-end;
+  max-width: 25px;
+  max-height: 25px;
+}
