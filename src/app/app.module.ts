@@ -24,7 +24,7 @@ import {
 } from '@angular/material';
 import {MatCardModule} from '@angular/material/card';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CovalentLayoutModule } from '@covalent/core/layout';
+//import { CovalentLayoutModule } from '@covalent/core/layout';
 import { CovalentStepsModule  } from '@covalent/core/steps';
 
 import { HeaderComponent } from './header/header.component';
@@ -114,7 +114,6 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatAutocompleteModule,
-    CovalentLayoutModule,
     MatCardModule,
     CovalentStepsModule,
     RouterModule.forRoot(appRoutes),
